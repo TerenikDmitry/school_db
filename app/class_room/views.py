@@ -10,4 +10,4 @@ def classRoom(class_id):
     classStudents = StudentInClass.query.filter_by(class_id=class_id).all()
     _class = Class.query.get_or_404(class_id)
 
-    return render_template('class_room/class.html', title='Class', _class=_class, classStudents=classStudents)
+    return render_template('classes/class.html', title='Class', _class=_class, classStudents=classStudents)
