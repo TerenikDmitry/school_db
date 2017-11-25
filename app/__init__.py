@@ -34,7 +34,7 @@ def create_app(config_name):
     from .home import home as home_blueprint
     app.register_blueprint(home_blueprint)
 
-    from .class_room import class_room as class_room_blueprint
+    from .classes import class_room as class_room_blueprint
     app.register_blueprint(class_room_blueprint)
 
     @app.errorhandler(403)
