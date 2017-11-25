@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}User{% endblock %}
+{% block body %}
+<div class="content-section">
+    <div class="center">
+        <h2>{{ user.first_name }} {{ user.last_name }} {{ user.middle_name }}</h2>
+        <div>email: {{ user.email }}</div>
+        <div>Tell:
+            {% if user.tel != "" %}
+                {{ user.tel }}
+            {% else %}
+                no phone number
+            {% endif %}
+        </div>
+        <hr>
+        <div>Children: </div>
+        {% for children in childrens %}
+            <div>
+            <a href="{{ url_for('home.student_dashboard',id=children.studentParent.id) }}">
+                {{ children.studentParent.last_name }} {{ children.studentParent.first_name }} {{ children.studentParent.middle_name }}
+            </a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

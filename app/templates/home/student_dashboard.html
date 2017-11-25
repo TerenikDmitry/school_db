@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}User{% endblock %}
+{% block body %}
+<div class="content-section">
+    <div class="center">
+        <h2>{{ user.first_name }} {{ user.last_name }} {{ user.middle_name }}</h2>
+        <div>email: {{ user.email }}</div>
+        <div>Tell:
+            {% if user.tel != "" %}
+                {{ user.tel }}
+            {% else %}
+                no phone number
+            {% endif %}
+        </div>
+        <div> Class:
+        <a href="{{ url_for('class_room.classRoom', class_id=studentClass.id) }}">
+            {{ studentClass.name }}
+        </a>
+        </div>
+        {% if parents %}
+            <hr>
+            <div>Parents: </div>
+            {% for parent in parents %}
+            <div>
+            <a href="{{ url_for('home.parent_dashboard',id=parent.parentStudent.id) }}">
+                {{ parent.parentStudent.last_name }} {{ parent.parentStudent.first_name }} {{ parent.parentStudent.middle_name }}
+            </a>
+            </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

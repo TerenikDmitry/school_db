@@ -1,0 +1,9 @@
+UI
+- Red Background logout menu item
+
+Logic
+- [Page] Class list
++ [Page] Parents see children's
+- [RENAME] app/class_room
+- [CHECK] all cascade Delete
+- [CHECK] all constrain regulations
