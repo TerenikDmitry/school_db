@@ -19,24 +19,24 @@ def check_admin():
 @login_required
 def list_roles():
     """
-        Show roles on the database
+    Show roles
     """
     check_admin()
 
     roles = Role.query.all()
+
     return render_template('admin/roles/roles.html',
-                           roles=roles, title='Roles')
+                           roles=roles,
+                           title='Roles')
 
 
 @admin.route('/roles/add', methods=['GET', 'POST'])
 @login_required
 def add_role():
     """
-    Add a role to the database
+    Add a role
     """
     check_admin()
-
-    add_role = True
 
     form = RoleForm()
     if form.validate_on_submit():
@@ -49,15 +49,14 @@ def add_role():
             db.session.commit()
             flash('You have successfully added a new role.')
         except:
-            # in case role name already exists
             flash('Error: role name already exists.')
 
-        # redirect to the roles page
+        # redirect to the list roles PAGE
         return redirect(url_for('admin.list_roles'))
 
-    # load role template
-    return render_template('admin/roles/role.html', add_role=add_role,
-                           form=form, title='Add Role')
+    return render_template('admin/roles/role.html',
+                           form=form,
+                           title='Add Role')
 
 
 @admin.route('/roles/edit/<int:id>', methods=['GET', 'POST'])
@@ -68,8 +67,6 @@ def edit_role(id):
     """
     check_admin()
 
-    add_role = False
-
     role = Role.query.get_or_404(id)
     form = RoleForm(obj=role)
     if form.validate_on_submit():
@@ -79,20 +76,22 @@ def edit_role(id):
         db.session.commit()
         flash('You have successfully edited the role.')
 
-        # redirect to the roles page
+        # redirect to the list roles PAGE
         return redirect(url_for('admin.list_roles'))
 
     form.description.data = role.description
     form.name.data = role.name
-    return render_template('admin/roles/role.html', add_role=add_role,
-                           form=form, title="Edit Role")
+
+    return render_template('admin/roles/role.html',
+                           form=form,
+                           title="Edit Role")
 
 
 @admin.route('/roles/delete/<int:id>', methods=['GET', 'POST'])
 @login_required
 def delete_role(id):
     """
-    Delete a role from the database
+    Delete a role
     """
     check_admin()
 
@@ -101,7 +100,6 @@ def delete_role(id):
     db.session.commit()
     flash('You have successfully deleted the role.')
 
-    # redirect to the roles page
     return redirect(url_for('admin.list_roles'))
 
 
@@ -109,20 +107,21 @@ def delete_role(id):
 @login_required
 def list_users():
     """
-    List all employees
+    List all users
     """
     check_admin()
 
     users = User.query.all()
     return render_template('admin/users/users.html',
-                           users=users, title='Users')
+                           users=users,
+                           title='Users')
 
 
 @admin.route('/users/add', methods=['GET', 'POST'])
 @login_required
 def add_user():
     """
-    List all employees
+    Add a user
     """
     check_admin()
 
@@ -143,19 +142,21 @@ def add_user():
         db.session.commit()
         flash('You have successfully add user.')
 
-        # redirect to the roles page
+        # redirect to the user list PAGE
         return redirect(url_for('admin.list_users'))
 
     return render_template('admin/users/user.html',
-                           user=user, form=form,
-                           title='Add User', add_user=add_user)
+                           user=user,
+                           form=form,
+                           title='Add User',
+                           add_user=add_user)
 
 
 @admin.route('/users/delete/<int:id>', methods=['GET', 'POST'])
 @login_required
 def delete_user(id):
     """
-    Delete a role from the database
+    Delete a user
     """
     check_admin()
 
@@ -164,7 +165,7 @@ def delete_user(id):
     db.session.commit()
     flash('You have successfully deleted the user.')
 
-    # redirect to the roles page
+    # redirect to the user list PAGE
     return redirect(url_for('admin.list_users'))
 
 
@@ -172,7 +173,7 @@ def delete_user(id):
 @login_required
 def edit_user(id):
     """
-    Assign a department and a role to an employee
+    Change user information
     """
     check_admin()
 
@@ -193,7 +194,7 @@ def edit_user(id):
         db.session.commit()
         flash('You have successfully assigned a role.')
 
-        # redirect to the roles page
+        # redirect to the user list PAGE
         return redirect(url_for('admin.list_users'))
 
     form.username.data = user.username
@@ -203,31 +204,32 @@ def edit_user(id):
     form.email.data = user.email
     form.tell.data = user.tel
     form.role.data = Role.query.get_or_404(user.role_id)
+
     return render_template('admin/users/user.html',
-                           user=user, form=form,
-                           title='Edit User', add_user=add_user)
+                           user=user,
+                           form=form,
+                           title='Edit User',
+                           add_user=add_user)
 
 
 @admin.route('/class_specializations')
 @login_required
 def list_class_specializations():
     """
-        Show class_specializations on the database
+    Show the list of specializations of classes
     """
     check_admin()
-    """
-    List all roles
-    """
+
     specializations = Specialization.query.all()
     return render_template('admin/class_specializations/class_specializations.html',
-                           specializations=specializations, title='Specializations')
+                           specializations=specializations)
 
 
 @admin.route('/class_specializations/add', methods=['GET', 'POST'])
 @login_required
 def add_class_specializations():
     """
-    Add a role to the database
+    Add class specialization
     """
     check_admin()
 
@@ -238,28 +240,26 @@ def add_class_specializations():
         specialization = Specialization(name=form.name.data)
 
         try:
-            # add role to the database
             db.session.add(specialization)
             db.session.commit()
             flash('You have successfully added a new specialization.')
         except:
-            # in case role name already exists
             flash('Error: specialization name already exists.')
 
-        # redirect to the roles page
+        # redirect to the list of specializations of classes PAGE
         return redirect(url_for('admin.list_class_specializations'))
 
-    # load role template
     return render_template('admin/class_specializations/class_specialization.html',
                            add_specialization=add_specialization,
-                           form=form, title='Add Specialization')
+                           form=form,
+                           title='Add Class Specialization')
 
 
 @admin.route('/class_specializations/delete/<int:id>', methods=['GET', 'POST'])
 @login_required
 def delete_class_specializations(id):
     """
-    Delete a role from the database
+    Delete class specialization
     """
     check_admin()
 
@@ -268,7 +268,7 @@ def delete_class_specializations(id):
     db.session.commit()
     flash('You have successfully deleted the specialization.')
 
-    # redirect to the roles page
+    # redirect to the list of specializations of classes PAGE
     return redirect(url_for('admin.list_class_specializations'))
 
 
@@ -276,7 +276,7 @@ def delete_class_specializations(id):
 @login_required
 def edit_class_specializations(id):
     """
-    Edit a role
+    Edit class specialization
     """
     check_admin()
 
@@ -290,35 +290,34 @@ def edit_class_specializations(id):
         db.session.commit()
         flash('You have successfully edited the specialization.')
 
-        # redirect to the roles page
+        # redirect to the list of specializations of classes PAGE
         return redirect(url_for('admin.list_class_specializations'))
 
     form.name.data = specialization.name
     return render_template('admin/class_specializations/class_specialization.html',
                            add_specialization=add_specialization,
-                           form=form, title="Edit Specialization")
+                           form=form,
+                           title="Edit Class Specialization")
 
 
 @admin.route('/room_specializations')
 @login_required
 def list_room_specializations():
     """
-        Show class_specializations on the database
+    Show the list of specializations of classroom
     """
     check_admin()
-    """
-    List all roles
-    """
+
     room_specializations = RoomSpecialization.query.all()
     return render_template('admin/room_specializations/room_specializations.html',
-                           room_specializations=room_specializations, title='Room Specializations')
+                           room_specializations=room_specializations, )
 
 
 @admin.route('/room_specializations/add', methods=['GET', 'POST'])
 @login_required
 def add_room_specializations():
     """
-    Add a role to the database
+    Add classroom specialization
     """
     check_admin()
 
@@ -329,37 +328,35 @@ def add_room_specializations():
         room_specialization = RoomSpecialization(name=form.name.data)
 
         try:
-            # add role to the database
             db.session.add(room_specialization)
             db.session.commit()
-            flash('You have successfully added a new room specialization.')
+            flash('You have successfully added a new classroom specialization.')
         except:
-            # in case role name already exists
-            flash('Error: room specialization name already exists.')
+            flash('Error: class specialization name already exists.')
 
-        # redirect to the roles page
+        # redirect to the list of specializations of classroom PAGE
         return redirect(url_for('admin.list_room_specializations'))
 
-    # load role template
     return render_template('admin/room_specializations/room_specialization.html',
                            add_room_specialization=add_room_specialization,
-                           form=form, title='Add Room Specialization')
+                           form=form,
+                           title='Add Room Specialization')
 
 
 @admin.route('/room_specializations/delete/<int:id>', methods=['GET', 'POST'])
 @login_required
 def delete_room_specialization(id):
     """
-    Delete a role from the database
+    Delete classroom specialization
     """
     check_admin()
 
     room_specializations = RoomSpecialization.query.get_or_404(id)
     db.session.delete(room_specializations)
     db.session.commit()
-    flash('You have successfully deleted the room specialization.')
+    flash('You have successfully deleted the classroom specialization.')
 
-    # redirect to the roles page
+    # redirect to the list of specializations of classroom PAGE
     return redirect(url_for('admin.list_room_specializations'))
 
 
@@ -367,7 +364,7 @@ def delete_room_specialization(id):
 @login_required
 def edit_room_specializations(id):
     """
-    Edit a role
+    Edit classroom specialization
     """
     check_admin()
 
@@ -381,35 +378,34 @@ def edit_room_specializations(id):
         db.session.commit()
         flash('You have successfully edited the room specialization.')
 
-        # redirect to the roles page
+        # redirect to the list of specializations of classroom PAGE
         return redirect(url_for('admin.list_room_specializations'))
 
     form.name.data = room_specialization.name
     return render_template('admin/room_specializations/room_specialization.html',
                            add_room_specialization=add_room_specialization,
-                           form=form, title="Edit Room Specialization")
+                           form=form,
+                           title="Edit Room Specialization")
 
 
 @admin.route('/classrooms')
 @login_required
 def list_classrooms():
     """
-        Show classrooms list
+    Show classroom list
     """
     check_admin()
-    """
-    List all roles
-    """
+
     classrooms = Classroom.query.all()
     return render_template('admin/classrooms/classrooms.html',
-                           classrooms=classrooms, title='Classrooms')
+                           classrooms=classrooms)
 
 
 @admin.route('/classrooms/delete/<int:id>')
 @login_required
 def delete_classroom(id):
     """
-        Delete a classrooms from the database
+    Delete classroom
     """
     check_admin()
 
@@ -418,7 +414,7 @@ def delete_classroom(id):
     db.session.commit()
     flash('You have successfully deleted the classroom specialization.')
 
-    # redirect to the roles page
+    # redirect to the list of classroom PAGE
     return redirect(url_for('admin.list_room_specializations'))
 
 
@@ -426,7 +422,7 @@ def delete_classroom(id):
 @login_required
 def add_classroom():
     """
-    Add a classroom to the database
+    Add classroom
     """
     check_admin()
 
@@ -438,18 +434,15 @@ def add_classroom():
                               room_specialization_id=form.spec.data.id)
 
         try:
-            # add role to the database
             db.session.add(classroom)
             db.session.commit()
             flash('You have successfully added a new classroom.')
         except:
-            # in case role name already exists
             flash('Error: classroom name already exists.')
 
-        # redirect to the roles page
+        # redirect to the list of classroom PAGE
         return redirect(url_for('admin.list_classrooms'))
 
-    # load role template
     return render_template('admin/classrooms/classroom.html',
                            add_classroom=add_classroom,
                            form=form,
@@ -460,7 +453,7 @@ def add_classroom():
 @login_required
 def edit_classroom(id):
     """
-       Edit a classroom to the database
+    Edit classroom
     """
     check_admin()
 
@@ -471,22 +464,20 @@ def edit_classroom(id):
     form = ClassroomEditForm()
     if form.validate_on_submit():
         try:
-            # add role to the database
             classroom.name = form.name.data
             classroom.room_specialization_id = form.spec.data.id
             db.session.add(classroom)
             db.session.commit()
             flash('You have successfully added a new classroom.')
         except:
-            # in case role name already exists
             flash('Error: classroom name already exists.')
 
-        # redirect to the roles page
+        # redirect to the list of classroom PAGE
         return redirect(url_for('admin.list_classrooms'))
+
     form.name.data = classroom.name
     form.spec.data = RoomSpecialization.query.get_or_404(classroom.room_specialization_id)
 
-    # load role template
     return render_template('admin/classrooms/classroom.html',
                            add_classroom=add_classroom,
                            form=form,

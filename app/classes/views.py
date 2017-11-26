@@ -28,19 +28,20 @@ def one_class(class_id):
 @login_required
 def list_classes():
     """
-        List of classes from the database
+    List of classes
     """
     check_admin()
 
     classesList = Class.query.all()
-    return render_template('classes/classes.html', classesList=classesList, title='Classes')
+    return render_template('classes/classes.html',
+                           classesList=classesList)
 
 
 @classes.route('/class/add', methods=['GET', 'POST'])
 @login_required
 def add_class():
     """
-        Add a class to the database
+    Add class
     """
     check_admin()
 
@@ -54,18 +55,15 @@ def add_class():
                              room_id=form.classroom_id.data.id,
                              specialization_id=form.specialization_id.data.id
                              )
-            # add role to the database
             db.session.add(classOne)
             db.session.commit()
             flash('You have successfully added a new class.')
         except:
-            # in case role name already exists
             flash('Error')
 
-        # redirect to the roles page
+        # redirect to the list of classes PAGE
         return redirect(url_for('classes.list_classes'))
 
-    # load role template
     return render_template('classes/editClass.html',
                            form=form,
                            title='Add Class')
@@ -75,7 +73,7 @@ def add_class():
 @login_required
 def edit_class(id):
     """
-    Edit a role
+    Edit class
     """
     check_admin()
 
@@ -94,10 +92,9 @@ def edit_class(id):
             db.session.commit()
             flash('You have successfully edited the class.')
         except:
-            # in case role name already exists
             flash('Error')
 
-        # redirect to the roles page
+        # redirect to the list of classes PAGE
         return redirect(url_for('classes.list_classes'))
 
     form.name.data = classOne.name
@@ -115,7 +112,7 @@ def edit_class(id):
 @login_required
 def delete_class(id):
     """
-    Delete a role from the database
+    Delete class
     """
     check_admin()
 
@@ -124,7 +121,7 @@ def delete_class(id):
     db.session.commit()
     flash('You have successfully deleted the class.')
 
-    # redirect to the roles page
+    # redirect to the list of classes PAGE
     return redirect(url_for('classes.list_classes'))
 
 
@@ -132,7 +129,7 @@ def delete_class(id):
 @login_required
 def add_student(id):
     """
-        Add a student to class
+    Add a student to class
     """
     check_admin()
 
@@ -141,14 +138,13 @@ def add_student(id):
         try:
             studentInClass = StudentInClass(class_id=id,
                                             user_id_studen=form.student.data.id)
-            # add role to the database
             db.session.add(studentInClass)
             db.session.commit()
             flash('You have successfully added a student to class.')
         except:
             flash('Error')
 
-        # redirect to the list of class PAGE
+        # redirect to the list of classes PAGE
         return redirect(url_for('classes.list_classes'))
 
     form.student.query = db.session.query(User).filter(User.role_id == 2).outerjoin(StudentInClass).filter(StudentInClass.user_id_studen == None)

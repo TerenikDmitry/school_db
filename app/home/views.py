@@ -36,20 +36,11 @@ def check_parent(role_id):
 
 
 @home.route('/')
-def homepage():
-    """
-    Render the homepage template on the / route
-    """
-    return render_template('home/index.html', title="Welcome")
-
-
 @home.route('/dashboard')
 @login_required
 def dashboard():
-    """
-    Render the dashboard template on the /dashboard route
-    """
-    return render_template('home/index.html', title="Welcome")
+    return render_template('home/index.html',
+                           title="Welcome")
 
 
 @home.route('/admin/dashboard')
@@ -73,9 +64,14 @@ def student_dashboard(id):
     studentClass = user.studentInClass[0].classes
 
     if current_user.role_id == 1 or current_user.role_id == 2:
-        return render_template('home/student_dashboard.html', title="User", user=user, studentClass=studentClass, parents=parents)
+        return render_template('home/student_dashboard.html',
+                               user=user,
+                               studentClass=studentClass,
+                               parents=parents)
     else:
-        return render_template('home/student_dashboard.html', title="User", user=user, studentClass=studentClass)
+        return render_template('home/student_dashboard.html',
+                               user=user,
+                               studentClass=studentClass)
 
 
 @home.route('/teacher/<int:id>')
@@ -89,7 +85,10 @@ def teacher_dashboard(id):
 
     subjects = TeacherToSubject.query.filter_by(user_id_teacher=id).all()
 
-    return render_template('home/teacher_dashboard.html', title="User", user=user, headClass=headClass, subjects=subjects)
+    return render_template('home/teacher_dashboard.html',
+                           user=user,
+                           headClass=headClass,
+                           subjects=subjects)
 
 
 @home.route('/parent/<int:id>')
@@ -101,4 +100,6 @@ def parent_dashboard(id):
 
     childrens = ParentToStudent.query.filter_by(user_id_parent=id).all()
 
-    return render_template('home/parent_dashboard.html', title="Parent", user=user, childrens=childrens)
+    return render_template('home/parent_dashboard.html',
+                           user=user,
+                           childrens=childrens)
