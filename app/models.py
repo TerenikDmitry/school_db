@@ -2,7 +2,6 @@ import datetime
 from flask_login import UserMixin
 from sqlalchemy import UniqueConstraint
 from werkzeug.security import generate_password_hash, check_password_hash
-
 from app import db, login_manager
 
 
@@ -52,7 +51,7 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
     def __repr__(self):
-        return '<User: {}>'.format(self.username)
+        return '{} {} {}'.format(self.last_name, self.first_name, self.middle_name)
 
 
 # Set up user_loader

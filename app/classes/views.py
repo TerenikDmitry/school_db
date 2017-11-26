@@ -4,7 +4,7 @@ from flask_login import current_user, login_required
 from . import classes
 from .. import db
 from ..models import Class, StudentInClass, User, Classroom, Specialization
-from forms import ClassForm
+from forms import ClassForm, ClassStudentsForm
 
 
 def check_admin():
@@ -44,8 +44,6 @@ def add_class():
     """
     check_admin()
 
-    add_class = True
-
     form = ClassForm()
     if form.validate_on_submit():
         try:
@@ -68,8 +66,9 @@ def add_class():
         return redirect(url_for('classes.list_classes'))
 
     # load role template
-    return render_template('classes/editClass.html', add_class=add_class,
-                           form=form, title='Add Class')
+    return render_template('classes/editClass.html',
+                           form=form,
+                           title='Add Class')
 
 
 @classes.route('/class/edit/<int:id>', methods=['GET', 'POST'])
@@ -79,8 +78,6 @@ def edit_class(id):
     Edit a role
     """
     check_admin()
-
-    add_class = False
 
     classOne = Class.query.get_or_404(id)
     form = ClassForm(obj=classOne)
@@ -109,8 +106,9 @@ def edit_class(id):
     form.head_teacher_id.data = User.query.get_or_404(classOne.headTeacher)
     form.classroom_id.data = Classroom.query.get_or_404(classOne.room_id)
     form.specialization_id.data = Specialization.query.get_or_404(classOne.specialization_id)
-    return render_template('classes/editClass.html', add_class=add_class,
-                           form=form, title="Edit Class")
+    return render_template('classes/editClass.html',
+                           form=form,
+                           title="Edit Class")
 
 
 @classes.route('/class/delete/<int:id>', methods=['GET', 'POST'])
@@ -128,3 +126,34 @@ def delete_class(id):
 
     # redirect to the roles page
     return redirect(url_for('classes.list_classes'))
+
+
+@classes.route('/class/students/add/<int:id>', methods=['GET', 'POST'])
+@login_required
+def add_student(id):
+    """
+        Add a student to class
+    """
+    check_admin()
+
+    form = ClassStudentsForm(obj=id)
+    if form.validate_on_submit():
+        try:
+            studentInClass = StudentInClass(class_id=id,
+                                            user_id_studen=form.student.data.id)
+            # add role to the database
+            db.session.add(studentInClass)
+            db.session.commit()
+            flash('You have successfully added a student to class.')
+        except:
+            flash('Error')
+
+        # redirect to the list of class PAGE
+        return redirect(url_for('classes.list_classes'))
+
+    form.student.query = db.session.query(User).filter(User.role_id == 2).outerjoin(StudentInClass).filter(StudentInClass.user_id_studen == None)
+    class_name = Class.query.get_or_404(id)
+    return render_template('classes/addStudentToClass.html',
+                           form=form,
+                           class_name = class_name.name,
+                           title='Add Student to Class')
