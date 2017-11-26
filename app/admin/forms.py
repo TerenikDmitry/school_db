@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, ValidationError
 from wtforms.validators import DataRequired, Email, EqualTo
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
-from ..models import Role, User, RoomSpecialization
+from ..models import Role, User, RoomSpecialization, Class
 
 
 class RoleForm(FlaskForm):
@@ -93,6 +93,10 @@ def get_users():
     return User.query
 
 
+def get_classes():
+    return Class.query
+
+
 class ParentToStudentAddForm(FlaskForm):
     """
     Form for admin to edit link between parents and students
@@ -101,9 +105,27 @@ class ParentToStudentAddForm(FlaskForm):
     student = QuerySelectField(query_factory=get_users)
     submit = SubmitField('Submit')
 
+
 class ParentToStudentEditForm(FlaskForm):
     """
     Form for admin to edit student link between parents and students
     """
     student = QuerySelectField(query_factory=get_users)
+    submit = SubmitField('Submit')
+
+
+class StudentToClassEditForm(FlaskForm):
+    """
+    Form for admin to edit student link between parents and students
+    """
+    class_name = QuerySelectField(query_factory=get_classes)
+    submit = SubmitField('Submit')
+
+
+class StudentToClassAddForm(FlaskForm):
+    """
+        Form for admin to add link between student and class
+    """
+    student = QuerySelectField(query_factory=get_users)
+    class_name = QuerySelectField(query_factory=get_classes)
     submit = SubmitField('Submit')

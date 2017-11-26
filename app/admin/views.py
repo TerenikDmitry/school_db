@@ -4,7 +4,7 @@ from flask_login import current_user, login_required
 from . import admin
 from .. import db
 from forms import *
-from ..models import Role, User, Specialization, RoomSpecialization, Classroom, ParentToStudent
+from ..models import Role, User, Specialization, RoomSpecialization, Classroom, ParentToStudent, StudentInClass
 
 
 def check_admin():
@@ -510,7 +510,7 @@ def add_parent_to_student():
         try:
             db.session.add(parent_to_student)
             db.session.commit()
-            flash('You have successfully added a new classroom.')
+            flash('You have successfully added a new link between parents and students.')
         except:
             flash('Error')
 
@@ -575,3 +575,105 @@ def edit_parent_to_student(id):
                            parent_name = parent_name,
                            add_parent_to_student=add_parent_to_student,
                            title='Edit link between parents and students')
+
+
+@admin.route('/students_class')
+@login_required
+def list_students_class():
+    """
+    A list link between students and class
+    """
+    check_admin()
+
+    students = User.query.filter_by(role_id=2).outerjoin(StudentInClass, User.id==StudentInClass.user_id_studen).all()
+
+    return render_template('admin/students/list.html',
+                           students=students)
+
+
+@admin.route('/students_class/add', methods=['GET', 'POST'])
+@login_required
+def add_students_class():
+    """
+    Add link between students and class
+    """
+    check_admin()
+
+    form = StudentToClassAddForm()
+    if form.validate_on_submit():
+        student_to_class = StudentInClass(class_id=form.class_name.data.id,
+                                          user_id_studen=form.student.data.id)
+
+        try:
+            db.session.add(student_to_class)
+            db.session.commit()
+            flash('You have successfully added a new link between student and class.')
+        except:
+            flash('Error')
+
+        # redirect to the list links between students and class PAGE
+        return redirect(url_for('admin.list_students_class'))
+
+    form.student.query = db.session.query(User).filter(User.role_id == 2).outerjoin(StudentInClass).filter(
+        StudentInClass.class_id == None)
+    return render_template('admin/students/edit.html',
+                           form=form,
+                           title='Add link between student and class')
+
+
+@admin.route('/students_class/delete/<int:id>', methods=['GET', 'POST'])
+@login_required
+def delete_students_class(id):
+    """
+    Delete link between students and class
+    """
+    check_admin()
+
+    student_to_class = StudentInClass.query.filter_by(user_id_studen=id).first()
+    db.session.delete(student_to_class)
+    db.session.commit()
+    flash('You have successfully deleted link between students and class.')
+
+    # redirect to the list links between parents and students PAGE
+    return redirect(url_for('admin.list_students_class'))
+
+
+@admin.route('/students_class/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_students_class(id):
+    """
+    Edit link between students and class
+    """
+    check_admin()
+
+    edit_student_to_class = True
+
+    student = User.query.get_or_404(id)
+    student_to_class = StudentInClass.query.filter_by(user_id_studen=id).first()
+
+    form = StudentToClassEditForm()
+    if form.validate_on_submit():
+        if student_to_class:
+            student_to_class.class_id = form.class_name.data.id
+        else:
+            student_to_class = StudentInClass(user_id_studen=id,
+                                              class_id=form.class_name.data.id)
+
+        try:
+            db.session.add(student_to_class)
+            db.session.commit()
+            flash('You have successfully added a new classroom.')
+        except:
+            flash('Error')
+
+        # redirect to the list links between students and class PAGE
+        return redirect(url_for('admin.list_students_class'))
+
+    form.class_name.query = db.session.query(Class)
+    if student_to_class:
+        form.class_name.data = Class.query.get(student_to_class.class_id)
+    return render_template('admin/students/edit.html',
+                           form=form,
+                           student=student,
+                           edit_student_to_class=edit_student_to_class,
+                           title='Edit link between student and class')

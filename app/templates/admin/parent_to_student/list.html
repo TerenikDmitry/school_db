@@ -24,14 +24,10 @@
               {% for parent_student in parent_to_student %}
                 <tr>
                     <td>
-                        {{ parent_student.parentStudent.last_name }}
-                        {{ parent_student.parentStudent.first_name }}
-                        {{ parent_student.parentStudent.middle_name }}
+                        {{ parent_student.parentStudent }}
                     </td>
                     <td>
-                        {{ parent_student.studentParent.last_name }}
-                        {{ parent_student.studentParent.first_name }}
-                        {{ parent_student.studentParent.middle_name }}
+                        {{ parent_student.studentParent }}
                     </td>
                     <td>
                         <a href="{{ url_for('admin.edit_parent_to_student', id=parent_student.parentStudent.id) }}">
