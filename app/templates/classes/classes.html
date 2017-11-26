@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Classes{% endblock %}
+{% block body %}
+<div class="content-section">
+  <div class="outer">
+    <div class="middle">
+      <div class="inner">
+        <h1 style="text-align:center;">Classes</h1>
+        {% if classesList %}
+          <hr class="intro-divider">
+          <div class="center">
+            <table class="table table-striped table-bordered">
+              <thead>
+                <tr>
+                    <th width="5%"> ID </th>
+                    <th width="8%"> Name </th>
+                    <th width="13%"> Date Start </th>
+                    <th width="13%"> Date End </th>
+                    <th width="15%"> Spec </th>
+                    <th width="23%"> Head Teacher </th>
+                    <th width="20%"> Classroom </th>
+                    <th width="8%"> Edit </th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for classOne in classesList %}
+                <tr>
+                    <td> {{ classOne.id }} </td>
+                    <td> {{ classOne.name }} </td>
+                    <td> {{ classOne.dateStartEducation.strftime('%d, %b %Y') }} </td>
+                    <td> {{ classOne.dateEndEducation.strftime('%d, %b %Y') }} </td>
+                    <td> {{ classOne.specializations.name }} </td>
+                    <td> {{ classOne.users.first_name }} {{ classOne.users.last_name }} {{ classOne.users.middle_name }} </td>
+                    <td> {{ classOne.classrooms.name }} ({{ classOne.classrooms.room_specializations.name }}) </td>
+                    <td>
+                        <a href="{{ url_for('classes.edit_class', id=classOne.id) }}">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                    </td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          <div style="text-align: center">
+        {% else %}
+          <div style="text-align: center">
+            <h3> No class have been added. </h3>
+            <hr class="intro-divider">
+          </div>
+        {% endif %}
+          <div style="text-align: center">
+          <a href="{{ url_for('classes.add_class') }}" class="btn btn-default btn-lg">
+            <i class="fa fa-plus"></i>
+            Add Class
+          </a>
+          </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -22,9 +22,7 @@ def list_roles():
         Show roles on the database
     """
     check_admin()
-    """
-    List all roles
-    """
+
     roles = Role.query.all()
     return render_template('admin/roles/roles.html',
                            roles=roles, title='Roles')
@@ -436,7 +434,8 @@ def add_classroom():
 
     form = ClassroomEditForm()
     if form.validate_on_submit():
-        classroom = Classroom(name=form.name.data,room_specialization_id=form.spec.data.id)
+        classroom = Classroom(name=form.name.data,
+                              room_specialization_id=form.spec.data.id)
 
         try:
             # add role to the database

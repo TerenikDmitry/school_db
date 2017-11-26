@@ -13,7 +13,7 @@
             {% endif %}
         </div>
         <div> Class:
-        <a href="{{ url_for('class_room.classRoom', class_id=studentClass.id) }}">
+        <a href="{{ url_for('classes.one_class', class_id=studentClass.id) }}">
             {{ studentClass.name }}
         </a>
         </div>

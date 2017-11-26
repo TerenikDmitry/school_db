@@ -34,8 +34,8 @@ def create_app(config_name):
     from .home import home as home_blueprint
     app.register_blueprint(home_blueprint)
 
-    from .classes import class_room as class_room_blueprint
-    app.register_blueprint(class_room_blueprint)
+    from .classes import classes as classes_blueprint
+    app.register_blueprint(classes_blueprint)
 
     @app.errorhandler(403)
     def forbidden(error):

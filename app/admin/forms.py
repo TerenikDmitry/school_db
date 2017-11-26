@@ -1,10 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, ValidationError
 from wtforms.validators import DataRequired, Email, EqualTo
-
-# update imports
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
-
 from ..models import Role, User, RoomSpecialization
 
 
@@ -35,8 +32,7 @@ class UserEditForm(FlaskForm):
     last_name = StringField('Last Name', validators=[DataRequired()])
     middle_name = StringField('Middle Name', validators=[DataRequired()])
     tell = StringField('Telephone')
-    role = QuerySelectField(query_factory=lambda: Role.query.all(),
-                            get_label="name")
+    role = QuerySelectField(query_factory=lambda: Role.query.all(), get_label="name")
     submit = SubmitField('Submit')
 
 
