@@ -87,3 +87,23 @@ class ClassroomEditForm(FlaskForm):
     spec = QuerySelectField(query_factory=lambda: RoomSpecialization.query.all(),
                             get_label="name")
     submit = SubmitField('Submit')
+
+
+def get_users():
+    return User.query
+
+
+class ParentToStudentAddForm(FlaskForm):
+    """
+    Form for admin to edit link between parents and students
+    """
+    parent = QuerySelectField(query_factory=get_users)
+    student = QuerySelectField(query_factory=get_users)
+    submit = SubmitField('Submit')
+
+class ParentToStudentEditForm(FlaskForm):
+    """
+    Form for admin to edit student link between parents and students
+    """
+    student = QuerySelectField(query_factory=get_users)
+    submit = SubmitField('Submit')

@@ -2,6 +2,7 @@ UI
 + Red Background logout menu item
 
 Logic
+- [Page] Class "link student to parent"
 + [Page] Class "Add student to class"
 + [Page] Class list
 + [Page] Parents see children's

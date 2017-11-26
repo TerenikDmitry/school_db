@@ -10,6 +10,9 @@
       <div class="inner">
         <div class="center">
             <h1> {{ title }} </h1>
+            {% if add_parent_to_student==False %}
+                <h2>{{ parent_name }}</h2>
+            {% endif %}
             <br/>
             {{ wtf.quick_form(form) }}
         </div>

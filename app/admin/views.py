@@ -3,8 +3,8 @@ from flask_login import current_user, login_required
 
 from . import admin
 from .. import db
-from forms import RoleForm, UserEditForm, SpecializationForm, RegistrationForm, ClassroomEditForm
-from ..models import Role, User, Specialization, RoomSpecialization, Classroom
+from forms import *
+from ..models import Role, User, Specialization, RoomSpecialization, Classroom, ParentToStudent
 
 
 def check_admin():
@@ -401,7 +401,7 @@ def list_classrooms():
                            classrooms=classrooms)
 
 
-@admin.route('/classrooms/delete/<int:id>')
+@admin.route('/classrooms/delete/<int:id>', methods=['GET', 'POST'])
 @login_required
 def delete_classroom(id):
     """
@@ -426,8 +426,6 @@ def add_classroom():
     """
     check_admin()
 
-    add_classroom = True
-
     form = ClassroomEditForm()
     if form.validate_on_submit():
         classroom = Classroom(name=form.name.data,
@@ -444,7 +442,6 @@ def add_classroom():
         return redirect(url_for('admin.list_classrooms'))
 
     return render_template('admin/classrooms/classroom.html',
-                           add_classroom=add_classroom,
                            form=form,
                            title='Add Classroom')
 
@@ -456,8 +453,6 @@ def edit_classroom(id):
     Edit classroom
     """
     check_admin()
-
-    add_classroom = False
 
     classroom = Classroom.query.get_or_404(id)
 
@@ -479,6 +474,104 @@ def edit_classroom(id):
     form.spec.data = RoomSpecialization.query.get_or_404(classroom.room_specialization_id)
 
     return render_template('admin/classrooms/classroom.html',
-                           add_classroom=add_classroom,
                            form=form,
                            title='Edit Classroom')
+
+
+@admin.route('/parent_to_student')
+@login_required
+def list_parent_to_student():
+    """
+    A list link between parents and students
+    """
+    check_admin()
+
+    parent_to_student = ParentToStudent.query.all()
+
+    return render_template('admin/parent_to_student/list.html',
+                           parent_to_student=parent_to_student)
+
+
+@admin.route('/parent_to_student/add', methods=['GET', 'POST'])
+@login_required
+def add_parent_to_student():
+    """
+    Add link between parents and students
+    """
+    check_admin()
+
+    add_parent_to_student = True
+
+    form = ParentToStudentAddForm()
+    if form.validate_on_submit():
+        parent_to_student = ParentToStudent(user_id_parent=form.parent.data.id,
+                                    user_id_student=form.student.data.id)
+
+        try:
+            db.session.add(parent_to_student)
+            db.session.commit()
+            flash('You have successfully added a new classroom.')
+        except:
+            flash('Error')
+
+        # redirect to the list links between parents and students PAGE
+        return redirect(url_for('admin.list_parent_to_student'))
+
+    form.parent.query = db.session.query(User).filter(User.role_id == 3)
+    form.student.query = db.session.query(User).filter(User.role_id == 2)
+    return render_template('admin/parent_to_student/edit.html',
+                           form=form,
+                           add_parent_to_student=add_parent_to_student,
+                           title='Add link between parents and students')
+
+
+@admin.route('/parent_to_student/delete/<int:id>', methods=['GET', 'POST'])
+@login_required
+def delete_parent_to_student(id):
+    """
+    Delete link between parents and students
+    """
+    check_admin()
+
+    parent_to_student = ParentToStudent.query.get_or_404(id)
+    db.session.delete(parent_to_student)
+    db.session.commit()
+    flash('You have successfully deleted link between parents and students.')
+
+    # redirect to the list links between parents and students PAGE
+    return redirect(url_for('admin.list_parent_to_student'))
+
+
+@admin.route('/parent_to_student/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_parent_to_student(id):
+    """
+    Edit link between parents and students
+    """
+    check_admin()
+
+    add_parent_to_student = False
+
+    parent_to_student = ParentToStudent.query.filter_by(user_id_parent=id).first()
+    parent_name = '{}'.format(parent_to_student.parentStudent)
+
+    form = ParentToStudentEditForm()
+    if form.validate_on_submit():
+        parent_to_student.user_id_student = form.student.data.id
+
+        try:
+            db.session.add(parent_to_student)
+            db.session.commit()
+            flash('You have successfully added a new classroom.')
+        except:
+            flash('Error')
+
+        # redirect to the list links between parents and students PAGE
+        return redirect(url_for('admin.list_parent_to_student'))
+
+    form.student.query = db.session.query(User).filter(User.role_id == 2)
+    return render_template('admin/parent_to_student/edit.html',
+                           form=form,
+                           parent_name = parent_name,
+                           add_parent_to_student=add_parent_to_student,
+                           title='Edit link between parents and students')

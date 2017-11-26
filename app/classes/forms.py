@@ -13,7 +13,7 @@ class ClassForm(FlaskForm):
     date_start = DateField('DateStart', validators=[DataRequired()])
     date_end = DateField('DateEnd', validators=[DataRequired()])
     specialization_id = QuerySelectField(query_factory=lambda: Specialization.query.all(), get_label="name")
-    head_teacher_id = QuerySelectField(query_factory=lambda: User.query.filter_by(role_id=1).all(), get_label="last_name")
+    head_teacher_id = QuerySelectField(query_factory=lambda: User.query.filter_by(role_id=1).all())
     classroom_id = QuerySelectField(query_factory=lambda: Classroom.query.all(), get_label="name")
     submit = SubmitField('Submit')
 

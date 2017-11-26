@@ -38,7 +38,7 @@ def check_parent(role_id):
 @home.route('/')
 @home.route('/dashboard')
 @login_required
-def dashboard():
+def homepage():
     return render_template('home/index.html',
                            title="Welcome")
 
