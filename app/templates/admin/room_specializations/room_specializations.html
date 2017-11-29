@@ -5,57 +5,58 @@
   <div class="outer">
     <div class="middle">
       <div class="inner">
-        <h1 style="text-align:center;">Room Specialization</h1>
-        {% if room_specializations %}
+          <h1 style="text-align:center;">Room Specialization</h1>
           <hr class="intro-divider">
+
+          <div style="text-align: center">
+              <a href="{{ url_for('admin.add_room_specializations') }}" class="btn btn-default btn-lg">
+                  <i class="fa fa-plus"></i> Add Room Specialization
+              </a>
+          </div>
+
+          {% if room_specializations %}
           <div class="center">
-            <table class="table table-striped table-bordered">
-              <thead>
-                <tr>
-                    <th width="10%"> ID </th>
-                    <th width="50%"> Name </th>
-                    <th width="10%"> Rooms Count </th>
-                    <th width="15%"> Edit </th>
-                    <th width="15%"> Delete </th>
-                </tr>
-              </thead>
-              <tbody>
-              {% for room_specialization in room_specializations %}
-                <tr>
-                    <td> {{ room_specialization.id }} </td>
-                    <td> {{ room_specialization.name }} </td>
-                    <td>
-                        {{ room_specialization.room_specialization_id.count() }}
-                    </td>
-                    <td>
-                    <a href="{{ url_for('admin.edit_room_specializations', id=room_specialization.id) }}">
-                        <i class="fa fa-pencil"></i> Edit
-                    </a>
-                    </td>
-                    <td>
-                    <a href="{{ url_for('admin.delete_room_specialization', id=room_specialization.id) }}">
-                        <i class="fa fa-trash"></i> Delete
-                    </a>
-                    </td>
-                </tr>
-              {% endfor %}
-              </tbody>
-            </table>
+              <table class="table table-striped table-bordered">
+                  <thead>
+                  <tr>
+                      <th width="10%"> ID </th>
+                      <th width="50%"> Name </th>
+                      <th width="10%"> Rooms Count </th>
+                      <th width="15%"> Edit </th>
+                      <th width="15%"> Delete </th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {% for room_specialization in room_specializations %}
+                  <tr>
+                      <td> {{ room_specialization.id }} </td>
+                      <td> {{ room_specialization.name }} </td>
+                      <td> {{ room_specialization.room_specialization_id.count() }} </td>
+                      <td>
+                          <a href="{{ url_for('admin.edit_room_specializations', id=room_specialization.id) }}">
+                              <i class="fa fa-pencil"></i> Edit
+                          </a>
+                      </td>
+                      <td>
+                          <a href="{{ url_for('admin.delete_room_specialization', id=room_specialization.id) }}">
+                              <i class="fa fa-trash"></i> Delete
+                          </a>
+                      </td>
+                  </tr>
+                  {% endfor %}
+                  </tbody>
+              </table>
           </div>
+          {% else %}
           <div style="text-align: center">
-        {% else %}
+              <h3> No room specialization have been added. </h3>
+          </div>
+          {% endif %}
+
           <div style="text-align: center">
-            <h3> No room specialization have been added. </h3>
-            <hr class="intro-divider">
-          </div>
-        {% endif %}
-          <div style="text-align: center">
-          <a href="{{ url_for('admin.add_room_specializations') }}" class="btn btn-default btn-lg">
-            <i class="fa fa-plus"></i>
-            Add Room Specialization
-          </a>
-          </div>
-          </div>
+              <a href="{{ url_for('admin.add_room_specializations') }}" class="btn btn-default btn-lg">
+                <i class="fa fa-plus"></i> Add Room Specialization
+              </a>
           </div>
       </div>
     </div>

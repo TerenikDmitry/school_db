@@ -115,3 +115,8 @@ p.copyright {
 .bg-danger{
     background-color: crimson;
 }
+
+.table{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

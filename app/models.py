@@ -113,6 +113,9 @@ class Class(db.Model):
     def __repr__(self):
         return '<Class: {}>'.format(self.name)
 
+    def __str__(self):
+        return '{}'.format(self.name)
+
 
 class Specialization(db.Model):
     """
