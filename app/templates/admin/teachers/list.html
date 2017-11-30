@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}
+    Teachers info
+{% endblock %}
+{% block body %}
+<div class="content-section">
+  <div class="outer">
+    <div class="middle">
+      <div class="inner">
+
+          <h1 style="text-align:center;">Teachers info</h1>
+          <hr class="intro-divider">
+
+          {% if teachers %}
+              <div class="center">
+                  <table class="table table-striped table-bordered">
+                  <thead>
+                      <tr>
+                          <th width="50%"> Teacher </th>
+                          <th width="25%"> List of Subjects </th>
+                          <th width="25%"> Bind to Classroom </th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                  {% for teacher in teachers %}
+                  {% if teacher.is_admin==False %}
+                  <tr>
+                      <td>
+                          <a href="{{ url_for('home.teacher_dashboard',id=teacher.id) }}">
+                              {{ teacher }}
+                          </a>
+                      </td>
+                      <td>
+
+                          {% if teacher.teacherToSubject.all() %}
+                              <a href="{{ url_for('admin.edit_teacher_subjects', id_teacher=teacher.id) }}">
+                                  <i class="fa fa-pencil"></i> edit subjects list
+                              </a>
+                              {% for subjects in teacher.teacherToSubject.all() %}
+                                  <div>{{ subjects.subjects.name }}</div>
+                              {% endfor %}
+                          {% else %}
+                              <a href="{{ url_for('admin.add_teacher_subjects', id_teacher=teacher.id) }}">
+                                  <i class="fa fa-plus"></i> add subject
+                              </a>
+                          {% endif %}
+                      </td>
+                      <td>
+                          {% if teacher.teacherClassroom.all() %}
+                              <a href="{{ url_for('admin.edit_teacher_classroom', id_teacher=teacher.id) }}">
+                                  <i class="fa fa-chain"></i> edit bind
+                              </a>
+                              {% for classroom in teacher.teacherClassroom.all() %}
+                                  <div>{{ classroom.classrooms.name }} ({{ classroom.classrooms.room_specializations.name }})</div>
+                              {% endfor %}
+                              <a href="{{ url_for('admin.delete_teacher_classroom', id_teacher=teacher.id) }}">
+                                  <i class="fa fa-chain-broken"></i> remove bind
+                              </a>
+                          {% else %}
+                              <a href="{{ url_for('admin.add_teacher_classroom', id_teacher=teacher.id) }}">
+                                  <i class="fa fa-chain"></i> add link
+                              </a>
+                          {% endif %}
+                      </td>
+                  </tr>
+                  {% endif %}
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+          {% else %}
+              <div style="text-align: center">
+                  <h3> No teachers. </h3>
+              </div>
+          {% endif %}
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

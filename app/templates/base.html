@@ -25,8 +25,9 @@
             <ul class="nav navbar-nav navbar-right">
                 {% if current_user.is_authenticated %}
                     {% if current_user.is_admin %}
+                        <li><a href="{{ url_for('admin.list_teachers_info') }}">Teachers</a></li>
                         <li><a href="{{ url_for('admin.list_students_class') }}">Students</a></li>
-                        <li><a href="{{ url_for('admin.list_parent_to_student') }}">Parentst</a></li>
+                        <li><a href="{{ url_for('admin.list_parent_to_student') }}">Parents</a></li>
                         <li><a href="{{ url_for('admin.list_classrooms') }}">Classrooms</a></li>
                         <li><a href="{{ url_for('classes.list_classes') }}">Classes</a></li>
                         <li><a href="{{ url_for('admin.list_roles') }}">Roles</a></li>
@@ -64,8 +65,9 @@
                 <ul class="list-inline">
                     {% if current_user.is_authenticated %}
                         {% if current_user.is_admin %}
+                            <li><a href="{{ url_for('admin.list_teachers_info') }}">Teachers</a></li>
                             <li><a href="{{ url_for('admin.list_students_class') }}">Students</a></li>
-                            <li><a href="{{ url_for('admin.list_parent_to_student') }}">Parentst</a></li>
+                            <li><a href="{{ url_for('admin.list_parent_to_student') }}">Parents</a></li>
                             <li><a href="{{ url_for('admin.list_classrooms') }}">Classrooms</a></li>
                             <li><a href="{{ url_for('classes.list_classes') }}">Classes</a></li>
                             <li><a href="{{ url_for('admin.list_roles') }}">Roles</a></li>
