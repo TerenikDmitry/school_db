@@ -21,6 +21,13 @@
                 {{ headClass.name }}
             </a>
         </div>
+        <div>Classroom:
+        {% if classroom %}
+            {{ classroom.classrooms.name }}
+        {% else %}
+            no classrooms
+        {% endif %}
+        </div>
         <hr>
         <div>Subjects: </div>
         {% for subject in subjects %}
