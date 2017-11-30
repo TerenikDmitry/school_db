@@ -149,9 +149,6 @@ class Subject(db.Model):
     def __repr__(self):
         return '<Subject: {}>'.format(self.name)
 
-    def __str__(self):
-        return '{}'.format(self.name)
-
 
 class TeacherToSubject(db.Model):
     """
@@ -201,6 +198,9 @@ class Classroom(db.Model):
 
     def __repr__(self):
         return '<Classroom: {}>'.format(self.name)
+
+    def __str__(self):
+        return '{}'.format(self.name)
 
 
 class ParentToStudent(db.Model):
