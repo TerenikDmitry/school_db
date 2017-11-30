@@ -1,7 +1,7 @@
 from flask import abort, render_template
 from flask_login import current_user, login_required
 
-from ..models import Role, User, TeacherToSubject, ParentToStudent
+from ..models import Role, User, TeacherToSubject, ParentToStudent, TeachersClassroom
 
 from . import home
 
@@ -85,10 +85,13 @@ def teacher_dashboard(id):
 
     subjects = TeacherToSubject.query.filter_by(user_id_teacher=id).all()
 
+    classroom = TeachersClassroom.query.filter_by(user_id_teacher=id).first()
+
     return render_template('home/teacher_dashboard.html',
                            user=user,
                            headClass=headClass,
-                           subjects=subjects)
+                           subjects=subjects,
+                           classroom=classroom)
 
 
 @home.route('/parent/<int:id>')
