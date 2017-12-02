@@ -1,18 +1,10 @@
-from flask import abort, flash, redirect, render_template, url_for
-from flask_login import current_user, login_required
+from flask import flash, redirect, render_template, url_for
+from flask_login import login_required
 
-from . import admin
+from . import admin, check_admin
 from .. import db
-from forms import *
-from ..models import User, TeacherToSubject, TeachersClassroom
-
-
-def check_admin():
-    """
-    Prevent non-admins from accessing the page
-    """
-    if not current_user.is_admin:
-        abort(403)
+from forms import TeacherSubjectAddForm, TeacherClassroomEditForm
+from ..models import User, TeacherToSubject, TeachersClassroom, Classroom, Subject
 
 
 @admin.route('/teachers/list')
@@ -26,6 +18,34 @@ def list_teachers_info():
     teachers = User.query.filter_by(role_id=1).all()
 
     return render_template('admin/teachers/list.html', teachers=teachers)
+
+
+@admin.route('/teachers/<int:id_teacher>/subject/add', methods=['GET', 'POST'])
+@login_required
+def add_teacher_subjects(id_teacher):
+    """
+    Add subject to the list of teacher subjects
+    """
+    check_admin()
+
+    form = TeacherSubjectAddForm()
+
+    if form.validate_on_submit():
+        subject = Subject.query.get_or_404(form.subject.data.id)
+        teacher_subject = TeacherToSubject(user_id_teacher=id_teacher,
+                                           subject_id=subject.id)
+
+        try:
+            db.session.add(teacher_subject)
+            db.session.commit()
+            flash('You have successfully added a subject to the list of teacher subjects.')
+        except:
+            flash('Error')
+
+        # redirect to the list links between students and class PAGE
+        return redirect(url_for('admin.edit_teacher_subjects', id_teacher=id_teacher))
+
+    return render_template('admin/teachers/subject_add.html',form=form)
 
 
 @admin.route('/teachers/<int:id_teacher>/subjects/edit/', methods=['GET', 'POST'])
@@ -57,50 +77,6 @@ def delete_teacher_subjects(id_teacher, id_subject):
 
     # redirect to the list links between parents and students PAGE
     return redirect(url_for('admin.edit_teacher_subjects', id_teacher=id_teacher))
-
-
-@admin.route('/teachers/<int:id_teacher>/classroom/delete', methods=['GET', 'POST'])
-@login_required
-def delete_teacher_classroom(id_teacher):
-    """
-    Unbind teacher-classroom relationship
-    """
-    check_admin()
-
-    teacher_classroom = TeachersClassroom.query.filter(TeacherToSubject.user_id_teacher == id_teacher).first()
-    db.session.delete(teacher_classroom)
-    db.session.commit()
-    flash('You have successfully deleted link between teacher and classroom.')
-
-    return redirect(url_for('admin.list_teachers_info'))
-
-
-@admin.route('/teachers/<int:id_teacher>/subject/add', methods=['GET', 'POST'])
-@login_required
-def add_teacher_subjects(id_teacher):
-    """
-    Add subject to the list of teacher subjects
-    """
-    check_admin()
-
-    form = TeacherSubjectAddForm()
-
-    if form.validate_on_submit():
-        subject = Subject.query.get_or_404(form.subject.data.id)
-        teacher_subject = TeacherToSubject(user_id_teacher=id_teacher,
-                                           subject_id=subject.id)
-
-        try:
-            db.session.add(teacher_subject)
-            db.session.commit()
-            flash('You have successfully added a subject to the list of teacher subjects.')
-        except:
-            flash('Error')
-
-        # redirect to the list links between students and class PAGE
-        return redirect(url_for('admin.edit_teacher_subjects', id_teacher=id_teacher))
-
-    return render_template('admin/teachers/subject_add.html',form=form)
 
 
 @admin.route('/teachers/<int:id_teacher>/classroom/add', methods=['GET', 'POST'])
@@ -162,3 +138,19 @@ def edit_teacher_classroom(id_teacher):
     form.classroom.data = Classroom.query.get_or_404(teacher_classroom.classroom_id)
 
     return render_template('admin/teachers/classroom_edit.html',form=form)
+
+
+@admin.route('/teachers/<int:id_teacher>/classroom/delete', methods=['GET', 'POST'])
+@login_required
+def delete_teacher_classroom(id_teacher):
+    """
+    Unbind teacher-classroom relationship
+    """
+    check_admin()
+
+    teacher_classroom = TeachersClassroom.query.filter(TeacherToSubject.user_id_teacher == id_teacher).first()
+    db.session.delete(teacher_classroom)
+    db.session.commit()
+    flash('You have successfully deleted link between teacher and classroom.')
+
+    return redirect(url_for('admin.list_teachers_info'))
