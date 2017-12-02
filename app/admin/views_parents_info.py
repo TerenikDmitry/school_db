@@ -81,10 +81,7 @@ def edit_parent_to_student(id):
     """
     check_admin()
 
-    add_parent_to_student = False
-
     parent_to_student = ParentToStudent.query.filter_by(user_id_parent=id).first()
-    parent_name = '{}'.format(parent_to_student.parentStudent)
 
     form = ParentToStudentEditForm()
     if form.validate_on_submit():
@@ -103,6 +100,5 @@ def edit_parent_to_student(id):
     form.student.query = db.session.query(User).filter(User.role_id == 2)
     return render_template('admin/parent_to_student/edit.html',
                            form=form,
-                           parent_name = parent_name,
-                           add_parent_to_student=add_parent_to_student,
+                           parent_to_student = parent_to_student,
                            title='Edit link between parents and students')

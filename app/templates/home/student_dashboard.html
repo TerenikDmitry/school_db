@@ -13,9 +13,13 @@
             {% endif %}
         </div>
         <div> Class:
-        <a href="{{ url_for('classes.one_class', class_id=studentClass.id) }}">
-            {{ studentClass.name }}
+        {% if studentClass %}
+        <a href="{{ url_for('classes.one_class', class_id=studentClass.classes.id) }}">
+            {{ studentClass.classes }}
         </a>
+        {% else %}
+            not bind
+        {% endif %}
         </div>
         {% if parents %}
             <hr>
