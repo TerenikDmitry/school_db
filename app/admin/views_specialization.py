@@ -4,7 +4,7 @@ from flask_login import login_required
 from . import admin, check_admin
 from .. import db
 from forms import SpecializationForm
-from ..models import Specialization, RoomSpecialization
+from ..models import Specialization, RoomSpecialization, Subject
 
 
 @admin.route('/class_specializations')
@@ -22,7 +22,7 @@ def list_class_specializations():
 
 @admin.route('/class_specializations/add', methods=['GET', 'POST'])
 @login_required
-def add_class_specializations():
+def add_class_specialization():
     """
     Add class specialization
     """
@@ -52,7 +52,7 @@ def add_class_specializations():
 
 @admin.route('/class_specializations/delete/<int:id>', methods=['GET', 'POST'])
 @login_required
-def delete_class_specializations(id):
+def delete_class_specialization(id):
     """
     Delete class specialization
     """
@@ -69,7 +69,7 @@ def delete_class_specializations(id):
 
 @admin.route('/class_specializations/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
-def edit_class_specializations(id):
+def edit_class_specialization(id):
     """
     Edit class specialization
     """
@@ -110,7 +110,7 @@ def list_room_specializations():
 
 @admin.route('/room_specializations/add', methods=['GET', 'POST'])
 @login_required
-def add_room_specializations():
+def add_room_specialization():
     """
     Add classroom specialization
     """
@@ -157,7 +157,7 @@ def delete_room_specialization(id):
 
 @admin.route('/room_specializations/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
-def edit_room_specializations(id):
+def edit_room_specialization(id):
     """
     Edit classroom specialization
     """
@@ -182,3 +182,84 @@ def edit_room_specializations(id):
                            form=form,
                            title="Edit Room Specialization")
 
+
+@admin.route('/subjects')
+@login_required
+def list_subjects():
+    """"
+    Show the list of subjects
+    """
+    check_admin()
+
+    subjects = Subject.query.all()
+    return render_template('admin/subjects/list.html',
+                           subjects=subjects)
+
+
+@admin.route('/subjects/add', methods=['GET', 'POST'])
+@login_required
+def add_subject():
+    """
+    Add subject
+    """
+    check_admin()
+
+    form = SpecializationForm()
+    if form.validate_on_submit():
+        subject = Subject(name=form.name.data)
+
+        try:
+            db.session.add(subject)
+            db.session.commit()
+            flash('You have successfully added a new subject.')
+        except:
+            flash('Error: subject name already exists.')
+
+        # redirect to the list of subjects PAGE
+        return redirect(url_for('admin.list_subjects'))
+
+    return render_template('admin/subjects/edit.html',
+                           form=form,
+                           title='Add Subject')
+
+
+@admin.route('/subjects/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_subject(id):
+    """
+    Edit subject
+    """
+    check_admin()
+
+    subject = RoomSpecialization.query.get_or_404(id)
+    form = SpecializationForm(obj=subject)
+    if form.validate_on_submit():
+        subject.name = form.name.data
+        db.session.add(subject)
+        db.session.commit()
+        flash('You have successfully edited the subject.')
+
+        # redirect to the list of subjects PAGE
+        return redirect(url_for('admin.list_subjects'))
+
+    form.name.data = subject.name
+    return render_template('admin/subjects/edit.html',
+                           form=form,
+                           title="Edit Subject")
+
+
+@admin.route('/subjects/delete/<int:id>', methods=['GET', 'POST'])
+@login_required
+def delete_subject(id):
+    """
+    Delete subject
+    """
+    check_admin()
+
+    subject = Subject.query.get_or_404(id)
+    db.session.delete(subject)
+    db.session.commit()
+    flash('You have successfully deleted the subject.')
+
+    # redirect to the list of subjects PAGE
+    return redirect(url_for('admin.list_subjects'))

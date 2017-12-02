@@ -143,7 +143,7 @@ class Subject(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(60), unique=True)
 
-    specialization_id = db.relationship('TeacherToSubject', backref='subjects', lazy='dynamic')
+    teacher_subject_id = db.relationship('TeacherToSubject', backref='subjects', lazy='dynamic')
     schedule_id = db.relationship('Schedule', backref='subjects', lazy='dynamic')
 
     def __repr__(self):
