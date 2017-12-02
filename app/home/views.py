@@ -61,7 +61,7 @@ def student_dashboard(id):
 
     parents = ParentToStudent.query.filter_by(user_id_student=id).all()
 
-    studentClass = user.studentInClass[0].classes
+    studentClass = user.studentInClass.first()
 
     if current_user.role_id == 1 or current_user.role_id == 2:
         return render_template('home/student_dashboard.html',
