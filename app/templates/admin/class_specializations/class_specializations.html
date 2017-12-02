@@ -9,7 +9,7 @@
           <hr class="intro-divider">
 
           <div style="text-align: center">
-              <a href="{{ url_for('admin.add_class_specializations') }}" class="btn btn-default btn-lg">
+              <a href="{{ url_for('admin.add_class_specialization') }}" class="btn btn-default btn-lg">
                 <i class="fa fa-plus"></i> Add Class Specialization
               </a>
           </div>
@@ -33,12 +33,12 @@
                       <td> {{ specialization.name }} </td>
                       <td> {{ specialization.specialization_id.count() }} </td>
                       <td>
-                          <a href="{{ url_for('admin.edit_class_specializations', id=specialization.id) }}">
+                          <a href="{{ url_for('admin.edit_class_specialization', id=specialization.id) }}">
                               <i class="fa fa-pencil"></i> Edit
                           </a>
                       </td>
                       <td>
-                          <a href="{{ url_for('admin.delete_class_specializations', id=specialization.id) }}">
+                          <a href="{{ url_for('admin.delete_class_specialization', id=specialization.id) }}">
                               <i class="fa fa-trash"></i> Delete
                           </a>
                       </td>
@@ -54,7 +54,7 @@
           {% endif %}
 
           <div style="text-align: center">
-              <a href="{{ url_for('admin.add_class_specializations') }}" class="btn btn-default btn-lg">
+              <a href="{{ url_for('admin.add_class_specialization') }}" class="btn btn-default btn-lg">
                 <i class="fa fa-plus"></i> Add Class Specialization
               </a>
           </div>

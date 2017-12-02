@@ -9,7 +9,7 @@
           <hr class="intro-divider">
 
           <div style="text-align: center">
-              <a href="{{ url_for('admin.add_room_specializations') }}" class="btn btn-default btn-lg">
+              <a href="{{ url_for('admin.add_room_specialization') }}" class="btn btn-default btn-lg">
                   <i class="fa fa-plus"></i> Add Room Specialization
               </a>
           </div>
@@ -33,7 +33,7 @@
                       <td> {{ room_specialization.name }} </td>
                       <td> {{ room_specialization.room_specialization_id.count() }} </td>
                       <td>
-                          <a href="{{ url_for('admin.edit_room_specializations', id=room_specialization.id) }}">
+                          <a href="{{ url_for('admin.edit_room_specialization', id=room_specialization.id) }}">
                               <i class="fa fa-pencil"></i> Edit
                           </a>
                       </td>
@@ -54,7 +54,7 @@
           {% endif %}
 
           <div style="text-align: center">
-              <a href="{{ url_for('admin.add_room_specializations') }}" class="btn btn-default btn-lg">
+              <a href="{{ url_for('admin.add_room_specialization') }}" class="btn btn-default btn-lg">
                 <i class="fa fa-plus"></i> Add Room Specialization
               </a>
           </div>
