@@ -4,17 +4,20 @@
     {{ title }}
 {% endblock %}
 {% block body %}
-<div class="content-section">
- <div class="outer">
-    <div class="middle">
-      <div class="inner">
-        <div class="center">
-            <h1> {{ title }} </h1>
-            <br/>
-            {{ wtf.quick_form(form) }}
+    <div class="outer">
+        <div class="middle">
+            <div class="center">
+                <div class="page-header">
+                    <h1>
+                        {{ title }}
+                        {% if role_name %}
+                            <br>
+                            <small>{{ role_name }}</small>
+                        {% endif %}
+                    </h1>
+                </div>
+                {{ wtf.quick_form(form) }}
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-</div>
 {% endblock %}

@@ -130,15 +130,6 @@ class StudentToClassEditForm(FlaskForm):
     submit = SubmitField('Submit')
 
 
-class StudentToClassAddForm(FlaskForm):
-    """
-        Form for admin to add link between student and class
-    """
-    student = QuerySelectField(query_factory=get_users)
-    class_name = QuerySelectField(query_factory=get_classes)
-    submit = SubmitField('Submit')
-
-
 class TeacherSubjectAddForm(FlaskForm):
     """
         Form for admin to add link between teacher and subject

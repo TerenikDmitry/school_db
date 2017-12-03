@@ -19,8 +19,7 @@ def list_users():
 
     users = User.query.all()
     return render_template('admin/users/users.html',
-                           users=users,
-                           title='Users')
+                           users=users)
 
 
 @admin.route('/users/add', methods=['GET', 'POST'])
@@ -32,6 +31,7 @@ def add_user():
     check_admin()
 
     add_user = True
+
     user = User()
     form = RegistrationForm()
     if form.validate_on_submit():
@@ -54,7 +54,6 @@ def add_user():
     return render_template('admin/users/user.html',
                            user=user,
                            form=form,
-                           title='Add User',
                            add_user=add_user)
 
 
@@ -82,8 +81,6 @@ def edit_user(id):
     Change user information
     """
     check_admin()
-
-    add_user = False
 
     user = User.query.get_or_404(id)
 
@@ -113,6 +110,4 @@ def edit_user(id):
 
     return render_template('admin/users/user.html',
                            user=user,
-                           form=form,
-                           title='Edit User',
-                           add_user=add_user)
+                           form=form)

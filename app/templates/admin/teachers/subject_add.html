@@ -4,17 +4,22 @@
     Teacher-Subjects
 {% endblock %}
 {% block body %}
-<div class="content-section">
- <div class="outer">
+<div class="outer">
     <div class="middle">
-      <div class="inner">
         <div class="center">
-            <h1> Added a subject to the list of teacher subjects </h1>
-            <br/>
+            <div class="page-header">
+                <h1>
+                    Added a subject to the list of teacher subjects <br>
+                    <small>Teacher -
+                        <a href="{{ url_for('home.teacher_dashboard',id=teacher.id) }}">
+                            {{ teacher }}
+                        </a>
+                    </small>
+                </h1>
+            </div>
             {{ wtf.quick_form(form) }}
+            <br/>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 {% endblock %}

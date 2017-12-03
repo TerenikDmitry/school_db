@@ -19,8 +19,7 @@ def list_roles():
     roles = Role.query.all()
 
     return render_template('admin/roles/roles.html',
-                           roles=roles,
-                           title='Roles')
+                           roles=roles)
 
 
 @admin.route('/roles/add', methods=['GET', 'POST'])
@@ -77,6 +76,7 @@ def edit_role(id):
 
     return render_template('admin/roles/role.html',
                            form=form,
+                           role_name=role.name,
                            title="Edit Role")
 
 

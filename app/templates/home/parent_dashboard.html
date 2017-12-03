@@ -1,11 +1,14 @@
 {% extends "base.html" %}
-{% block title %}
-    Parent
-{% endblock %}
+{% block title %} Parent {% endblock %}
 {% block body %}
-<div class="content-section">
+<div class="outer">
     <div class="center">
-        <h2>{{ user.first_name }} {{ user.last_name }} {{ user.middle_name }}</h2>
+        <div class="page-header">
+            <h1>
+                {{ user.last_name }} {{ user.first_name }} {{ user.middle_name }}
+                <small>(parent)</small>
+            </h1>
+        </div>
         <div>email: {{ user.email }}</div>
         <div>Tell:
             {% if user.tel != "" %}
@@ -14,15 +17,24 @@
                 no phone number
             {% endif %}
         </div>
-        <hr>
-        <div>Children: </div>
-        {% for children in childrens %}
-            <div>
-            <a href="{{ url_for('home.student_dashboard',id=children.studentParent.id) }}">
-                {{ children.studentParent.last_name }} {{ children.studentParent.first_name }} {{ children.studentParent.middle_name }}
-            </a>
+
+        <br>
+        {% if childrens %}
+            <div class="panel panel-default">
+                <div class="panel-heading">Children:</div>
+                <ul class="list-group">
+                    {% for children in childrens %}
+                        <li class="list-group-item">
+                            <a href="{{ url_for('home.student_dashboard',id=children.studentParent.id) }}">
+                                {{ children.studentParent.last_name }} {{ children.studentParent.first_name }} {{ children.studentParent.middle_name }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
             </div>
-        {% endfor %}
+        {% else %}
+            <div class="alert alert-warning" role="alert">No children's</div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

@@ -1,65 +1,61 @@
 {% extends "base.html" %}
 {% block title %}Classrooms{% endblock %}
 {% block body %}
-<div class="content-section">
-  <div class="outer">
-    <div class="middle">
-      <div class="inner">
-          <h1 style="text-align:center;">Classrooms</h1>
-          <hr class="intro-divider">
+    <div class="outer">
+        <div class="middle">
+            <div class="center">
+                <div class="page-header">
+                    <h1>Classrooms</h1>
+                </div>
 
-          <div style="text-align: center">
-          <a href="{{ url_for('admin.add_classroom') }}" class="btn btn-default btn-lg">
-              <i class="fa fa-plus"></i> Add Classrooms
-          </a>
-          </div>
+                <div style="text-align: center">
+                    <a href="{{ url_for('admin.add_classroom') }}" class="btn btn-default btn-lg">
+                        <i class="fa fa-plus"></i> Add Classrooms
+                    </a>
+                </div>
 
-          {% if classrooms %}
-          <div class="center">
-            <table class="table table-striped table-bordered">
-              <thead>
-                <tr>
-                    <th width="10%"> ID </th>
-                    <th width="40%"> Name </th>
-                    <th width="20%"> Class Specialization </th>
-                    <th width="15%"> Edit </th>
-                    <th width="15%"> Delete </th>
-                </tr>
-              </thead>
-              <tbody>
-              {% for classroom in classrooms %}
-                <tr>
-                    <td> {{ classroom.id }} </td>
-                    <td> {{ classroom.name }} </td>
-                    <td> {{ classroom.room_specializations.name }} </td>
-                    <td>
-                        <a href="{{ url_for('admin.edit_classroom', id=classroom.id) }}">
-                            <i class="fa fa-pencil"></i> edit
-                        </a>
-                    </td>
-                    <td>
-                        <a href="{{ url_for('admin.delete_classroom', id=classroom.id) }}">
-                            <i class="fa fa-trash"></i> delete
-                        </a>
-                    </td>
-                </tr>
-              {% endfor %}
-              </tbody>
-            </table>
-          </div>
-          {% else %}
-          <div style="text-align: center">
-              <h3> No classrooms have been added. </h3>
-          </div>
-          {% endif %}
+                {% if classrooms %}
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <th width="10%"> ID</th>
+                            <th width="40%"> Name</th>
+                            <th width="20%"> Class Specialization</th>
+                            <th width="15%"> Edit</th>
+                            <th width="15%"> Delete</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for classroom in classrooms %}
+                            <tr>
+                                <td> {{ classroom.id }} </td>
+                                <td> {{ classroom.name }} </td>
+                                <td> {{ classroom.room_specializations.name }} </td>
+                                <td>
+                                    <a href="{{ url_for('admin.edit_classroom', id=classroom.id) }}">
+                                        <i class="fa fa-pencil"></i> edit
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('admin.delete_classroom', id=classroom.id) }}">
+                                        <i class="fa fa-trash"></i> delete
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <div class="alert alert-warning" role="alert">No classrooms have been added.</div>
+                {% endif %}
 
-          <div style="text-align: center">
-          <a href="{{ url_for('admin.add_classroom') }}" class="btn btn-default btn-lg">
-              <i class="fa fa-plus"></i> Add Classrooms
-          </a>
-          </div>
-      </div>
+                <div style="text-align: center">
+                    <a href="{{ url_for('admin.add_classroom') }}" class="btn btn-default btn-lg">
+                        <i class="fa fa-plus"></i> Add Classrooms
+                    </a>
+                </div>
+                <br>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 {% endblock %}

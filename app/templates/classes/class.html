@@ -1,32 +1,39 @@
 {% extends "base.html" %}
 {% block title %}Class{% endblock %}
 {% block body %}
-<div class="content-section">
+<div class="outer">
     <div class="center">
-        <h1>
-            <a href="{{ url_for('classes.one_class', class_id=_class.id) }}">
-                {{ _class.name }}
-            </a>
-        </h1>
-        <div>Specialization: {{ _class.specializations.name }}</div>
+        <div class="page-header">
+            <h1>{{ _class }}</h1>
+        </div>
+        <div>Specialization: {{ _class.specializations }}</div>
         <div>Teacher:
             <a href="{{ url_for('home.teacher_dashboard', id=_class.users.id) }}">
-                {{ _class.users.first_name }} {{ _class.users.last_name }} {{ _class.users.middle_name }}
+                {{ _class.users.last_name }} {{ _class.users.first_name }} {{ _class.users.middle_name }}
             </a>
         </div>
         <div>Classroom:
             {{ _class.classrooms.name }}
             ({{ _class.classrooms.room_specializations.name }})
         </div>
-        <hr>
-        <div>Students: </div>
-        {% for student in classStudents %}
-            <div>
-            <a href="{{ url_for('home.student_dashboard',id=student.users.id) }}">
-                {{ student.users.first_name }} {{ student.users.last_name }} {{ student.users.middle_name }}
-            </a>
+
+        <br>
+        {% if classStudents %}
+            <div class="panel panel-default">
+                <div class="panel-heading">Students:</div>
+                <ul class="list-group">
+                    {% for student in classStudents %}
+                        <li class="list-group-item">
+                            <a href="{{ url_for('home.student_dashboard',id=student.users.id) }}">
+                                {{ student.users.last_name }} {{ student.users.first_name }} {{ student.users.middle_name }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
             </div>
-        {% endfor %}
+        {% else %}
+            <div class="alert alert-warning" role="alert">No students</div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

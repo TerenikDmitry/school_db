@@ -1,87 +1,82 @@
 {% extends "base.html" %}
-{% block title %}Classes{% endblock %}
+{% block title %} Classes {% endblock %}
 {% block body %}
-<div class="content-section">
-  <div class="outer">
-    <div class="middle">
-      <div class="inner">
-          <h1 style="text-align:center;">Classes</h1>
-          <hr class="intro-divider">
+    <div class="outer">
+        <div class="middle">
+            <div class="center">
+                <div class="page-header">
+                    <h1> Classes </h1>
+                </div>
 
-          <div style="text-align: center">
-              <a href="{{ url_for('classes.add_class') }}" class="btn btn-default btn-lg">
-                  <i class="fa fa-plus"></i> Add Class
-              </a>
-          </div>
+                <div style="text-align: center">
+                    <a href="{{ url_for('classes.add_class') }}" class="btn btn-default btn-lg">
+                        <i class="fa fa-plus"></i> Add Class
+                    </a>
+                </div>
 
-          {% if classesList %}
-          <div class="center">
-              <table class="table table-striped table-bordered">
-              <thead>
-              <tr>
-                  <th width="4%"> ID </th>
-                  <th width="6%"> Name </th>
-                  <th width="9%"> Date Start </th>
-                  <th width="9%"> Date End </th>
-                  <th width="14%"> Spec </th>
-                  <th width="24%"> Head Teacher </th>
-                  <th width="12%"> Classroom </th>
-                  <th width="7%"> Edit class </th>
-                  <th width="8%"> Delete class </th>
-                  <th width="7%"> Add student </th>
-              </tr>
-              </thead>
-              <tbody>
-              {% for classOne in classesList %}
-                  <tr>
-                      <td> {{ classOne.id }} </td>
-                      <td>
-                          <a href="{{ url_for('classes.one_class', class_id=classOne.id) }}">
-                              {{ classOne }}
-                          </a>
-                      </td>
-                      <td> {{ classOne.dateStartEducation.strftime('%d, %b %Y') }} </td>
-                      <td> {{ classOne.dateEndEducation.strftime('%d, %b %Y') }} </td>
-                      <td> {{ classOne.specializations.name }} </td>
-                      <td>
-                          <a href="{{ url_for('home.teacher_dashboard', id=classOne.users.id) }}">
-                              {{ classOne.users}}
-                          </a>
-                      </td>
-                      <td> {{ classOne.classrooms.name }} ({{ classOne.classrooms.room_specializations.name }}) </td>
-                      <td>
-                          <a href="{{ url_for('classes.edit_class', id=classOne.id) }}">
-                              <i class="fa fa-pencil"></i> edit
-                          </a>
-                      </td>
-                      <td>
-                          <a href="{{ url_for('classes.delete_class', id=classOne.id) }}">
-                              <i class="fa fa-trash"></i> delete
-                          </a>
-                      </td>
-                      <td>
-                          <a href="{{ url_for('classes.add_student', id=classOne.id) }}">
-                              <i class="fa fa-plus"></i> add
-                          </a>
-                      </td>
-                  </tr>
-              {% endfor %}
-              </tbody>
-              </table>
-          </div>
-          {% else %}
-          <div style="text-align: center">
-              <h3> No class have been added. </h3>
-          </div>
-          {% endif %}
+                {% if classesList %}
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <th width="4%"> ID</th>
+                            <th width="6%"> Name</th>
+                            <th width="9%"> Date Start</th>
+                            <th width="9%"> Date End</th>
+                            <th width="14%"> Spec</th>
+                            <th width="24%"> Head Teacher</th>
+                            <th width="12%"> Classroom</th>
+                            <th width="7%"> Edit class</th>
+                            <th width="8%"> Delete class</th>
+                            <th width="7%"> Add student</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for classOne in classesList %}
+                            <tr>
+                                <td> {{ classOne.id }} </td>
+                                <td>
+                                    <a href="{{ url_for('classes.one_class', class_id=classOne.id) }}">
+                                        {{ classOne }}
+                                    </a>
+                                </td>
+                                <td> {{ classOne.dateStartEducation.strftime('%d, %b %Y') }} </td>
+                                <td> {{ classOne.dateEndEducation.strftime('%d, %b %Y') }} </td>
+                                <td> {{ classOne.specializations.name }} </td>
+                                <td>
+                                    <a href="{{ url_for('home.teacher_dashboard', id=classOne.users.id) }}">
+                                        {{ classOne.users }}
+                                    </a>
+                                </td>
+                                <td> {{ classOne.classrooms.name }} ({{ classOne.classrooms.room_specializations.name }})</td>
+                                <td>
+                                    <a href="{{ url_for('classes.edit_class', id=classOne.id) }}">
+                                        <i class="fa fa-pencil"></i> edit
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('classes.delete_class', id=classOne.id) }}">
+                                        <i class="fa fa-trash"></i> delete
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('classes.add_student', id=classOne.id) }}">
+                                        <i class="fa fa-plus"></i> add
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <div class="alert alert-warning" role="alert">No class have been added.</div>
+                {% endif %}
 
-          <div style="text-align: center">
-          <a href="{{ url_for('classes.add_class') }}" class="btn btn-default btn-lg">
-            <i class="fa fa-plus"></i> Add Class
-          </a>
-          </div>
-      </div>
+                <div style="text-align: center">
+                    <a href="{{ url_for('classes.add_class') }}" class="btn btn-default btn-lg">
+                        <i class="fa fa-plus"></i> Add Class
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 {% endblock %}

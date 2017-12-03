@@ -95,5 +95,6 @@ def edit_classroom(id):
     form.spec.data = RoomSpecialization.query.get_or_404(classroom.room_specialization_id)
 
     return render_template('admin/classrooms/classroom.html',
+                           classroom_name=classroom.name,
                            form=form,
                            title='Edit Classroom')

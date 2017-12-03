@@ -29,6 +29,7 @@ def add_teacher_subjects(id_teacher):
     check_admin()
 
     form = TeacherSubjectAddForm()
+    teacher = User.query.get_or_404(id_teacher)
 
     if form.validate_on_submit():
         subject = Subject.query.get_or_404(form.subject.data.id)
@@ -45,7 +46,7 @@ def add_teacher_subjects(id_teacher):
         # redirect to the list links between students and class PAGE
         return redirect(url_for('admin.edit_teacher_subjects', id_teacher=id_teacher))
 
-    return render_template('admin/teachers/subject_add.html',form=form)
+    return render_template('admin/teachers/subject_add.html',form=form, teacher=teacher)
 
 
 @admin.route('/teachers/<int:id_teacher>/subjects/edit/', methods=['GET', 'POST'])
@@ -83,14 +84,14 @@ def delete_teacher_subjects(id_teacher, id_subject):
 @login_required
 def add_teacher_classroom(id_teacher):
     """
-    Add subject to the list of teacher subjects
+    Add teacher-classroom relationship
     """
     check_admin()
 
+    teacher = User.query.get_or_404(id_teacher)
     add_classroom_link = True
 
     form = TeacherClassroomEditForm()
-
     if form.validate_on_submit():
         classroom = Classroom.query.get_or_404(form.classroom.data.id)
         teacher_classroom = TeachersClassroom(user_id_teacher=id_teacher,
@@ -106,21 +107,23 @@ def add_teacher_classroom(id_teacher):
         # redirect to the list of Teachers
         return redirect(url_for('admin.list_teachers_info'))
 
-    return render_template('admin/teachers/classroom_edit.html',form=form, add_classroom_link=add_classroom_link)
+    return render_template('admin/teachers/classroom_edit.html',
+                           form=form,
+                           add_classroom_link=add_classroom_link,
+                           teacher=teacher)
 
 
 @admin.route('/teachers/<int:id_teacher>/classroom/edit', methods=['GET', 'POST'])
 @login_required
 def edit_teacher_classroom(id_teacher):
     """
-    Add subject to the list of teacher subjects
+    Change teacher-classroom relationship
     """
     check_admin()
 
     teacher_classroom = TeachersClassroom.query.filter_by(user_id_teacher=id_teacher).first()
 
     form = TeacherClassroomEditForm()
-
     if form.validate_on_submit():
         classroom = Classroom.query.get_or_404(form.classroom.data.id)
         teacher_classroom.classroom_id = classroom.id
@@ -137,7 +140,9 @@ def edit_teacher_classroom(id_teacher):
 
     form.classroom.data = Classroom.query.get_or_404(teacher_classroom.classroom_id)
 
-    return render_template('admin/teachers/classroom_edit.html',form=form)
+    return render_template('admin/teachers/classroom_edit.html',
+                           form=form,
+                           teacher=teacher_classroom.users)
 
 
 @admin.route('/teachers/<int:id_teacher>/classroom/delete', methods=['GET', 'POST'])

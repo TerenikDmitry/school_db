@@ -28,8 +28,6 @@ def add_class_specialization():
     """
     check_admin()
 
-    add_specialization = True
-
     form = SpecializationForm()
     if form.validate_on_submit():
         specialization = Specialization(name=form.name.data)
@@ -45,7 +43,6 @@ def add_class_specialization():
         return redirect(url_for('admin.list_class_specializations'))
 
     return render_template('admin/class_specializations/class_specialization.html',
-                           add_specialization=add_specialization,
                            form=form,
                            title='Add Class Specialization')
 
@@ -75,8 +72,6 @@ def edit_class_specialization(id):
     """
     check_admin()
 
-    add_specialization = False
-
     specialization = Specialization.query.get_or_404(id)
     form = SpecializationForm(obj=specialization)
     if form.validate_on_submit():
@@ -90,7 +85,7 @@ def edit_class_specialization(id):
 
     form.name.data = specialization.name
     return render_template('admin/class_specializations/class_specialization.html',
-                           add_specialization=add_specialization,
+                           spec_name=specialization.name,
                            form=form,
                            title="Edit Class Specialization")
 
@@ -116,8 +111,6 @@ def add_room_specialization():
     """
     check_admin()
 
-    add_room_specialization = True
-
     form = SpecializationForm()
     if form.validate_on_submit():
         room_specialization = RoomSpecialization(name=form.name.data)
@@ -133,7 +126,6 @@ def add_room_specialization():
         return redirect(url_for('admin.list_room_specializations'))
 
     return render_template('admin/room_specializations/room_specialization.html',
-                           add_room_specialization=add_room_specialization,
                            form=form,
                            title='Add Room Specialization')
 
@@ -163,8 +155,6 @@ def edit_room_specialization(id):
     """
     check_admin()
 
-    add_room_specialization = False
-
     room_specialization = RoomSpecialization.query.get_or_404(id)
     form = SpecializationForm(obj=room_specialization)
     if form.validate_on_submit():
@@ -178,7 +168,7 @@ def edit_room_specialization(id):
 
     form.name.data = room_specialization.name
     return render_template('admin/room_specializations/room_specialization.html',
-                           add_room_specialization=add_room_specialization,
+                           spec_name=room_specialization.name,
                            form=form,
                            title="Edit Room Specialization")
 
@@ -231,7 +221,7 @@ def edit_subject(id):
     """
     check_admin()
 
-    subject = RoomSpecialization.query.get_or_404(id)
+    subject = Subject.query.get_or_404(id)
     form = SpecializationForm(obj=subject)
     if form.validate_on_submit():
         subject.name = form.name.data
@@ -244,6 +234,7 @@ def edit_subject(id):
 
     form.name.data = subject.name
     return render_template('admin/subjects/edit.html',
+                           subject_name=subject.name,
                            form=form,
                            title="Edit Subject")
 

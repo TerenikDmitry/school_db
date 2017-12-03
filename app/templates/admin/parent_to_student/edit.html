@@ -4,20 +4,24 @@
     {{ title }}
 {% endblock %}
 {% block body %}
-<div class="content-section">
- <div class="outer">
+<div class="outer">
     <div class="middle">
-      <div class="inner">
         <div class="center">
-            <h1> {{ title }} </h1>
-            {% if not add_parent_to_student %}
-                <h2>Parent | {{ parent_to_student.parentStudent }}</h2>
-            {% endif %}
-            <br/>
+            <div class="page-header">
+                <h1> {{ title }}
+                {% if not add_parent_to_student %}
+                    <br>
+                    <small>Parent -
+                    <a href="{{ url_for('home.parent_dashboard',id=parent_to_student.parentStudent.id) }}">
+                        {{ parent_to_student.parentStudent }}
+                    </a>
+                    </small>
+                {% endif %}
+                </h1>
+            </div>
             {{ wtf.quick_form(form) }}
+            <br/>
         </div>
       </div>
-    </div>
-  </div>
 </div>
 {% endblock %}

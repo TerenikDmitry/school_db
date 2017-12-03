@@ -105,6 +105,7 @@ def edit_class(id):
     form.specialization_id.data = Specialization.query.get_or_404(classOne.specialization_id)
     return render_template('classes/editClass.html',
                            form=form,
+                           class_name=classOne.name,
                            title="Edit Class")
 
 

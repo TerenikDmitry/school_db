@@ -1,102 +1,95 @@
 {% extends "base.html" %}
 {% block title %}
-    {{ title }}
+    Users
 {% endblock %}
 {% block body %}
-<div class="content-section">
-  <div class="outer">
+<div class="outer">
     <div class="middle">
-      <div class="inner">
-          <h1 style="text-align:center;">{{ title }}</h1>
-          <hr class="intro-divider">
+        <div class="center">
+            <div class="page-header">
+                <h1> Users </h1>
+            </div>
 
-          <div style="text-align: center">
-              <a href="{{ url_for('admin.add_user') }}" class="btn btn-default btn-lg">
-                  <i class="fa fa-plus"></i> Add User
-              </a>
-          </div>
+            <div style="text-align: center">
+                <a href="{{ url_for('admin.add_user') }}" class="btn btn-default btn-lg">
+                    <i class="fa fa-plus"></i> Add User
+                </a>
+            </div>
 
-          {% if users %}
-          <div class="center">
-              <table class="table table-striped table-bordered">
-              <thead>
-              <tr>
-                  <th width="22%"> Name </th>
-                  <th width="13%"> Login </th>
-                  <th width="15%"> Mail </th>
-                  <th width="15%"> Telephone </th>
-                  <th width="15%"> Role </th>
-                  <th width="10%"> Edit </th>
-                  <th width="10%"> Delete </th>
-              </tr>
-              </thead>
-              <tbody>
-              {% for user in users %}
-                  {% if user.is_admin %}
-                      <tr style="background-color: #138d75; color: white;">
-                          <td> <i class="fa fa-key"></i> Admin </td>
-                          <td> {{ user.username }} </td>
-                          <td> N/A </td>
-                          <td> N/A </td>
-                          <td> N/A </td>
-                          <td> N/A </td>
-                          <td> N/A </td>
-                      </tr>
-                  {% else %}
-                      <tr>
-                          <td>
-                              {% if user.roles.id == 1%}
-                              <a href="{{ url_for('home.teacher_dashboard', id=user.id) }}">
-                              {% elif user.roles.id == 2 %}
-                              <a href="{{ url_for('home.student_dashboard', id=user.id) }}">
-                              {% elif user.roles.id == 3 %}
-                              <a href="{{ url_for('home.parent_dashboard', id=user.id) }}">
-                              {% endif %}
-                                  {{ user }}
-                              </a>
-                          </td>
-                          <td> {{ user.username }} </td>
-                          <td> {{ user.email }} </td>
-                          <td>
-                          {% if user.tel %}
-                              {{ user.tel }}
-                          {% else %}
-                              no telephone
-                          {% endif %}
-                          </td>
-                          <td> {{ user.roles.name }}
-                          </td>
-                          <td>
-                              <a href="{{ url_for('admin.edit_user', id=user.id) }}">
-                                  <i class="fa fa-pencil"></i> Edit
-                              </a>
-                          </td>
-                          <td>
-                              <a href="{{ url_for('admin.delete_user', id=user.id) }}">
-                                  <i class="fa fa-trash"></i> Delete
-                              </a>
-                          </td>
-                      </tr>
-                  {% endif %}
-              {% endfor %}
-              </tbody>
-              </table>
-          </div>
-          {% else %}
-          <div style="text-align: center">
-              <h3> No Users have been added. </h3>
-          </div>
-          {% endif %}
+            {% if users %}
+                <table class="table table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th width="22%"> Name </th>
+                        <th width="13%"> Login </th>
+                        <th width="15%"> Mail </th>
+                        <th width="15%"> Telephone </th>
+                        <th width="15%"> Role </th>
+                        <th width="10%"> Edit </th>
+                        <th width="10%"> Delete </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for user in users %}
+                        {% if user.is_admin %}
+                            <tr style="background-color: #138d75; color: white;">
+                                <td> <i class="fa fa-key"></i> Admin </td>
+                                <td> {{ user.username }} </td>
+                                <td> N/A </td>
+                                <td> N/A </td>
+                                <td> N/A </td>
+                                <td> N/A </td>
+                                <td> N/A </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td>
+                                    {% if user.roles.id == 1%}
+                                        <a href="{{ url_for('home.teacher_dashboard', id=user.id) }}">
+                                    {% elif user.roles.id == 2 %}
+                                        <a href="{{ url_for('home.student_dashboard', id=user.id) }}">
+                                    {% elif user.roles.id == 3 %}
+                                        <a href="{{ url_for('home.parent_dashboard', id=user.id) }}">
+                                    {% endif %}
+                                    {{ user }}
+                                    </a>
+                                </td>
+                                <td> {{ user.username }} </td>
+                                <td> {{ user.email }} </td>
+                                <td>
+                                    {% if user.tel %}
+                                        {{ user.tel }}
+                                    {% else %}
+                                        no telephone
+                                    {% endif %}
+                                </td>
+                                <td> {{ user.roles.name }} </td>
+                                <td>
+                                    <a href="{{ url_for('admin.edit_user', id=user.id) }}">
+                                        <i class="fa fa-pencil"></i> Edit
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('admin.delete_user', id=user.id) }}">
+                                        <i class="fa fa-trash"></i> Delete
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="alert alert-warning" role="alert">No Users have been added.</div>
+            {% endif %}
 
-          <div style="text-align: center">
-              <a href="{{ url_for('admin.add_user') }}" class="btn btn-default btn-lg">
-                  <i class="fa fa-plus"></i> Add User
-              </a>
-          </div>
-
+            <div style="text-align: center">
+                <a href="{{ url_for('admin.add_user') }}" class="btn btn-default btn-lg">
+                    <i class="fa fa-plus"></i> Add User
+                </a>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
+    <br>
 </div>
 {% endblock %}

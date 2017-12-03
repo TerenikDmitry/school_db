@@ -4,21 +4,28 @@
     Teacher-Classroom
 {% endblock %}
 {% block body %}
-<div class="content-section">
- <div class="outer">
+<div class="outer">
     <div class="middle">
-      <div class="inner">
         <div class="center">
-            {% if add_classroom_link %}
-                <h1> Add a link between Teacher and the Classroom </h1>
-            {% else %}
-                <h1> Change the link between Teacher and the Classroom </h1>
-            {% endif %}
+            <div class="page-header">
+                <h1>
+                    {% if add_classroom_link %}
+                        Add a link between Teacher and the Classroom
+                    {% else %}
+                        Change the link between Teacher and the Classroom
+                    {% endif %}
+                    <br>
+                    <small>Teacher -
+                        <a href="{{ url_for('home.teacher_dashboard',id=teacher.id) }}">
+                            {{ teacher }}
+                        </a>
+                    </small>
+                </h1>
+            </div>
+
             <br/>
             {{ wtf.quick_form(form) }}
         </div>
-      </div>
     </div>
-  </div>
 </div>
 {% endblock %}
