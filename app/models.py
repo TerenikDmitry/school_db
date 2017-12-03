@@ -132,6 +132,9 @@ class Specialization(db.Model):
     def __repr__(self):
         return '<Specialization: {}>'.format(self.name)
 
+    def __str__(self):
+        return '{}'.format(self.name)
+
 
 class Subject(db.Model):
     """
