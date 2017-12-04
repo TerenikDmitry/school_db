@@ -15,7 +15,7 @@ def list_class_specializations():
     """
     check_admin()
 
-    specializations = Specialization.query.all()
+    specializations = Specialization.query.order_by(Specialization.name).all()
     return render_template('admin/class_specializations/class_specializations.html',
                            specializations=specializations)
 
@@ -98,7 +98,7 @@ def list_room_specializations():
     """
     check_admin()
 
-    room_specializations = RoomSpecialization.query.all()
+    room_specializations = RoomSpecialization.query.order_by(RoomSpecialization.name).all()
     return render_template('admin/room_specializations/room_specializations.html',
                            room_specializations=room_specializations, )
 
@@ -181,7 +181,7 @@ def list_subjects():
     """
     check_admin()
 
-    subjects = Subject.query.all()
+    subjects = Subject.query.order_by(Subject.name).all()
     return render_template('admin/subjects/list.html',
                            subjects=subjects)
 

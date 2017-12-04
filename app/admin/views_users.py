@@ -17,7 +17,7 @@ def list_users():
     """
     check_admin()
 
-    users = User.query.all()
+    users = User.query.order_by(User.role_id,User.last_name).all()
     return render_template('admin/users/users.html',
                            users=users)
 
@@ -86,7 +86,6 @@ def edit_user(id):
 
     form = UserEditForm(obj=user)
     if form.validate_on_submit():
-        user.role_id = form.role.data.id
         user.username = form.username.data
         user.first_name = form.first_name.data
         user.last_name = form.last_name.data
@@ -106,7 +105,6 @@ def edit_user(id):
     form.middle_name.data = user.middle_name
     form.email.data = user.email
     form.tell.data = user.tel
-    form.role.data = Role.query.get_or_404(user.role_id)
 
     return render_template('admin/users/user.html',
                            user=user,

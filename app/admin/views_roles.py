@@ -16,7 +16,7 @@ def list_roles():
     """
     check_admin()
 
-    roles = Role.query.all()
+    roles = Role.query.order_by(Role.name).all()
 
     return render_template('admin/roles/roles.html',
                            roles=roles)

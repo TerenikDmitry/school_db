@@ -17,7 +17,7 @@ def list_parent_to_student():
     """
     check_admin()
 
-    parent_to_student = ParentToStudent.query.all()
+    parent_to_student = ParentToStudent.query.order_by(ParentToStudent.user_id_parent).all()
 
     return render_template('admin/parent_to_student/list.html',
                            parent_to_student=parent_to_student)

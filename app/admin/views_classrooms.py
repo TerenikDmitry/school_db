@@ -17,7 +17,7 @@ def list_classrooms():
     """
     check_admin()
 
-    classrooms = Classroom.query.all()
+    classrooms = Classroom.query.order_by(Classroom.name).all()
     return render_template('admin/classrooms/classrooms.html',
                            classrooms=classrooms)
 

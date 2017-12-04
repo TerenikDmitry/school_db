@@ -16,7 +16,7 @@ def list_students_class():
     """
     check_admin()
 
-    students = User.query.filter_by(role_id=2).outerjoin(StudentInClass, User.id==StudentInClass.user_id_studen).all()
+    students = User.query.filter_by(role_id=2).order_by(User.last_name).outerjoin(StudentInClass, User.id==StudentInClass.user_id_studen).all()
 
     return render_template('admin/students/list.html',
                            students=students)

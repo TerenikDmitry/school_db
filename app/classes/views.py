@@ -32,7 +32,7 @@ def list_classes():
     """
     check_admin()
 
-    classesList = Class.query.all()
+    classesList = Class.query.order_by(Class.name).all()
     return render_template('classes/class.html',
                            classesList=classesList)
 

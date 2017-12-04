@@ -15,9 +15,10 @@ def list_teachers_info():
     """
     check_admin()
 
-    teachers = User.query.filter_by(role_id=1).all()
+    teachers = User.query.filter_by(role_id=1).order_by(User.last_name).all()
 
-    return render_template('admin/teachers/list.html', teachers=teachers)
+    return render_template('admin/teachers/list.html',
+                           teachers=teachers)
 
 
 @admin.route('/teachers/<int:id_teacher>/subject/add', methods=['GET', 'POST'])
