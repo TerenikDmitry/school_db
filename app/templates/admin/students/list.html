@@ -32,7 +32,7 @@
                                 <i class="fa fa-link"></i> change bind
                             </a><br>
                             <a href="{{ url_for('classes.one_class', class_id=student.studentInClass.first().classes.id) }}">
-                                {{ student.studentInClass.first().classes }}
+                                <span class="label label-success">{{ student.studentInClass.first().classes }}</span>
                             </a><br>
                             <a href="{{ url_for('admin.delete_students_class', id=student.id) }}">
                                 <i class="fa fa-chain-broken"></i> remove bind
