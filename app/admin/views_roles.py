@@ -51,7 +51,7 @@ def add_role():
                            title='Add Role')
 
 
-@admin.route('/roles/edit/<int:id>', methods=['GET', 'POST'])
+@admin.route('/roles/<int:id>/edit', methods=['GET', 'POST'])
 @login_required
 def edit_role(id):
     """
@@ -80,7 +80,7 @@ def edit_role(id):
                            title="Edit Role")
 
 
-@admin.route('/roles/delete/<int:id>', methods=['GET', 'POST'])
+@admin.route('/roles/<int:id>/delete', methods=['GET', 'POST'])
 @login_required
 def delete_role(id):
     """

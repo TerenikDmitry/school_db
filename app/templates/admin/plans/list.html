@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}
+    Plan
+{% endblock %}
+{% block body %}
+    <div class="outer">
+        <div class="middle">
+            <div class="center">
+
+                <div>
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                {% if category == 'message' %}
+                                    <div class="alert alert-success" role="alert">
+                                {% elif category == 'warning'%}
+                                    <div class="alert alert-warning" role="alert">
+                                {% else %}
+                                    <div class="alert alert-danger" role="alert">
+                                {% endif %}
+                            {{ message }}
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                </div>
+
+                <div class="page-header">
+                    <h1>Plan</h1>
+                </div>
+
+                <div style="text-align: center">
+                    <a href="{{ url_for('admin.add_plan') }}" class="btn btn-default btn-lg">
+                        <i class="fa fa-plus"></i> Add plan
+                    </a>
+                </div>
+
+                {% if educationPlan %}
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <th width="4%"> ID</th>
+                            <th width="14%"> Year</th>
+                            <th width="14%"> Semester</th>
+                            <th width="14%"> Day</th>
+                            <th width="14%"> Lesson Number</th>
+                            <th width="20%"> Edit</th>
+                            <th width="20%"> Delete</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for plan in educationPlan %}
+                            <tr>
+                                <td> {{ plan.id }} </td>
+                                <td> {{ plan.year }} </td>
+                                <td> {{ plan.semester }} </td>
+                                <td> {{ plan.fullday }} </td>
+                                <td> {{ plan.lessonNumber }} </td>
+                                <td>
+                                    <a href="{{ url_for('admin.edit_plan', id=plan.id) }}">
+                                        <i class="fa fa-trash"></i> edit
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('admin.delete_plan', id=plan.id) }}">
+                                        <i class="fa fa-trash"></i> delete
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <div class="alert alert-warning" role="alert">No planes.</div>
+                {% endif %}
+
+                <div style="text-align: center">
+                    <a href="{{ url_for('admin.add_plan') }}" class="btn btn-default btn-lg">
+                        <i class="fa fa-plus"></i> Add plan
+                    </a>
+                </div>
+                <br>
+            </div>
+        </div>
+    </div>
+{% endblock %}

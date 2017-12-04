@@ -25,6 +25,7 @@
             <ul class="nav navbar-nav navbar-right">
                 {% if current_user.is_authenticated %}
                     {% if current_user.is_admin %}
+                        <li><a href="{{ url_for('admin.list_plan') }}">Plans</a></li>
                         <li><a href="{{ url_for('admin.list_teachers_info') }}">Teachers</a></li>
                         <li><a href="{{ url_for('admin.list_students_class') }}">Students</a></li>
                         <li><a href="{{ url_for('admin.list_parent_to_student') }}">Parents</a></li>
@@ -66,6 +67,7 @@
                 <ul class="list-inline">
                     {% if current_user.is_authenticated %}
                         {% if current_user.is_admin %}
+                            <li><a href="{{ url_for('admin.list_plan') }}">Plans</a></li>
                             <li><a href="{{ url_for('admin.list_teachers_info') }}">Teachers</a></li>
                             <li><a href="{{ url_for('admin.list_students_class') }}">Students</a></li>
                             <li><a href="{{ url_for('admin.list_parent_to_student') }}">Parents</a></li>

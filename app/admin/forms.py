@@ -1,7 +1,11 @@
+import datetime
+
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField, ValidationError
-from wtforms.validators import DataRequired, Email, EqualTo
+
+from wtforms import StringField, SubmitField, PasswordField, ValidationError, IntegerField, SelectField
+from wtforms.validators import DataRequired, Email, EqualTo, NumberRange
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
+
 from ..models import Role, User, RoomSpecialization, Class, Subject, Classroom
 
 
@@ -46,9 +50,9 @@ class RegistrationForm(FlaskForm):
     middle_name = StringField('Middle Name', validators=[DataRequired()])
     tell = PasswordField('Telephone')
     password = PasswordField('Password', validators=[
-                                        DataRequired(),
-                                        EqualTo('confirm_password')
-                                        ])
+        DataRequired(),
+        EqualTo('confirm_password')
+    ])
     confirm_password = PasswordField('Confirm Password')
     role = QuerySelectField(query_factory=lambda: Role.query.all(), get_label="name")
     submit = SubmitField('Register')
@@ -142,4 +146,22 @@ class TeacherClassroomEditForm(FlaskForm):
         Form for admin to add link between teacher and classroom
     """
     classroom = QuerySelectField(query_factory=get_classrooms)
+    submit = SubmitField('Submit')
+
+
+class PlanForm(FlaskForm):
+    """
+        Form for admin to add one plan
+    """
+    year = IntegerField('Year', [NumberRange(min=1996, max=2017, message=None)], default=(datetime.date.today().year))
+    semester = SelectField('Semester', choices=[(1, '1 semester'), (2, '2 semester')], coerce=int)
+    day = SelectField('Day', coerce=int, choices=[(1, 'Monday'),
+                                       (2, 'Tuesday'),
+                                       (3, 'Wednesday'),
+                                       (4, 'Thursday'),
+                                       (5, 'Friday'),
+                                       (6, 'Saturday'),
+                                       (7, 'Sunday')
+                                       ])
+    lessonNumber = SelectField('Lesson number', coerce=int,choices = [(g, '{} lesson'.format(g)) for g in range(1,8)])
     submit = SubmitField('Submit')

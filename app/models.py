@@ -256,25 +256,32 @@ class EducationPlan(db.Model):
 
     __tablename__ = 'education_plan'
     __table_args__ = (
-        CheckConstraint('CHECK (day >= 0)'),
-        CheckConstraint('CHECK (day <= 6)'),
-        CheckConstraint('CHECK (lessonNumber >= 0)'),
-        CheckConstraint('CHECK (lessonNumber <= 6)'),
-        CheckConstraint('CHECK (semester >= 1)'),
-        CheckConstraint('CHECK (semester <= 2)'),
-        CheckConstraint('year' <= (datetime.date.today().year + 2)),
+        UniqueConstraint('day', 'year', 'lessonNumber', 'semester', name='_plans'),
     )
 
     id = db.Column(db.Integer, primary_key=True)
-    day = db.Column(db.Integer, default=0)
+    day = db.Column(db.Integer, default=1)
     year = db.Column(db.Integer, default=(datetime.date.today().year + 1))
-    lessonNumber = db.Column(db.Integer, default=0)
-    semester = db.Column(db.Integer, default=0)
+    lessonNumber = db.Column(db.Integer, default=1)
+    semester = db.Column(db.Integer, default=1)
 
     schedule_id = db.relationship('Schedule', backref='education_plan', lazy='dynamic')
 
+    @hybrid_property
+    def fullday(self):
+        days = {
+            1: 'Monday',
+            2: 'Tuesday',
+            3: 'Wednesday',
+            4: 'Thursday',
+            5: 'Friday',
+            6: 'Saturday',
+            7: 'Sunday'
+        }
+        return days[self.day]
+
     def __repr__(self):
-        return '<EducationPlan: year {}, semester {}>'.format(self.year, self.semester)
+        return '<EducationPlan: year {}, semester {}, day {}, lesson number {}>'.format(self.year, self.semester, self.day, self.lessonNumber)
 
 
 class TeachersClassroom(db.Model):
