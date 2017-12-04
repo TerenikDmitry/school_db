@@ -1,6 +1,6 @@
 import datetime
 from flask_login import UserMixin
-from sqlalchemy import UniqueConstraint
+from sqlalchemy import UniqueConstraint, CheckConstraint
 from sqlalchemy.ext.hybrid import hybrid_property
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import db, login_manager
@@ -255,13 +255,21 @@ class EducationPlan(db.Model):
     """
 
     __tablename__ = 'education_plan'
-    __table_args__ = (UniqueConstraint('year', 'semester', name='_year_semester'),)
+    __table_args__ = (
+        CheckConstraint('CHECK (day >= 0)'),
+        CheckConstraint('CHECK (day <= 6)'),
+        CheckConstraint('CHECK (lessonNumber >= 0)'),
+        CheckConstraint('CHECK (lessonNumber <= 6)'),
+        CheckConstraint('CHECK (semester >= 1)'),
+        CheckConstraint('CHECK (semester <= 2)'),
+        CheckConstraint('year' <= (datetime.date.today().year + 2)),
+    )
 
     id = db.Column(db.Integer, primary_key=True)
-    day = db.Column(db.Integer, nullable=False)
-    year = db.Column(db.Integer, nullable=False)
-    lessonNumber = db.Column(db.Integer, nullable=False)
-    semester = db.Column(db.String(6), nullable=False)
+    day = db.Column(db.Integer, default=0)
+    year = db.Column(db.Integer, default=(datetime.date.today().year + 1))
+    lessonNumber = db.Column(db.Integer, default=0)
+    semester = db.Column(db.Integer, default=0)
 
     schedule_id = db.relationship('Schedule', backref='education_plan', lazy='dynamic')
 
