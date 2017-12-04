@@ -1,6 +1,7 @@
 import datetime
 from flask_login import UserMixin
 from sqlalchemy import UniqueConstraint
+from sqlalchemy.ext.hybrid import hybrid_property
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import db, login_manager
 
@@ -49,6 +50,10 @@ class User(UserMixin, db.Model):
         Check if hashed password matches actual password
         """
         return check_password_hash(self.password_hash, password)
+
+    @hybrid_property
+    def fullname(self):
+        return self.last_name + " " + self.first_name + " " + self.middle_name
 
     def __repr__(self):
         return '{}: {} {} {}'.format(self.id, self.last_name, self.first_name, self.middle_name)
@@ -250,10 +255,12 @@ class EducationPlan(db.Model):
     """
 
     __tablename__ = 'education_plan'
-    __table_args__ = (UniqueConstraint('date', 'semester', name='_year_semester'),)
+    __table_args__ = (UniqueConstraint('year', 'semester', name='_year_semester'),)
 
     id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    day = db.Column(db.Integer, nullable=False)
+    year = db.Column(db.Integer, nullable=False)
+    lessonNumber = db.Column(db.Integer, nullable=False)
     semester = db.Column(db.String(6), nullable=False)
 
     schedule_id = db.relationship('Schedule', backref='education_plan', lazy='dynamic')
@@ -270,7 +277,7 @@ class TeachersClassroom(db.Model):
     __tablename__ = 'teachers_classroom'
 
     id = db.Column(db.Integer, primary_key=True)
-    classroom_id = db.Column(db.Integer, db.ForeignKey('classrooms.id'), unique=True)
+    classroom_id = db.Column(db.Integer, db.ForeignKey('classrooms.id'))
     user_id_teacher = db.Column(db.Integer, db.ForeignKey('users.id'), unique=True)
 
     def __repr__(self):
@@ -290,7 +297,6 @@ class Schedule(db.Model):
     subject_id = db.Column(db.Integer, db.ForeignKey('subjects.id'))
     teacher_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     educationPlan_id = db.Column(db.Integer, db.ForeignKey('education_plan.id'))
-    lessonNumber = db.Column(db.Integer, nullable=False)
 
     grade_id = db.relationship('Grade', backref='schedules', lazy='dynamic')
 
