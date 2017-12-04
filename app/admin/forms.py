@@ -32,7 +32,6 @@ class UserEditForm(FlaskForm):
     last_name = StringField('Last Name', validators=[DataRequired()])
     middle_name = StringField('Middle Name', validators=[DataRequired()])
     tell = StringField('Telephone')
-    role = QuerySelectField(query_factory=lambda: Role.query.all(), get_label="name")
     submit = SubmitField('Submit')
 
 
