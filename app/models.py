@@ -107,7 +107,7 @@ class Class(db.Model):
     headTeacher = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     room_id = db.Column(db.Integer, db.ForeignKey('classrooms.id'), nullable=False)
 
-    class_id = db.relationship('StudentInClass', backref='classes', lazy='dynamic')
+    students = db.relationship('StudentInClass', backref='classes', lazy='dynamic',cascade="all, delete")
     schedule_id = db.relationship('Schedule', backref='classes', lazy='dynamic')
 
     def __repr__(self):

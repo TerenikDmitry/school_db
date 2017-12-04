@@ -21,7 +21,7 @@ def one_class(class_id):
     classStudents = StudentInClass.query.filter_by(class_id=class_id).all()
     _class = Class.query.get_or_404(class_id)
 
-    return render_template('classes/class.html', title='Class', _class=_class, classStudents=classStudents)
+    return render_template('classes/class_dashboard.html', title='Class', _class=_class, classStudents=classStudents)
 
 
 @classes.route('/class/list')
@@ -33,7 +33,7 @@ def list_classes():
     check_admin()
 
     classesList = Class.query.all()
-    return render_template('classes/classes.html',
+    return render_template('classes/class.html',
                            classesList=classesList)
 
 
@@ -64,12 +64,14 @@ def add_class():
         # redirect to the list of classes PAGE
         return redirect(url_for('classes.list_classes'))
 
+    form.head_teacher_id.query = User.query.filter(User.is_admin!=True, User.role_id==1).outerjoin(Class, Class.headTeacher == User.id).filter(Class.id==None)
+
     return render_template('classes/editClass.html',
                            form=form,
                            title='Add Class')
 
 
-@classes.route('/class/edit/<int:id>', methods=['GET', 'POST'])
+@classes.route('/class/<int:id>/edit', methods=['GET', 'POST'])
 @login_required
 def edit_class(id):
     """
@@ -109,7 +111,7 @@ def edit_class(id):
                            title="Edit Class")
 
 
-@classes.route('/class/delete/<int:id>', methods=['GET', 'POST'])
+@classes.route('/class/<int:id>/delete', methods=['GET', 'POST'])
 @login_required
 def delete_class(id):
     """
@@ -126,31 +128,65 @@ def delete_class(id):
     return redirect(url_for('classes.list_classes'))
 
 
-@classes.route('/class/students/add/<int:id>', methods=['GET', 'POST'])
+@classes.route('/class/<int:id>/students/add', methods=['GET', 'POST'])
 @login_required
 def add_student(id):
     """
-    Add a student to class
+    Add class
     """
     check_admin()
 
-    form = ClassStudentsForm(obj=id)
+    form = ClassStudentsForm()
     if form.validate_on_submit():
         try:
-            studentInClass = StudentInClass(class_id=id,
-                                            user_id_studen=form.student.data.id)
-            db.session.add(studentInClass)
+            classStudent = StudentInClass(class_id=id,
+                                          user_id_studen=form.student.data.id)
+            db.session.add(classStudent)
             db.session.commit()
-            flash('You have successfully added a student to class.')
+            flash('You have successfully added a new class.')
         except:
             flash('Error')
 
         # redirect to the list of classes PAGE
         return redirect(url_for('classes.list_classes'))
 
-    form.student.query = db.session.query(User).filter(User.role_id == 2).outerjoin(StudentInClass).filter(StudentInClass.user_id_studen == None)
-    class_name = Class.query.get_or_404(id)
-    return render_template('classes/addStudentToClass.html',
+    form.student.query = User.query.filter_by(role_id=2).outerjoin(StudentInClass, StudentInClass.user_id_studen == User.id).filter(StudentInClass.class_id==None)
+
+    return render_template('classes/editStudentToClass.html',
                            form=form,
-                           class_name = class_name.name,
+                           title='Add Student')
+
+
+@classes.route('/class/<int:id>/students/edit', methods=['GET', 'POST'])
+@login_required
+def list_students(id):
+    """
+    Add a student to class
+    """
+    check_admin()
+
+    students = StudentInClass.query.filter_by(class_id=id).all()
+    oneClass = Class.query.get_or_404(id)
+
+    return render_template('classes/listStudentToClass.html',
+                           students=students,
+                           oneClass=oneClass,
                            title='Add Student to Class')
+
+
+@classes.route('/class/<int:id_class>/students/delete/<int:id_student>', methods=['GET', 'POST'])
+@login_required
+def delete_student(id_class,id_student):
+    """
+    Delete a Student from Class
+    """
+    check_admin()
+
+    students = StudentInClass.query.filter(StudentInClass.class_id == id_class,
+                                           StudentInClass.user_id_studen == id_student).first()
+    db.session.delete(students)
+    db.session.commit()
+    flash('You have successfully deleted student from class.')
+
+    # redirect to the list of classes PAGE
+    return redirect(url_for('classes.list_classes'))
