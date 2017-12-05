@@ -1,7 +1,7 @@
-from flask import abort, render_template
+from flask import abort, render_template, flash
 from flask_login import current_user, login_required
 
-from ..models import Role, User, TeacherToSubject, ParentToStudent, TeachersClassroom
+from ..models import Role, User, TeacherToSubject, ParentToStudent, TeachersClassroom, Class
 
 from . import home
 
@@ -81,7 +81,7 @@ def teacher_dashboard(id):
 
     check_teacher(user.role_id)
 
-    headClass = user.teacherInClass[0]
+    headClass = Class.query.filter_by(headTeacher=id).first()
 
     subjects = TeacherToSubject.query.filter_by(user_id_teacher=id).all()
 
