@@ -64,6 +64,16 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
+def get_name_user(user_id):
+    user = User.query.get(int(user_id))
+    return user.fullname
+
+
+def get_name_subject(id):
+    subject = Subject.query.get(int(id))
+    return subject.name
+
+
 class Role(db.Model):
     """
     Role table
@@ -178,6 +188,9 @@ class TeacherToSubject(db.Model):
     def __repr__(self):
         return '<TeacherToSubject: teacher {} - subject {}>'.format(self.user_id_teacher, self.subject_id)
 
+    def __str__(self):
+        return '{} - {}'.format(get_name_user(self.user_id_teacher), get_name_subject(self.subject_id))
+
 
 class RoomSpecialization(db.Model):
     """
@@ -284,7 +297,19 @@ class EducationPlan(db.Model):
         return days[self.day]
 
     def __repr__(self):
-        return '<EducationPlan: year {}, semester {}, day {}, lesson number {}>'.format(self.year, self.semester, self.day, self.lessonNumber)
+        return '<EducationPlan {}: year {}, semester {}, day {}, lesson number {}>'.format(self.id, self.year, self.semester, self.day, self.lessonNumber)
+
+    def __str__(self):
+        days = {
+            1: 'Monday',
+            2: 'Tuesday',
+            3: 'Wednesday',
+            4: 'Thursday',
+            5: 'Friday',
+            6: 'Saturday',
+            7: 'Sunday'
+        }
+        return '{} year, {} semester, {}, {} lesson'.format(self.year, self.semester, days[self.day], self.lessonNumber)
 
 
 class TeachersClassroom(db.Model):
