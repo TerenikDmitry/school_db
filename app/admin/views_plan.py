@@ -4,7 +4,7 @@ from .. import db
 from flask import render_template, flash, redirect, url_for
 from flask_login import login_required
 
-from forms import PlanForm, PlanFormDay
+from forms import PlanForm, PlanFormDay, PlanFormSemester
 from ..models import EducationPlan
 
 @admin.route('/plans')
@@ -121,3 +121,33 @@ def add_plan_day():
     return render_template('admin/plans/plan.html',
                            form=form,
                            title='Add Plan 1-7 lesson')
+
+
+@admin.route('/plans/add/semester', methods=['GET', 'POST'])
+@login_required
+def add_plan_semester():
+    """
+    Add one plan
+    """
+    check_admin()
+
+    form = PlanFormSemester()
+    if form.validate_on_submit():
+        for day in range(1,7):
+            for leson in range(1,8):
+                plan = EducationPlan(year=form.year.data,
+                                     day=day,
+                                     lessonNumber=leson,
+                                     semester=form.semester.data)
+                try:
+                    db.session.add(plan)
+                    db.session.commit()
+                    flash('You have successfully add the Plan.{}'.format(plan), category='message')
+                except:
+                    flash('Such a Plan already exists.', category='error')
+
+        return redirect(url_for('admin.list_plan'))
+
+    return render_template('admin/plans/plan.html',
+                           form=form,
+                           title='Add Plan 1-6 day 1-7 lesson')

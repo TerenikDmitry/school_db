@@ -182,3 +182,12 @@ class PlanFormDay(FlaskForm):
                                        (7, 'Sunday')
                                        ])
     submit = SubmitField('Submit')
+
+
+class PlanFormSemester(FlaskForm):
+    """
+        Form for admin to add one plan
+    """
+    year = IntegerField('Year', [NumberRange(min=1996, max=2017, message=None)], default=(datetime.date.today().year))
+    semester = SelectField('Semester', choices=[(1, '1 semester'), (2, '2 semester')], coerce=int)
+    submit = SubmitField('Submit')
