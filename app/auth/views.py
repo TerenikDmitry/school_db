@@ -30,7 +30,7 @@ def login():
 
         # when login details are incorrect
         else:
-            flash("Invalid email or password.")
+            flash("Invalid email or password.",category='error')
 
     return render_template('auth/login.html', form=form, title='Login')
 
@@ -39,7 +39,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    flash('You have successfully been logged out.')
+    flash('You have successfully been logged out.', category='message')
 
     # redirect to the login page
     return redirect(url_for('auth.login'))

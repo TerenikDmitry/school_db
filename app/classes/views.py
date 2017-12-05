@@ -57,9 +57,9 @@ def add_class():
                              )
             db.session.add(classOne)
             db.session.commit()
-            flash('You have successfully added a new class.')
+            flash('You have successfully added a new class.',category='message')
         except:
-            flash('Error')
+            flash('Add the class error.',category='error')
 
         # redirect to the list of classes PAGE
         return redirect(url_for('classes.list_classes'))
@@ -83,27 +83,24 @@ def edit_class(id):
     form = ClassForm(obj=classOne)
     if form.validate_on_submit():
         classOne.name = form.name.data
-        classOne.dateStartEducation = form.date_start.data
-        classOne.dateStartEducation = form.date_end.data
-        classOne.headTeacher = form.head_teacher_id.data.id
-        classOne.room_id = form.classroom_id.data.id
+        classOne.dateStartEducation = form.dateStartEducation.data
+        classOne.dateStartEducation = form.dateEndEducation.data
+        classOne.headTeacher = form.headTeacher.data.id
+        classOne.room_id = form.room_id.data.id
         classOne.specialization_id = form.specialization_id.data.id
 
         try:
             db.session.add(classOne)
             db.session.commit()
-            flash('You have successfully edited the class.')
+            flash('You have successfully edited the class.',category='message')
         except:
-            flash('Error')
+            flash('Edited the class error',category='error')
 
         # redirect to the list of classes PAGE
         return redirect(url_for('classes.list_classes'))
 
-    form.name.data = classOne.name
-    form.date_start.data = classOne.dateStartEducation
-    form.date_end.data = classOne.dateEndEducation
-    form.head_teacher_id.data = User.query.get_or_404(classOne.headTeacher)
-    form.classroom_id.data = Classroom.query.get_or_404(classOne.room_id)
+    form.headTeacher.data = User.query.get_or_404(classOne.headTeacher)
+    form.room_id.data = Classroom.query.get_or_404(classOne.room_id)
     form.specialization_id.data = Specialization.query.get_or_404(classOne.specialization_id)
     return render_template('classes/editClass.html',
                            form=form,
@@ -143,9 +140,9 @@ def add_student(id):
                                           user_id_studen=form.student.data.id)
             db.session.add(classStudent)
             db.session.commit()
-            flash('You have successfully added a new class.')
+            flash('You have successfully added a student to the class.',category='message')
         except:
-            flash('Error')
+            flash('Error in adding student to class',category='error')
 
         # redirect to the list of classes PAGE
         return redirect(url_for('classes.list_classes'))
@@ -182,11 +179,14 @@ def delete_student(id_class,id_student):
     """
     check_admin()
 
-    students = StudentInClass.query.filter(StudentInClass.class_id == id_class,
-                                           StudentInClass.user_id_studen == id_student).first()
-    db.session.delete(students)
-    db.session.commit()
-    flash('You have successfully deleted student from class.')
+    try:
+        students = StudentInClass.query.filter(StudentInClass.class_id == id_class,
+                                               StudentInClass.user_id_studen == id_student).first()
+        db.session.delete(students)
+        db.session.commit()
+        flash('You have successfully deleted student from class.',category='message')
+    except:
+        flash('Error in removing student from class', category='error')
 
     # redirect to the list of classes PAGE
     return redirect(url_for('classes.list_classes'))

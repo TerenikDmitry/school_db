@@ -56,9 +56,10 @@ def add_plan():
         try:
             db.session.add(plan)
             db.session.commit()
-            flash('You have successfully add the plan.', category='message')
+            flash('You have successfully add the Plan.', category='message')
         except:
-            flash('Such a plan already exists.', category='error')
+            flash('Such a Plan already exists.', category='error')
+
         return redirect(url_for('admin.list_plan'))
 
     return render_template('admin/plans/plan.html',
@@ -81,9 +82,10 @@ def edit_plan(id):
         try:
             db.session.add(plan)
             db.session.commit()
-            flash('You have successfully edit the plan.',category='message')
+            flash('You have successfully edit the Plan.',category='message')
         except:
-            flash('Error. Edit the plan.', category='error')
+            flash('Error. Edit the Plan.', category='error')
+
         return redirect(url_for('admin.list_plan'))
 
     return render_template('admin/plans/plan.html',

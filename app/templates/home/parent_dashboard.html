@@ -11,10 +11,10 @@
         </div>
         <div>email: {{ user.email }}</div>
         <div>Tell:
-            {% if user.tel != "" %}
-                {{ user.tel }}
+            {% if user.telephone %}
+                {{ user.telephone }}
             {% else %}
-                no phone number
+                no telephone
             {% endif %}
         </div>
 

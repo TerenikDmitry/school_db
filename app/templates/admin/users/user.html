@@ -1,7 +1,7 @@
 {% import "bootstrap/wtf.html" as wtf %}
 {% extends "base.html" %}
 {% block title %}
-    {% if add_user %}
+    {% if not user %}
         Add User
     {% else %}
         Edit User
@@ -13,10 +13,11 @@
         <div class="center">
             <div class="page-header">
                 <h1>
-                {% if add_user %}
+                {% if not user %}
                     Add User
                 {% else %}
-                    Edit User
+                    Edit User<br>
+                    <small>{{ user }}</small>
                 {% endif %}
                 </h1>
             </div>

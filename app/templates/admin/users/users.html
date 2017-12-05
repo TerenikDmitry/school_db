@@ -6,6 +6,7 @@
 <div class="outer">
     <div class="middle">
         <div class="center">
+
             <div class="page-header">
                 <h1> Users </h1>
             </div>
@@ -57,8 +58,8 @@
                                 <td> {{ user.username }} </td>
                                 <td> {{ user.email }} </td>
                                 <td>
-                                    {% if user.tel %}
-                                        {{ user.tel }}
+                                    {% if user.telephone %}
+                                        {{ user.telephone }}
                                     {% else %}
                                         no telephone
                                     {% endif %}
@@ -88,8 +89,8 @@
                     <i class="fa fa-plus"></i> Add User
                 </a>
             </div>
+            </br>
         </div>
     </div>
-    <br>
 </div>
 {% endblock %}

@@ -30,14 +30,13 @@ def add_class_specialization():
 
     form = SpecializationForm()
     if form.validate_on_submit():
-        specialization = Specialization(name=form.name.data)
-
         try:
+            specialization = Specialization(name=form.name.data)
             db.session.add(specialization)
             db.session.commit()
-            flash('You have successfully added a new specialization.')
+            flash('You have successfully added a new Class Specialization.',category='message')
         except:
-            flash('Error: specialization name already exists.')
+            flash('Error: Class Specialization name already exists.',category='error')
 
         # redirect to the list of specializations of classes PAGE
         return redirect(url_for('admin.list_class_specializations'))
@@ -55,10 +54,13 @@ def delete_class_specialization(id):
     """
     check_admin()
 
-    specialization = Specialization.query.get_or_404(id)
-    db.session.delete(specialization)
-    db.session.commit()
-    flash('You have successfully deleted the specialization.')
+    try:
+        specialization = Specialization.query.get_or_404(id)
+        db.session.delete(specialization)
+        db.session.commit()
+        flash('You have successfully deleted the Class Specialization.',category='message')
+    except:
+        flash('error in removing the Class Specialization.', category='error')
 
     # redirect to the list of specializations of classes PAGE
     return redirect(url_for('admin.list_class_specializations'))
@@ -75,10 +77,13 @@ def edit_class_specialization(id):
     specialization = Specialization.query.get_or_404(id)
     form = SpecializationForm(obj=specialization)
     if form.validate_on_submit():
-        specialization.name = form.name.data
-        db.session.add(specialization)
-        db.session.commit()
-        flash('You have successfully edited the specialization.')
+        try:
+            specialization.name = form.name.data
+            db.session.add(specialization)
+            db.session.commit()
+            flash('You have successfully edited the Class Specialization name.', category='message')
+        except:
+            flash('Error in changing Class Specialization name.', category='error')
 
         # redirect to the list of specializations of classes PAGE
         return redirect(url_for('admin.list_class_specializations'))
@@ -113,14 +118,13 @@ def add_room_specialization():
 
     form = SpecializationForm()
     if form.validate_on_submit():
-        room_specialization = RoomSpecialization(name=form.name.data)
-
         try:
+            room_specialization = RoomSpecialization(name=form.name.data)
             db.session.add(room_specialization)
             db.session.commit()
-            flash('You have successfully added a new classroom specialization.')
+            flash('You have successfully added a new Classroom Specialization.',category='message')
         except:
-            flash('Error: class specialization name already exists.')
+            flash('Error: Classroom Specialization name already exists.',category='error')
 
         # redirect to the list of specializations of classroom PAGE
         return redirect(url_for('admin.list_room_specializations'))
@@ -138,10 +142,13 @@ def delete_room_specialization(id):
     """
     check_admin()
 
-    room_specializations = RoomSpecialization.query.get_or_404(id)
-    db.session.delete(room_specializations)
-    db.session.commit()
-    flash('You have successfully deleted the classroom specialization.')
+    try:
+        room_specializations = RoomSpecialization.query.get_or_404(id)
+        db.session.delete(room_specializations)
+        db.session.commit()
+        flash('You have successfully deleted the Classroom Specialization.', category='message')
+    except:
+        flash('Error in removing the Classroom Specialization.', category='error')
 
     # redirect to the list of specializations of classroom PAGE
     return redirect(url_for('admin.list_room_specializations'))
@@ -158,10 +165,13 @@ def edit_room_specialization(id):
     room_specialization = RoomSpecialization.query.get_or_404(id)
     form = SpecializationForm(obj=room_specialization)
     if form.validate_on_submit():
-        room_specialization.name = form.name.data
-        db.session.add(room_specialization)
-        db.session.commit()
-        flash('You have successfully edited the room specialization.')
+        try:
+            room_specialization.name = form.name.data
+            db.session.add(room_specialization)
+            db.session.commit()
+            flash('You have successfully edited the Classroom Specialization name.', category='message')
+        except:
+            flash('Error in changing Classroom Specialization name.', category='error')
 
         # redirect to the list of specializations of classroom PAGE
         return redirect(url_for('admin.list_room_specializations'))
@@ -196,14 +206,13 @@ def add_subject():
 
     form = SpecializationForm()
     if form.validate_on_submit():
-        subject = Subject(name=form.name.data)
-
         try:
+            subject = Subject(name=form.name.data)
             db.session.add(subject)
             db.session.commit()
-            flash('You have successfully added a new subject.')
+            flash('You have successfully added a new Subject.', category='message')
         except:
-            flash('Error: subject name already exists.')
+            flash('Error: Subject name already exists.', category='error')
 
         # redirect to the list of subjects PAGE
         return redirect(url_for('admin.list_subjects'))
@@ -224,10 +233,13 @@ def edit_subject(id):
     subject = Subject.query.get_or_404(id)
     form = SpecializationForm(obj=subject)
     if form.validate_on_submit():
-        subject.name = form.name.data
-        db.session.add(subject)
-        db.session.commit()
-        flash('You have successfully edited the subject.')
+        try:
+            subject.name = form.name.data
+            db.session.add(subject)
+            db.session.commit()
+            flash('You have successfully edited the Subject name.', category='message')
+        except:
+            flash('Error in changing Subject name.', category='error')
 
         # redirect to the list of subjects PAGE
         return redirect(url_for('admin.list_subjects'))
@@ -247,10 +259,13 @@ def delete_subject(id):
     """
     check_admin()
 
-    subject = Subject.query.get_or_404(id)
-    db.session.delete(subject)
-    db.session.commit()
-    flash('You have successfully deleted the subject.')
+    try:
+        subject = Subject.query.get_or_404(id)
+        db.session.delete(subject)
+        db.session.commit()
+        flash('You have successfully deleted the Subject.', category='message')
+    except:
+        flash('Error in removing the Subject.', category='error')
 
     # redirect to the list of subjects PAGE
     return redirect(url_for('admin.list_subjects'))

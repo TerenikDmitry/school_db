@@ -10,11 +10,11 @@ class ClassForm(FlaskForm):
     Form for admin to add or edit a class
     """
     name = StringField('Name', validators=[DataRequired()])
-    date_start = DateField('DateStart', validators=[DataRequired()])
-    date_end = DateField('DateEnd', validators=[DataRequired()])
-    specialization_id = QuerySelectField(query_factory=lambda: Specialization.query.all(), get_label="name")
-    head_teacher_id = QuerySelectField(query_factory=lambda: User.query.filter_by(role_id=1).all())
-    classroom_id = QuerySelectField(query_factory=lambda: Classroom.query.all(), get_label="name")
+    dateStartEducation = DateField('DateStart', validators=[DataRequired()])
+    dateEndEducation = DateField('DateEnd', validators=[DataRequired()])
+    specialization_id = QuerySelectField(query_factory=lambda: Specialization.query.all())
+    headTeacher = QuerySelectField(query_factory=lambda: User.query.filter_by(role_id=1).all())
+    room_id = QuerySelectField(query_factory=lambda: Classroom.query.all())
     submit = SubmitField('Submit')
 
 

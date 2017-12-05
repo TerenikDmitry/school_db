@@ -34,15 +34,14 @@ def add_students_class(id):
 
     form = StudentToClassEditForm()
     if form.validate_on_submit():
-        student_to_class = StudentInClass(class_id=form.class_name.data.id,
-                                          user_id_studen=id)
-
         try:
+            student_to_class = StudentInClass(class_id=form.class_name.data.id,
+                                              user_id_studen=id)
             db.session.add(student_to_class)
             db.session.commit()
-            flash('You have successfully added a new link between student and class.')
+            flash('You have successfully added a new link between Student and Class.',category='message')
         except:
-            flash('Error')
+            flash('Error in adding a new link between Student and Class',category='error')
 
         # redirect to the list links between students and class PAGE
         return redirect(url_for('admin.list_students_class'))
@@ -60,11 +59,13 @@ def delete_students_class(id):
     Delete link between students and class
     """
     check_admin()
-
-    student_to_class = StudentInClass.query.filter_by(user_id_studen=id).first()
-    db.session.delete(student_to_class)
-    db.session.commit()
-    flash('You have successfully deleted link between students and class.')
+    try:
+        student_to_class = StudentInClass.query.filter_by(user_id_studen=id).first()
+        db.session.delete(student_to_class)
+        db.session.commit()
+        flash('You have successfully deleted link between Students and Class.',category='message')
+    except:
+        flash('Error in deleting link between Students and Class', category='error')
 
     # redirect to the list links between parents and students PAGE
     return redirect(url_for('admin.list_students_class'))
@@ -92,9 +93,9 @@ def edit_students_class(id):
         try:
             db.session.add(student_to_class)
             db.session.commit()
-            flash('You have successfully added a new classroom.')
+            flash('You have successfully edit link between Students and Class.', category='message')
         except:
-            flash('Error')
+            flash('Error in linking Student to Class.', category='error')
 
         # redirect to the list links between students and class PAGE
         return redirect(url_for('admin.list_students_class'))

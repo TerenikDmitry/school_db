@@ -9,7 +9,7 @@
         <div class="center">
             <div class="page-header">
                 <h1> {{ title }}
-                {% if not add_parent_to_student %}
+                {% if parent_to_student %}
                     <br>
                     <small>Parent -
                     <a href="{{ url_for('home.parent_dashboard',id=parent_to_student.parentStudent.id) }}">

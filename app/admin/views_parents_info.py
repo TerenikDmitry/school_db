@@ -31,8 +31,6 @@ def add_parent_to_student():
     """
     check_admin()
 
-    add_parent_to_student = True
-
     form = ParentToStudentAddForm()
     if form.validate_on_submit():
         parent_to_student = ParentToStudent(user_id_parent=form.parent.data.id,
@@ -41,9 +39,9 @@ def add_parent_to_student():
         try:
             db.session.add(parent_to_student)
             db.session.commit()
-            flash('You have successfully added a new link between parents and students.')
+            flash('You have successfully added a new link between Parent and Student.', category='message')
         except:
-            flash('Error')
+            flash('Error in adding the new link between Parent and Student', category='error')
 
         # redirect to the list links between parents and students PAGE
         return redirect(url_for('admin.list_parent_to_student'))
@@ -52,7 +50,6 @@ def add_parent_to_student():
     form.student.query = db.session.query(User).filter(User.role_id == 2)
     return render_template('admin/parent_to_student/edit.html',
                            form=form,
-                           add_parent_to_student=add_parent_to_student,
                            title='Add link between parents and students')
 
 
@@ -64,10 +61,13 @@ def delete_parent_to_student(id):
     """
     check_admin()
 
-    parent_to_student = ParentToStudent.query.get_or_404(id)
-    db.session.delete(parent_to_student)
-    db.session.commit()
-    flash('You have successfully deleted link between parents and students.')
+    try:
+        parent_to_student = ParentToStudent.query.get_or_404(id)
+        db.session.delete(parent_to_student)
+        db.session.commit()
+        flash('You have successfully deleted link between Parent and Student.', category='message')
+    except:
+        flash('Error in removing link between Parent and Student', category='error')
 
     # redirect to the list links between parents and students PAGE
     return redirect(url_for('admin.list_parent_to_student'))
@@ -85,14 +85,13 @@ def edit_parent_to_student(id):
 
     form = ParentToStudentEditForm()
     if form.validate_on_submit():
-        parent_to_student.user_id_student = form.student.data.id
-
         try:
+            parent_to_student.user_id_student = form.student.data.id
             db.session.add(parent_to_student)
             db.session.commit()
-            flash('You have successfully added a new classroom.')
+            flash('You have successfully changed the link between Parent and Student.', category='message')
         except:
-            flash('Error')
+            flash('Error in changing the link between Parent and Student.', category='error')
 
         # redirect to the list links between parents and students PAGE
         return redirect(url_for('admin.list_parent_to_student'))
@@ -101,4 +100,4 @@ def edit_parent_to_student(id):
     return render_template('admin/parent_to_student/edit.html',
                            form=form,
                            parent_to_student = parent_to_student,
-                           title='Edit link between parents and students')
+                           title='Edit link between Parents and Students')

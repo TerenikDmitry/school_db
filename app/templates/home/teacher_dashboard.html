@@ -9,24 +9,31 @@
                 <small>(teacher)</small>
             </h1>
         </div>
+
         <div>email: {{ user.email }}</div>
+
         <div>Tell:
-            {% if user.tel != "" %}
-                {{ user.tel }}
+            {% if user.telephone %}
+                {{ user.telephone }}
             {% else %}
-                no phone number
+                no telephone
             {% endif %}
         </div>
+
         <div>Head Class:
-            <a href="{{ url_for('classes.one_class', class_id=headClass.id) }}">
+            {% if headClass %}<a href="{{ url_for('classes.one_class', class_id=headClass.id) }}">
                 {{ headClass.name }}
             </a>
+            {% else %}
+                no link
+            {% endif %}
         </div>
+
         <div>Classroom:
         {% if classroom %}
             {{ classroom.classrooms.name }}
         {% else %}
-            no classrooms
+            no link
         {% endif %}
         </div>
 

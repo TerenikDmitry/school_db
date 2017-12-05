@@ -30,31 +30,28 @@ def add_user():
     """
     check_admin()
 
-    add_user = True
-
-    user = User()
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(email=form.email.data,
-                    username=form.username.data,
-                    first_name=form.first_name.data,
-                    last_name=form.last_name.data,
-                    middle_name=form.middle_name.data,
-                    password=form.password.data,
-                    role_id=form.role.data.id,
-                    tel=form.tell.data)
-
-        db.session.add(user)
-        db.session.commit()
-        flash('You have successfully add user.')
+        try:
+            user = User(email=form.email.data,
+                        username=form.username.data,
+                        first_name=form.first_name.data,
+                        last_name=form.last_name.data,
+                        middle_name=form.middle_name.data,
+                        password=form.password.data,
+                        role_id=form.role.data.id,
+                        telephone=form.telephone.data)
+            db.session.add(user)
+            db.session.commit()
+            flash('You have successfully added a user.',category='message')
+        except:
+            flash('Error in adding user.', category='error')
 
         # redirect to the user list PAGE
         return redirect(url_for('admin.list_users'))
 
     return render_template('admin/users/user.html',
-                           user=user,
-                           form=form,
-                           add_user=add_user)
+                           form=form)
 
 
 @admin.route('/users/delete/<int:id>', methods=['GET', 'POST'])
@@ -65,10 +62,13 @@ def delete_user(id):
     """
     check_admin()
 
-    user = User.query.get_or_404(id)
-    db.session.delete(user)
-    db.session.commit()
-    flash('You have successfully deleted the user.')
+    try:
+        user = User.query.get_or_404(id)
+        db.session.delete(user)
+        db.session.commit()
+        flash('You have successfully deleted the user.',category='message')
+    except:
+        flash('Error in deleting user.', category='error')
 
     # redirect to the user list PAGE
     return redirect(url_for('admin.list_users'))
@@ -91,20 +91,16 @@ def edit_user(id):
         user.last_name = form.last_name.data
         user.middle_name = form.middle_name.data
         user.email = form.email.data
-        user.tel = form.tell.data
-        db.session.add(user)
-        db.session.commit()
-        flash('You have successfully assigned a role.')
+        user.tel = form.telephone.data
+        try:
+            db.session.add(user)
+            db.session.commit()
+            flash('You have successfully changed the user information.',category='message')
+        except:
+            flash('Error in changing user informationn.', category='error')
 
         # redirect to the user list PAGE
         return redirect(url_for('admin.list_users'))
-
-    form.username.data = user.username
-    form.first_name.data = user.first_name
-    form.last_name.data = user.last_name
-    form.middle_name.data = user.middle_name
-    form.email.data = user.email
-    form.tell.data = user.tel
 
     return render_template('admin/users/user.html',
                            user=user,

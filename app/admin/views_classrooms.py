@@ -30,10 +30,13 @@ def delete_classroom(id):
     """
     check_admin()
 
-    classroom = Classroom.query.get_or_404(id)
-    db.session.delete(classroom)
-    db.session.commit()
-    flash('You have successfully deleted the classroom specialization.')
+    try:
+        classroom = Classroom.query.get_or_404(id)
+        db.session.delete(classroom)
+        db.session.commit()
+        flash('You have successfully deleted the Classroom Specialization.', category='message')
+    except:
+        flash('Error in removing the Classroom Specialization.', category='error')
 
     # redirect to the list of classroom PAGE
     return redirect(url_for('admin.list_room_specializations'))
@@ -49,15 +52,14 @@ def add_classroom():
 
     form = ClassroomEditForm()
     if form.validate_on_submit():
-        classroom = Classroom(name=form.name.data,
-                              room_specialization_id=form.spec.data.id)
-
         try:
+            classroom = Classroom(name=form.name.data,
+                                  room_specialization_id=form.spec.data.id)
             db.session.add(classroom)
             db.session.commit()
-            flash('You have successfully added a new classroom.')
+            flash('You have successfully added a new Classroom Specialization.', category='message')
         except:
-            flash('Error: classroom name already exists.')
+            flash('Error: Classroom Specialization name already exists.', category='error')
 
         # redirect to the list of classroom PAGE
         return redirect(url_for('admin.list_classrooms'))
@@ -84,9 +86,9 @@ def edit_classroom(id):
             classroom.room_specialization_id = form.spec.data.id
             db.session.add(classroom)
             db.session.commit()
-            flash('You have successfully added a new classroom.')
+            flash('You have successfully changed name of the Classroom Specialization.', category='message')
         except:
-            flash('Error: classroom name already exists.')
+            flash('Error in changing the name of the Classroom Specialization.', category='error')
 
         # redirect to the list of classroom PAGE
         return redirect(url_for('admin.list_classrooms'))

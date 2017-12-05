@@ -6,25 +6,6 @@
     <div class="outer">
         <div class="middle">
             <div class="center">
-
-                <div>
-                    {% with messages = get_flashed_messages(with_categories=true) %}
-                        {% if messages %}
-                            {% for category, message in messages %}
-                                {% if category == 'message' %}
-                                    <div class="alert alert-success" role="alert">
-                                {% elif category == 'warning'%}
-                                    <div class="alert alert-warning" role="alert">
-                                {% else %}
-                                    <div class="alert alert-danger" role="alert">
-                                {% endif %}
-                            {{ message }}
-                            </div>
-                            {% endfor %}
-                        {% endif %}
-                    {% endwith %}
-                </div>
-
                 <div class="page-header">
                     <h1>Plan</h1>
                 </div>

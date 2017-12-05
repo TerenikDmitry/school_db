@@ -39,9 +39,9 @@ def add_role():
             # add role to the database
             db.session.add(role)
             db.session.commit()
-            flash('You have successfully added a new role.')
+            flash('You have successfully added a new Role.',category='message')
         except:
-            flash('Error: role name already exists.')
+            flash('Error: Role name already exists.',category='error')
 
         # redirect to the list roles PAGE
         return redirect(url_for('admin.list_roles'))
@@ -62,11 +62,14 @@ def edit_role(id):
     role = Role.query.get_or_404(id)
     form = RoleForm(obj=role)
     if form.validate_on_submit():
-        role.name = form.name.data
-        role.description = form.description.data
-        db.session.add(role)
-        db.session.commit()
-        flash('You have successfully edited the role.')
+        try:
+            role.name = form.name.data
+            role.description = form.description.data
+            db.session.add(role)
+            db.session.commit()
+            flash('You have successfully edited the Role neme.',category='message')
+        except:
+            flash('Error in changing Roles name.', category='error')
 
         # redirect to the list roles PAGE
         return redirect(url_for('admin.list_roles'))
@@ -88,9 +91,12 @@ def delete_role(id):
     """
     check_admin()
 
-    role = Role.query.get_or_404(id)
-    db.session.delete(role)
-    db.session.commit()
-    flash('You have successfully deleted the role.')
+    try:
+        role = Role.query.get_or_404(id)
+        db.session.delete(role)
+        db.session.commit()
+        flash('You have successfully deleted the Role.',category='message')
+    except:
+        flash('error in removing Roles.', category='error')
 
     return redirect(url_for('admin.list_roles'))
