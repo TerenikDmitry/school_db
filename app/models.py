@@ -28,7 +28,6 @@ class User(UserMixin, db.Model):
     teacherInClass = db.relationship('Class', backref='users', lazy='dynamic', cascade="all, delete")
     teacherToSubject = db.relationship('TeacherToSubject', backref='users', lazy='dynamic', cascade="all, delete")
     teacherClassroom = db.relationship('TeachersClassroom', backref='users', lazy='dynamic', cascade="all, delete")
-    schedule_id = db.relationship('Schedule', backref='users', lazy='dynamic')
     grade_id = db.relationship('Grade', backref='users', lazy='dynamic')
 
     @property
@@ -152,7 +151,6 @@ class Subject(db.Model):
     name = db.Column(db.String(60), unique=True)
 
     teacher_subject_id = db.relationship('TeacherToSubject', backref='subjects', lazy='dynamic')
-    schedule_id = db.relationship('Schedule', backref='subjects', lazy='dynamic')
 
     def __repr__(self):
         return '<Subject: {}>'.format(self.name)
@@ -167,10 +165,15 @@ class TeacherToSubject(db.Model):
     """
 
     __tablename__ = 'teachers_to_subjects'
+    __table_args__ = (
+        UniqueConstraint('subject_id', 'user_id_teacher', name='_teacherSubjectUnique'),
+    )
 
     id = db.Column(db.Integer, primary_key=True)
     subject_id = db.Column(db.Integer, db.ForeignKey('subjects.id'))
     user_id_teacher = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    schedule_id = db.relationship('Schedule', backref='teachers_to_subjects', lazy='dynamic')
 
     def __repr__(self):
         return '<TeacherToSubject: teacher {} - subject {}>'.format(self.user_id_teacher, self.subject_id)
@@ -309,8 +312,7 @@ class Schedule(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     classroom_id = db.Column(db.Integer, db.ForeignKey('classrooms.id'))
     class_id = db.Column(db.Integer, db.ForeignKey('classes.id'))
-    subject_id = db.Column(db.Integer, db.ForeignKey('subjects.id'))
-    teacher_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    teacher_subject_id = db.Column(db.Integer, db.ForeignKey('teachers_to_subjects.id'))
     educationPlan_id = db.Column(db.Integer, db.ForeignKey('education_plan.id'))
 
     grade_id = db.relationship('Grade', backref='schedules', lazy='dynamic')
