@@ -86,18 +86,18 @@ def edit_user(id):
 
     form = UserEditForm(obj=user)
     if form.validate_on_submit():
-        user.username = form.username.data
-        user.first_name = form.first_name.data
-        user.last_name = form.last_name.data
-        user.middle_name = form.middle_name.data
-        user.email = form.email.data
-        user.tel = form.telephone.data
         try:
+            user.username = form.username.data
+            user.first_name = form.first_name.data
+            user.last_name = form.last_name.data
+            user.middle_name = form.middle_name.data
+            user.email = form.email.data
+            user.telephone = form.telephone.data
             db.session.add(user)
             db.session.commit()
             flash('You have successfully changed the user information.',category='message')
         except:
-            flash('Error in changing user informationn.', category='error')
+            flash('Error in changing user information.', category='error')
 
         # redirect to the user list PAGE
         return redirect(url_for('admin.list_users'))
