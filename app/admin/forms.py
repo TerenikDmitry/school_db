@@ -165,3 +165,20 @@ class PlanForm(FlaskForm):
                                        ])
     lessonNumber = SelectField('Lesson number', coerce=int,choices = [(g, '{} lesson'.format(g)) for g in range(1,8)])
     submit = SubmitField('Submit')
+
+
+class PlanFormDay(FlaskForm):
+    """
+        Form for admin to add one plan
+    """
+    year = IntegerField('Year', [NumberRange(min=1996, max=2017, message=None)], default=(datetime.date.today().year))
+    semester = SelectField('Semester', choices=[(1, '1 semester'), (2, '2 semester')], coerce=int)
+    day = SelectField('Day', coerce=int, choices=[(1, 'Monday'),
+                                       (2, 'Tuesday'),
+                                       (3, 'Wednesday'),
+                                       (4, 'Thursday'),
+                                       (5, 'Friday'),
+                                       (6, 'Saturday'),
+                                       (7, 'Sunday')
+                                       ])
+    submit = SubmitField('Submit')
