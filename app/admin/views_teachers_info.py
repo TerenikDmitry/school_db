@@ -41,7 +41,7 @@ def add_teacher_subjects(id_teacher):
             db.session.commit()
             flash('You have successfully added a subject to the list of teacher\'s subjects.', category='message')
         except:
-            flash('Error in adding an item to the list of teacher\'s subjects.', category='error')
+            flash('Error in adding an item to the list of teacher\'s subjects. This relationship already exists.', category='error')
 
         # redirect to the list links between students and class PAGE
         return redirect(url_for('admin.edit_teacher_subjects', id_teacher=id_teacher))
