@@ -16,7 +16,7 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(60), index=True, unique=True)
     username = db.Column(db.String(60), index=True, unique=True)
-    tel = db.Column(db.String(60), default='-')
+    telephone = db.Column(db.String(60), nullable=True)
     first_name = db.Column(db.String(60), index=True, nullable=False)
     last_name = db.Column(db.String(60), index=True, nullable=False)
     middle_name = db.Column(db.String(60), index=True)
