@@ -20,3 +20,4 @@ from . import views_students_class
 from . import views_teachers_info
 from . import views_users
 from . import views_plan
+from . import views_schedule

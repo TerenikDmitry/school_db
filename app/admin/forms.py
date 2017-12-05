@@ -6,7 +6,7 @@ from wtforms import StringField, SubmitField, PasswordField, ValidationError, In
 from wtforms.validators import DataRequired, Email, EqualTo, NumberRange
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 
-from ..models import Role, User, RoomSpecialization, Class, Subject, Classroom
+from ..models import Role, User, RoomSpecialization, Class, Subject, Classroom, EducationPlan, TeacherToSubject
 
 
 class RoleForm(FlaskForm):
@@ -151,7 +151,7 @@ class TeacherClassroomEditForm(FlaskForm):
 
 class PlanForm(FlaskForm):
     """
-        Form for admin to add one plan
+        Form for admin to add one Plan
     """
     year = IntegerField('Year', [NumberRange(min=1996, max=2017, message=None)], default=(datetime.date.today().year))
     semester = SelectField('Semester', choices=[(1, '1 semester'), (2, '2 semester')], coerce=int)
@@ -169,7 +169,7 @@ class PlanForm(FlaskForm):
 
 class PlanFormDay(FlaskForm):
     """
-        Form for admin to add one plan
+        Form for admin to add Plan to all day
     """
     year = IntegerField('Year', [NumberRange(min=1996, max=2017, message=None)], default=(datetime.date.today().year))
     semester = SelectField('Semester', choices=[(1, '1 semester'), (2, '2 semester')], coerce=int)
@@ -186,8 +186,18 @@ class PlanFormDay(FlaskForm):
 
 class PlanFormSemester(FlaskForm):
     """
-        Form for admin to add one plan
+        Form for admin to add Plan to all semester
     """
     year = IntegerField('Year', [NumberRange(min=1996, max=2017, message=None)], default=(datetime.date.today().year))
     semester = SelectField('Semester', choices=[(1, '1 semester'), (2, '2 semester')], coerce=int)
+    submit = SubmitField('Submit')
+
+
+class ScheduleForm(FlaskForm):
+    """
+        Form for admin to edit Schedule
+    """
+    classroom_id = QuerySelectField(query_factory=lambda: Classroom.query)
+    class_id = QuerySelectField(query_factory=lambda: Class.query)
+    teacher_subject_id = QuerySelectField(query_factory=lambda: TeacherToSubject.query.all())
     submit = SubmitField('Submit')
