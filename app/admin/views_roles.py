@@ -74,9 +74,6 @@ def edit_role(id):
         # redirect to the list roles PAGE
         return redirect(url_for('admin.list_roles'))
 
-    form.description.data = role.description
-    form.name.data = role.name
-
     return render_template('admin/roles/role.html',
                            form=form,
                            role_name=role.name,
@@ -91,12 +88,12 @@ def delete_role(id):
     """
     check_admin()
 
+    role = Role.query.get_or_404(id)
     try:
-        role = Role.query.get_or_404(id)
         db.session.delete(role)
         db.session.commit()
         flash('You have successfully deleted the Role.',category='message')
     except:
-        flash('error in removing Roles.', category='error')
+        flash('Error in removing Roles.', category='error')
 
     return redirect(url_for('admin.list_roles'))
