@@ -10,7 +10,7 @@
 
                 <div style="text-align: center">
                     <a href="{{ url_for('admin.add_classroom') }}" class="btn btn-default btn-lg">
-                        <i class="fa fa-plus"></i> Add Classrooms
+                        <i class="fas fa-plus"></i> Add Classrooms
                     </a>
                 </div>
 
@@ -33,12 +33,12 @@
                                 <td> {{ classroom.room_specializations.name }} </td>
                                 <td>
                                     <a href="{{ url_for('admin.edit_classroom', id=classroom.id) }}">
-                                        <i class="fa fa-pencil"></i> edit
+                                        <i class="fas fa-pencil-alt"></i> edit
                                     </a>
                                 </td>
                                 <td>
                                     <a href="{{ url_for('admin.delete_classroom', id=classroom.id) }}">
-                                        <i class="fa fa-trash"></i> delete
+                                        <i class="fas fa-trash"></i> delete
                                     </a>
                                 </td>
                             </tr>

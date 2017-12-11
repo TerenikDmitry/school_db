@@ -69,9 +69,10 @@ def student_dashboard(id):
                                studentClass=studentClass,
                                parents=parents)
     else:
-        return render_template('home/student_dashboard.html',
+        return render_template('home/student_dashboard_all.html',
                                user=user,
-                               studentClass=studentClass)
+                               studentClass=studentClass,
+                               parents=parents)
 
 
 @home.route('/teacher/<int:id>')
@@ -87,11 +88,18 @@ def teacher_dashboard(id):
 
     classroom = TeachersClassroom.query.filter_by(user_id_teacher=id).first()
 
-    return render_template('home/teacher_dashboard.html',
-                           user=user,
-                           headClass=headClass,
-                           subjects=subjects,
-                           classroom=classroom)
+    if current_user.role_id == 1 or current_user.is_admin:
+        return render_template('home/teacher_dashboard.html',
+                               user=user,
+                               headClass=headClass,
+                               subjects=subjects,
+                               classroom=classroom)
+    else:
+        return render_template('home/teacher_dashboard_all.html',
+                               user=user,
+                               headClass=headClass,
+                               subjects=subjects,
+                               classroom=classroom)
 
 
 @home.route('/parent/<int:id>')

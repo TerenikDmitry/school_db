@@ -1,13 +1,18 @@
 {% extends "base.html" %}
-{% block title %}
-    Schedule
-{% endblock %}
 {% block body %}
     <div class="outer">
         <div class="middle">
             <div class="center">
                 <div class="page-header">
-                    <h1>Schedule</h1>
+                    <h1>{{ title }} <br>
+                        <small>{{ year }} - {{ semester }} semester</small>
+                    </h1>
+                </div>
+
+                <div style="text-align: center">
+                    <a href="{{ url_for('admin.add_schedule_year_sem', year=year, semester=semester) }}" class="btn btn-default btn-lg">
+                        <i class="fas fa-plus"></i> Add Schedule
+                    </a>
                 </div>
 
                 {% if schedules %}
@@ -15,7 +20,7 @@
                         <thead>
                         <tr>
                             <th width="30%"> Plan </th>
-                            <th width="30%"> Teacher </th>
+                            <th width="30%"> Teacher-Subject </th>
                             <th width="10%"> Class </th>
                             <th width="10%"> Classroom </th>
                             <th width="10%"> Edit </th>
@@ -26,18 +31,22 @@
                         {% for schedulePlan in schedules %}
                         {% for schedule in schedulePlan.schedule_id.all() %}
                             <tr>
-                                <td> {{ schedulePlan }} </td>
+                                <td> {{ schedulePlan.dayLesson }} </td>
                                 <td> {{ schedule.teachers_to_subjects }} </td>
-                                <td> {{ schedule.classes }} </td>
+                                <td>
+                                    <a href="{{ url_for('classes.one_class', class_id=schedule.classes.id) }}">
+                                        {{ schedule.classes }}
+                                    </a>
+                                </td>
                                 <td> {{ schedule.classrooms }} </td>
                                 <td>
                                     <a href="{{ url_for('admin.edit_schedule_year_sem', plan_id=schedulePlan.id, year=schedulePlan.year ,semester=schedulePlan.semester) }}">
-                                        <i class="fa fa-pencil"></i> Edit
+                                        <i class="fas fa-pencil-alt"></i> edit
                                     </a>
                                 </td>
                                 <td>
                                     <a href="{{ url_for('admin.delete_schedule_year_sem', id=schedule.id, year=schedulePlan.year ,semester=schedulePlan.semester) }}">
-                                        <i class="fa fa-trash"></i> Delete
+                                        <i class="fas fa-trash"></i> delete
                                     </a>
                                 </td>
                             </tr>
@@ -48,6 +57,12 @@
                 {% else %}
                     <div class="alert alert-warning" role="alert">No Schedule.</div>
                 {% endif %}
+
+                <div style="text-align: center">
+                    <a href="{{ url_for('admin.add_schedule_year_sem', year=year, semester=semester) }}" class="btn btn-default btn-lg">
+                        <i class="fa fa-plus"></i> Add Schedule
+                    </a>
+                </div>
 
                 <br>
             </div>

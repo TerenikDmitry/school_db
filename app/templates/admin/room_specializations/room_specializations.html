@@ -5,12 +5,12 @@
         <div class="middle">
             <div class="center">
                 <div class="page-header">
-                    <h1>Room Specialization</h1>
+                    <h1> Room Specialization </h1>
                 </div>
 
                 <div style="text-align: center">
                     <a href="{{ url_for('admin.add_room_specialization') }}" class="btn btn-default btn-lg">
-                        <i class="fa fa-plus"></i> Add Room Specialization
+                        <i class="fas fa-plus"></i> Add Room Specialization
                     </a>
                 </div>
 
@@ -34,12 +34,12 @@
                                 <td> {{ room_specialization.room_specialization_id.count() }} </td>
                                 <td>
                                     <a href="{{ url_for('admin.edit_room_specialization', id=room_specialization.id) }}">
-                                        <i class="fa fa-pencil"></i> Edit
+                                        <i class="fas fa-pencil-alt"></i> edit
                                     </a>
                                 </td>
                                 <td>
                                     <a href="{{ url_for('admin.delete_room_specialization', id=room_specialization.id) }}">
-                                        <i class="fa fa-trash"></i> Delete
+                                        <i class="fas fa-trash"></i> delete
                                     </a>
                                 </td>
                             </tr>

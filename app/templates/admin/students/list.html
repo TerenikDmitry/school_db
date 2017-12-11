@@ -29,17 +29,17 @@
                         <td>
                             {% if student.studentInClass.first().classes%}
                             <a href="{{ url_for('admin.edit_students_class', id=student.id) }}">
-                                <i class="fa fa-link"></i> change bind
+                                <i class="fas fa-link"></i> change bind
                             </a><br>
                             <a href="{{ url_for('classes.one_class', class_id=student.studentInClass.first().classes.id) }}">
                                 <span class="label label-success">{{ student.studentInClass.first().classes }}</span>
                             </a><br>
                             <a href="{{ url_for('admin.delete_students_class', id=student.id) }}">
-                                <i class="fa fa-chain-broken"></i> remove bind
+                                <i class="fas fa-unlink"></i> remove bind
                             </a>
                             {% else %}
                              <a href="{{ url_for('admin.add_students_class', id=student.id) }}">
-                                 <i class="fa fa-chain"></i> add link
+                                 <i class="fas fa-link"></i> add link
                              </a>
                             {% endif %}
                         </td>

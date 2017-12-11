@@ -37,9 +37,7 @@
                 <ul class="list-group">
                     {% for parent in parents %}
                         <li class="list-group-item">
-                            <a href="{{ url_for('home.parent_dashboard',id=parent.parentStudent.id) }}">
-                                {{ parent.parentStudent.fullname }}
-                            </a>
+                            {{ parent.parentStudent.fullname }}
                         </li>
                     {% endfor %}
                 </ul>

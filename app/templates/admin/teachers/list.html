@@ -14,9 +14,10 @@
                     <table class="table table-striped table-bordered">
                         <thead>
                         <tr>
-                            <th width="50%"> Teacher</th>
-                            <th width="25%"> List of Subjects</th>
-                            <th width="25%"> Bind to Classroom</th>
+                            <th width="40%"> Teacher</th>
+                            <th width="20%"> List of Subjects</th>
+                            <th width="20%"> Bind to Classroom</th>
+                            <th width="20%"> Bind to Class</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -31,32 +32,46 @@
                                     <td>
                                         {% if teacher.teacherToSubject.all() %}
                                             <a href="{{ url_for('admin.edit_teacher_subjects', id_teacher=teacher.id) }}">
-                                                <i class="fa fa-pencil"></i> edit subjects list
+                                                <i class="fas fa-pencil-alt"></i> edit subjects list
                                             </a>
                                             {% for subjects in teacher.teacherToSubject.all() %}
                                                 <div>{{ subjects.subjects }}</div>
                                             {% endfor %}
                                         {% else %}
                                             <a href="{{ url_for('admin.add_teacher_subjects', id_teacher=teacher.id) }}">
-                                                <i class="fa fa-plus"></i> add subject
+                                                <i class="fas fa-plus-circle"></i> add subject
                                             </a>
                                         {% endif %}
                                     </td>
                                     <td>
                                         {% if teacher.teacherClassroom.first() %}
                                             <a href="{{ url_for('admin.edit_teacher_classroom', id_teacher=teacher.id) }}">
-                                                <i class="fa fa-chain"></i> edit bind
+                                                <i class="fas fa-link"></i> edit bind
                                             </a><br>
                                             <span class="label label-success">
                                                 {{ teacher.teacherClassroom.first().classrooms.name }}
                                                 ({{ teacher.teacherClassroom.first().classrooms.room_specializations.name }})
                                             </span><br>
                                             <a href="{{ url_for('admin.delete_teacher_classroom', id_teacher=teacher.id) }}">
-                                                <i class="fa fa-chain-broken"></i> remove bind
+                                                <i class="fas fa-unlink"></i> remove bind
                                             </a>
                                         {% else %}
                                             <a href="{{ url_for('admin.add_teacher_classroom', id_teacher=teacher.id) }}">
-                                                <i class="fa fa-chain"></i> add link
+                                                <i class="fas fa-link"></i> add link
+                                            </a>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if teacher.teacherInClass.first() %}
+                                            <a href="{{ url_for('classes.one_class', class_id=teacher.teacherInClass.first().id) }}">
+                                            <span class="label label-success">
+                                                {{ teacher.teacherInClass.first() }}
+                                            </span>
+                                            </a>
+                                        {% else %}
+                                            No classes available <br>
+                                            <a href="{{ url_for('classes.add_class') }}">
+                                                <i class="fas fa-plus"></i> add class
                                             </a>
                                         {% endif %}
                                     </td>

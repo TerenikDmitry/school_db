@@ -21,7 +21,16 @@ def one_class(class_id):
     classStudents = StudentInClass.query.filter_by(class_id=class_id).all()
     _class = Class.query.get_or_404(class_id)
 
-    return render_template('classes/class_dashboard.html', title='Class', _class=_class, classStudents=classStudents)
+    if current_user.role_id == 1 or current_user.role_id == 2:
+        return render_template('classes/class_dashboard.html',
+                               title='Class',
+                               _class=_class,
+                               classStudents=classStudents)
+    else:
+        return render_template('classes/class_dashboard_all.html',
+                               title='Class',
+                               _class=_class,
+                               classStudents=classStudents)
 
 
 @classes.route('/class/list')
@@ -49,10 +58,10 @@ def add_class():
     if form.validate_on_submit():
         try:
             classOne = Class(name=form.name.data,
-                             dateStartEducation=form.date_start.data,
-                             dateEndEducation=form.date_end.data,
-                             headTeacher=form.head_teacher_id.data.id,
-                             room_id=form.classroom_id.data.id,
+                             dateStartEducation=form.dateStartEducation.data,
+                             dateEndEducation=form.dateEndEducation.data,
+                             headTeacher=form.headTeacher.data.id,
+                             room_id=form.room_id.data.id,
                              specialization_id=form.specialization_id.data.id
                              )
             db.session.add(classOne)
@@ -64,7 +73,7 @@ def add_class():
         # redirect to the list of classes PAGE
         return redirect(url_for('classes.list_classes'))
 
-    form.head_teacher_id.query = User.query.filter(User.is_admin!=True, User.role_id==1).outerjoin(Class, Class.headTeacher == User.id).filter(Class.id==None)
+    form.headTeacher.query = User.query.filter(User.is_admin!=True, User.role_id==1).outerjoin(Class, Class.headTeacher == User.id).filter(Class.id==None)
 
     return render_template('classes/editClass.html',
                            form=form,
@@ -84,7 +93,7 @@ def edit_class(id):
     if form.validate_on_submit():
         classOne.name = form.name.data
         classOne.dateStartEducation = form.dateStartEducation.data
-        classOne.dateStartEducation = form.dateEndEducation.data
+        classOne.dateEndEducation = form.dateEndEducation.data
         classOne.headTeacher = form.headTeacher.data.id
         classOne.room_id = form.room_id.data.id
         classOne.specialization_id = form.specialization_id.data.id

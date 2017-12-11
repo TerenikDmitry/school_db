@@ -2,7 +2,7 @@ import datetime
 
 from flask_wtf import FlaskForm
 
-from wtforms import StringField, SubmitField, PasswordField, ValidationError, IntegerField, SelectField
+from wtforms import StringField, SubmitField, PasswordField, ValidationError, IntegerField, SelectField, BooleanField
 from wtforms.validators import DataRequired, Email, EqualTo, NumberRange
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 
@@ -36,6 +36,7 @@ class UserEditForm(FlaskForm):
     last_name = StringField('Last Name', validators=[DataRequired()])
     middle_name = StringField('Middle Name', validators=[DataRequired()])
     telephone = StringField('Telephone')
+    is_man = BooleanField('Is man')
     submit = SubmitField('Submit')
 
 
@@ -54,6 +55,7 @@ class RegistrationForm(FlaskForm):
         EqualTo('confirm_password')
     ])
     confirm_password = PasswordField('Confirm Password')
+    is_man = BooleanField('Is man')
     role = QuerySelectField(query_factory=lambda: Role.query.all(), get_label="name")
     submit = SubmitField('Register')
 
@@ -79,6 +81,7 @@ class UserAddForm(FlaskForm):
     tell = StringField('Telephone')
     role = QuerySelectField(query_factory=lambda: Role.query.all(),
                             get_label="name")
+    is_man = BooleanField('Sex')
     submit = SubmitField('Submit')
 
 
@@ -193,11 +196,31 @@ class PlanFormSemester(FlaskForm):
     submit = SubmitField('Submit')
 
 
-class ScheduleForm(FlaskForm):
+class ScheduleFormEdit(FlaskForm):
     """
         Form for admin to edit Schedule
     """
     classroom_id = QuerySelectField(query_factory=lambda: Classroom.query)
     class_id = QuerySelectField(query_factory=lambda: Class.query)
     teacher_subject_id = QuerySelectField(query_factory=lambda: TeacherToSubject.query.all())
+    submit = SubmitField('Submit')
+
+
+class ScheduleFormAdd(FlaskForm):
+    """
+        Form for admin to add Schedule
+    """
+    classroom_id = QuerySelectField(query_factory=lambda: Classroom.query)
+    class_id = QuerySelectField(query_factory=lambda: Class.query)
+    teacher_subject_id = QuerySelectField(query_factory=lambda: TeacherToSubject.query.all())
+    educationPlan_id = QuerySelectField(query_factory=lambda: EducationPlan.query.order_by(EducationPlan.year,EducationPlan.semester).all())
+    submit = SubmitField('Submit')
+
+
+class ScheduleFormAddSubject(FlaskForm):
+    """
+        Form for admin to add Schedule
+    """
+    classroom_id = QuerySelectField(query_factory=lambda: Classroom.query)
+    class_id = QuerySelectField(query_factory=lambda: Class.query)
     submit = SubmitField('Submit')

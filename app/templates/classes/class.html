@@ -11,7 +11,7 @@
 
                 <div style="text-align: center">
                     <a href="{{ url_for('classes.add_class') }}" class="btn btn-default btn-lg">
-                        <i class="fa fa-plus"></i> Add Class
+                        <i class="fas fa-plus"></i> Add Class
                     </a>
                 </div>
 
@@ -26,8 +26,8 @@
                             <th width="14%"> Spec</th>
                             <th width="24%"> Head Teacher</th>
                             <th width="12%"> Classroom</th>
-                            <th width="11%"> Edit class</th>
-                            <th width="11%"> Class students</th>
+                            <th width="10%"> Edit class</th>
+                            <th width="12%"> Number of students </th>
                         </tr>
                         </thead>
                         <tbody>
@@ -47,25 +47,28 @@
                                         {{ classOne.users }}
                                     </a>
                                 </td>
-                                <td> {{ classOne.classrooms.name }} <br> ({{ classOne.classrooms.room_specializations.name }})</td>
+                                <td>
+                                    {{ classOne.classrooms.name }} <br>
+                                    ({{ classOne.classrooms.room_specializations.name }})
+                                </td>
                                 <td>
                                     <a href="{{ url_for('classes.edit_class', id=classOne.id) }}">
-                                        <i class="fa fa-pencil"></i> edit
+                                        <i class="fas fa-pencil-alt"></i> edit
                                     </a>
                                     <br>
                                     <a href="{{ url_for('classes.delete_class', id=classOne.id) }}">
-                                        <i class="fa fa-trash"></i> delete
+                                        <i class="fas fa-trash"></i> delete
                                     </a>
                                 </td>
                                 <td>
+                                    {{ classOne.students.count() }}<br>
                                     {% if classOne.students.count()!=0 %}
-                                        {{ classOne.students.count() }}<br>
                                         <a href="{{ url_for('classes.list_students', id=classOne.id) }}">
-                                            <i class="fa fa-pencil"></i> edit list
+                                            <i class="fas fa-pencil-alt"></i> edit list
                                         </a>
                                     {% else %}
                                         <a href="{{ url_for('classes.add_student', id=classOne.id) }}">
-                                        <i class="fa fa-plus"></i> Add student
+                                        <i class="fas fa-plus"></i> add student
                                     </a>
                                     {% endif %}
                                 </td>
@@ -79,7 +82,7 @@
 
                 <div style="text-align: center">
                     <a href="{{ url_for('classes.add_class') }}" class="btn btn-default btn-lg">
-                        <i class="fa fa-plus"></i> Add Class
+                        <i class="fas fa-plus"></i> Add Class
                     </a>
                 </div>
             </div>

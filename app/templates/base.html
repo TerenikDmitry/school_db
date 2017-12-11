@@ -5,7 +5,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
     <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://use.fontawesome.com/releases/v5.0.0/css/all.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -26,7 +27,7 @@
                 {% if current_user.is_authenticated %}
                     {% if current_user.is_admin %}
                         <li><a href="{{ url_for('admin.list_schedule') }}">Schedule</a></li>
-                        <li><a href="{{ url_for('admin.list_plan') }}">Plans</a></li>
+                        <li><a href="{{ url_for('admin.list_plan') }}">Plan</a></li>
                         <li><a href="{{ url_for('admin.list_teachers_info') }}">Teachers</a></li>
                         <li><a href="{{ url_for('admin.list_students_class') }}">Students</a></li>
                         <li><a href="{{ url_for('admin.list_parent_to_student') }}">Parents</a></li>
@@ -37,20 +38,43 @@
                         <li><a href="{{ url_for('admin.list_users') }}">Users</a></li>
                         <li><a href="{{ url_for('admin.list_class_specializations') }}">Class Spec</a></li>
                         <li><a href="{{ url_for('admin.list_room_specializations') }}">Room Spec</a></li>
-                        <li><a href="{{ url_for('home.admin_dashboard') }}"><i class="fa fa-user"></i> Hi, {{ current_user.username }}!</a></li>
+                        <li>
+                            <a href="{{ url_for('home.admin_dashboard') }}">
+                                <i class="fa fa-user"></i> Hi, {{ current_user.username }}!
+                            </a>
+                        </li>
                     {% elif current_user.role_id==3 %}
-                            <li><a href="{{ url_for('home.parent_dashboard',id=current_user.id) }}"><i class="fa fa-user"></i> Hi, {{ current_user.username }}!</a></li>
+                        <li>
+                            <a href="{{ url_for('home.parent_dashboard',id=current_user.id) }}">
+                                <i class="fa fa-user"></i> Hi, {{ current_user.username }}!
+                            </a>
+                        </li>
                     {% elif current_user.role_id==2 %}
-                        <li><a href="#">Rating</a></li>
-                        <li><a href="{{ url_for('home.student_dashboard',id=current_user.id) }}"><i class="fa fa-user"></i> Hi, {{ current_user.username }}!</a></li>
+                        <li>
+                            <a href="{{ url_for('home.student_dashboard',id=current_user.id) }}">
+                                <i class="fa fa-user"></i> Hi, {{ current_user.username }}!
+                            </a>
+                        </li>
                     {% elif current_user.role_id==1 %}
-                        <li><a href="{{ url_for('home.teacher_dashboard',id=current_user.id) }}"><i class="fa fa-user"></i> Hi, {{ current_user.username }}!</a></li>
+                        <li>
+                            <a href="{{ url_for('home.teacher_dashboard',id=current_user.id) }}">
+                                <i class="fa fa-user"></i> Hi, {{ current_user.username }}!
+                            </a>
+                        </li>
                     {% else %}
                         <li><a href="{{ url_for('home.dashboard') }}">Dashboard</a></li>
                     {% endif %}
-                    <li><a href="{{ url_for('auth.logout') }}" class="bg-danger">Logout</a></li>
+                    <li class="active">
+                        <a href="{{ url_for('auth.logout') }}">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </li>
                 {% else %}
-                    <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+                    <li>
+                        <a href="{{ url_for('auth.login') }}">
+                            <i class="fas fa-sign-in-alt"></i>Login
+                        </a>
+                    </li>
                 {% endif %}
             </ul>
         </div>
@@ -86,7 +110,7 @@
                     {% if current_user.is_authenticated %}
                         {% if current_user.is_admin %}
                             <li><a href="{{ url_for('admin.list_schedule') }}">Schedule</a></li>
-                            <li><a href="{{ url_for('admin.list_plan') }}">Plans</a></li>
+                            <li><a href="{{ url_for('admin.list_plan') }}">Plan</a></li>
                             <li><a href="{{ url_for('admin.list_teachers_info') }}">Teachers</a></li>
                             <li><a href="{{ url_for('admin.list_students_class') }}">Students</a></li>
                             <li><a href="{{ url_for('admin.list_parent_to_student') }}">Parents</a></li>
@@ -96,21 +120,40 @@
                             <li><a href="{{ url_for('admin.list_roles') }}">Roles</a></li>
                             <li><a href="{{ url_for('admin.list_users') }}">Users</a></li>
                             <li><a href="{{ url_for('admin.list_class_specializations') }}">Class Spec</a></li>
-                            <li><a href="{{ url_for('admin.list_room_specializations') }}">Rooms Spec</a></li>
-                            <li><a href="{{ url_for('home.admin_dashboard') }}"><i class="fa fa-user"></i> Hi, {{ current_user.username }}!</a></li>
-                        {% elif current_user.role_id==2 %}
-                            <li><a href="#">Rating</a></li>
-                            <li><a href="{{ url_for('home.student_dashboard',id=current_user.id) }}"><i class="fa fa-user"></i> Hi, {{ current_user.username }}!</a></li>
-                        {% elif current_user.role_id==1 %}
-                            <li><a href="{{ url_for('home.teacher_dashboard',id=current_user.id) }}"><i class="fa fa-user"></i> Hi, {{ current_user.username }}!</a></li>
+                            <li><a href="{{ url_for('admin.list_room_specializations') }}">Room Spec</a></li>
+                            <li>
+                                <a href="{{ url_for('home.admin_dashboard') }}">
+                                    <i class="fa fa-user"></i> Hi, {{ current_user.username }}!
+                                </a>
+                            </li>
                         {% elif current_user.role_id==3 %}
-                            <li><a href="{{ url_for('home.parent_dashboard',id=current_user.id) }}"><i class="fa fa-user"></i> Hi, {{ current_user.username }}!</a></li>
+                            <li>
+                                <a href="{{ url_for('home.parent_dashboard',id=current_user.id) }}">
+                                    <i class="fa fa-user"></i> Hi, {{ current_user.username }}!
+                                </a>
+                            </li>
+                        {% elif current_user.role_id==2 %}
+                            <li>
+                                <a href="{{ url_for('home.student_dashboard',id=current_user.id) }}">
+                                    <i class="fa fa-user"></i> Hi, {{ current_user.username }}!
+                                </a>
+                            </li>
+                        {% elif current_user.role_id==1 %}
+                            <li>
+                                <a href="{{ url_for('home.teacher_dashboard',id=current_user.id) }}">
+                                    <i class="fa fa-user"></i> Hi, {{ current_user.username }}!
+                                </a>
+                            </li>
                         {% else %}
                             <li><a href="{{ url_for('home.dashboard') }}">Dashboard</a></li>
                         {% endif %}
-                        <li><a href="{{ url_for('auth.logout') }}" class="bg-danger">Logout</a></li>
+                        <li class="active">
+                            <a href="{{ url_for('auth.logout') }}">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </a>
+                        </li>
                     {% else %}
-                        <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+                        <li class="active"><a href="{{ url_for('auth.login') }}">Login</a></li>
                     {% endif %}
                 </ul>
                 <p class="copyright small">Copyright © 2017. Terenik</p>

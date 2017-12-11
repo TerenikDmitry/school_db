@@ -1,18 +1,17 @@
 {% extends "base.html" %}
-{% block title %}
-    Schedule
-{% endblock %}
 {% block body %}
     <div class="outer">
         <div class="middle">
             <div class="center">
                 <div class="page-header">
-                    <h1>Schedule</h1>
+                    <h1>{{ title }}</h1>
                 </div>
                 {% if plans %}
                 <div class="list-group">
                     {% for plan in plans %}
-                        <a href="{{ url_for('admin.list_schedule_year_sem', year=plan['_year'],semester=plan['_semester']) }}" class="list-group-item">{{ plan['_year'] }} - {{ plan['_semester'] }} semester</a>
+                        <a href="{{ url_for('admin.list_schedule_year_sem', year=plan['_year'],semester=plan['_semester']) }}" class="list-group-item list-group-item-info">
+                            <i class="fas fa-external-link-square-alt" aria-hidden="true"></i> {{ plan['_year'] }} - {{ plan['_semester'] }} semester
+                        </a>
                     {% endfor %}
                 </div>
                 {% else %}

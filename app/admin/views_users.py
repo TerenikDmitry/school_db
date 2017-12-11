@@ -40,7 +40,8 @@ def add_user():
                         middle_name=form.middle_name.data,
                         password=form.password.data,
                         role_id=form.role.data.id,
-                        telephone=form.telephone.data)
+                        telephone=form.telephone.data,
+                        is_man=form.is_man.data)
             db.session.add(user)
             db.session.commit()
             flash('You have successfully added a user.',category='message')
@@ -93,6 +94,7 @@ def edit_user(id):
             user.middle_name = form.middle_name.data
             user.email = form.email.data
             user.telephone = form.telephone.data
+            user.is_man = form.is_man.data
             db.session.add(user)
             db.session.commit()
             flash('You have successfully changed the user information.',category='message')

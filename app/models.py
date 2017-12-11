@@ -23,6 +23,7 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128), nullable=False)
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
+    is_man = db.Column(db.Boolean, default=False)
 
     studentInClass = db.relationship('StudentInClass', backref='users', lazy='dynamic', cascade="all, delete")
     teacherInClass = db.relationship('Class', backref='users', lazy='dynamic', cascade="all, delete")
@@ -189,7 +190,7 @@ class TeacherToSubject(db.Model):
         return '<TeacherToSubject: teacher {} - subject {}>'.format(self.user_id_teacher, self.subject_id)
 
     def __str__(self):
-        return '{} - {}'.format(get_name_user(self.user_id_teacher), get_name_subject(self.subject_id))
+        return '{}: {} - {}'.format(self.id, get_name_user(self.user_id_teacher), get_name_subject(self.subject_id))
 
 
 class RoomSpecialization(db.Model):
@@ -284,6 +285,19 @@ class EducationPlan(db.Model):
     schedule_id = db.relationship('Schedule', backref='education_plan', lazy='dynamic')
 
     @hybrid_property
+    def dayLesson(self):
+        days = {
+            1: 'Monday',
+            2: 'Tuesday',
+            3: 'Wednesday',
+            4: 'Thursday',
+            5: 'Friday',
+            6: 'Saturday',
+            7: 'Sunday'
+        }
+        return '{}, {} lesson'.format(days[self.day], self.lessonNumber)
+
+    @hybrid_property
     def fullday(self):
         days = {
             1: 'Monday',
@@ -333,6 +347,9 @@ class Schedule(db.Model):
     """
 
     __tablename__ = 'schedules'
+    __table_args__ = (
+        UniqueConstraint('class_id', 'educationPlan_id', name='_schedules'),
+    )
 
     id = db.Column(db.Integer, primary_key=True)
     classroom_id = db.Column(db.Integer, db.ForeignKey('classrooms.id'))

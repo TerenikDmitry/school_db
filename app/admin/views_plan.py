@@ -17,7 +17,8 @@ def list_plan():
 
     educationPlan = EducationPlan.query.order_by(EducationPlan.year, EducationPlan.semester, EducationPlan.day, EducationPlan.lessonNumber).all()
     return render_template('admin/plans/list.html',
-                           educationPlan=educationPlan)
+                           educationPlan=educationPlan,
+                           title="Education Plan")
 
 
 @admin.route('/plans/<int:id>/delete', methods=['GET', 'POST'])

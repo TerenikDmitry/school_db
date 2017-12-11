@@ -5,11 +5,13 @@
     <div class="center">
         <div class="page-header">
             <h1>
-                {{ user.fullname }}
+                <i class="far fa-user"></i> {{ user.fullname }}
                 <small>(parent)</small>
             </h1>
         </div>
-        <div>email: {{ user.email }}</div>
+
+        <div>Email: {{ user.email }}</div>
+
         <div>Tell:
             {% if user.telephone %}
                 {{ user.telephone }}

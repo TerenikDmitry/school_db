@@ -12,7 +12,7 @@
 
                 <div style="text-align: center">
                     <a href="{{ url_for('admin.add_role') }}" class="btn btn-default btn-lg">
-                        <i class="fa fa-plus"></i> Add Role
+                        <i class="fas fa-plus"></i> Add Role
                     </a>
                 </div>
 
@@ -38,12 +38,12 @@
                                 <td> {{ role.user_id.count() }} </td>
                                 <td>
                                     <a href="{{ url_for('admin.edit_role', id=role.id) }}">
-                                        <i class="fa fa-pencil"></i> Edit
+                                        <i class="fas fa-pencil-alt"></i> edit
                                     </a>
                                 </td>
                                 <td>
                                     <a href="{{ url_for('admin.delete_role', id=role.id) }}">
-                                        <i class="fa fa-trash"></i> Delete
+                                        <i class="fas fa-trash"></i> delete
                                     </a>
                                 </td>
                             </tr>
