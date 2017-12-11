@@ -1,3 +1,5 @@
+from datetime import date
+
 from sqlalchemy.orm.exc import NoResultFound
 
 from . import admin
@@ -18,6 +20,18 @@ def user_access():
         abort(403)
 
 
+def curr_year():
+    return date.today().year
+
+
+def curr_semester():
+    month = date.today().month
+    if month>=9 and month<=12:
+        return 1
+    else:
+        return 2
+
+
 @admin.route('/schedule')
 @login_required
 def list_schedule():
@@ -25,9 +39,6 @@ def list_schedule():
     Show schedule
     """
     user_access()
-
-    #User.query.filter_by(role_id=2).outerjoin(StudentInClass, StudentInClass.user_id_studen == User.id).filter(
-    #    StudentInClass.class_id == None)
 
     plans = []
     for planY in EducationPlan.query.distinct(EducationPlan.year).order_by(desc(EducationPlan.year)):
@@ -50,7 +61,7 @@ def list_schedule_teacher(id_subject, id_day):
     schedules = []
     teacherSubject = TeacherToSubject.query.get_or_404(id_subject)
 
-    plansAll = EducationPlan.query.filter_by(year=2017,semester=1,day=id_day).order_by(EducationPlan.year, EducationPlan.semester, EducationPlan.day, EducationPlan.lessonNumber).all()
+    plansAll = EducationPlan.query.filter_by(year=curr_year(),semester=curr_semester(),day=id_day).order_by(EducationPlan.year, EducationPlan.semester, EducationPlan.day, EducationPlan.lessonNumber).all()
     for plansAlllesson in plansAll:
         try:
             schedule = Schedule.query.filter_by(educationPlan_id=plansAlllesson.id,teacher_subject_id=id_subject).one()
@@ -58,7 +69,7 @@ def list_schedule_teacher(id_subject, id_day):
         except NoResultFound:
             schedules.append(plansAlllesson)
 
-    plans = EducationPlan.query.filter_by(year=2017,semester=1).distinct(EducationPlan.day)
+    plans = EducationPlan.query.filter_by(year=curr_year(),semester=curr_semester()).distinct(EducationPlan.day)
 
     return render_template('admin/schedule/dayTeacherList.html',
                            teacherSubject=teacherSubject,
@@ -79,7 +90,7 @@ def list_schedule_class(id_class, id_day):
 
     currentClass = Class.query.get_or_404(id_class)
 
-    plans = EducationPlan.query.filter_by(year=2017,semester=1,day=id_day).order_by(EducationPlan.year, EducationPlan.semester, EducationPlan.day, EducationPlan.lessonNumber).all()
+    plans = EducationPlan.query.filter_by(year=curr_year(),semester=curr_semester(),day=id_day).order_by(EducationPlan.year, EducationPlan.semester, EducationPlan.day, EducationPlan.lessonNumber).all()
     for plan in plans:
         try:
             schedule = Schedule.query.filter_by(educationPlan_id=plan.id,class_id=id_class).one()
@@ -87,7 +98,7 @@ def list_schedule_class(id_class, id_day):
         except NoResultFound:
             schedules.append(plan)
 
-    plansDay = EducationPlan.query.filter_by(year=2017,semester=1).distinct(EducationPlan.day)
+    plansDay = EducationPlan.query.filter_by(year=curr_year(),semester=curr_semester()).distinct(EducationPlan.day)
 
     return render_template('admin/schedule/dayClassList.html',
                            currentClass=currentClass,
