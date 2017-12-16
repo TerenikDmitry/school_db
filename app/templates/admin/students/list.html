@@ -10,43 +10,56 @@
                 <h1> Student-Class relationship </h1>
             </div>
 
-            {% if students %}
-            <table class="table table-striped table-bordered">
-                <thead>
-                <tr>
-                    <th width="70%"> Student </th>
-                    <th width="30%"> Class </th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for student in students %}
+            {% if students.items %}
+                <table class="table table-striped table-bordered">
+                    <thead>
                     <tr>
-                        <td>
-                            <a href="{{ url_for('home.student_dashboard',id=student.id) }}">
-                                {{ student }}
-                            </a>
-                        </td>
-                        <td>
-                            {% if student.studentInClass.first().classes%}
-                            <a href="{{ url_for('admin.edit_students_class', id=student.id) }}">
-                                <i class="fas fa-link"></i> change bind
-                            </a><br>
-                            <a href="{{ url_for('classes.one_class', class_id=student.studentInClass.first().classes.id) }}">
-                                <span class="label label-success">{{ student.studentInClass.first().classes }}</span>
-                            </a><br>
-                            <a href="{{ url_for('admin.delete_students_class', id=student.id) }}">
-                                <i class="fas fa-unlink"></i> remove bind
-                            </a>
-                            {% else %}
-                             <a href="{{ url_for('admin.add_students_class', id=student.id) }}">
-                                 <i class="fas fa-link"></i> add link
-                             </a>
-                            {% endif %}
-                        </td>
+                        <th width="70%"> Student </th>
+                        <th width="30%"> Class </th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {% for student in students.items %}
+                        <tr>
+                            <td>
+                                <a href="{{ url_for('home.student_dashboard',id=student.id) }}">
+                                    {{ student }}
+                                </a>
+                            </td>
+                            <td>
+                                {% if student.studentInClass.first().classes%}
+                                <a href="{{ url_for('admin.edit_students_class', id=student.id) }}">
+                                    <i class="fas fa-link"></i> change bind
+                                </a><br>
+                                <a href="{{ url_for('classes.one_class', class_id=student.studentInClass.first().classes.id) }}">
+                                    <span class="label label-success">{{ student.studentInClass.first().classes }}</span>
+                                </a><br>
+                                <a href="{{ url_for('admin.delete_students_class', id=student.id) }}">
+                                    <i class="fas fa-unlink"></i> remove bind
+                                </a>
+                                {% else %}
+                                 <a href="{{ url_for('admin.add_students_class', id=student.id) }}">
+                                     <i class="fas fa-link"></i> add link
+                                 </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <ul class="pagination">
+                    {%- for page in students.iter_pages() %}
+                        {% if page %}
+                            {% if page != students.page %}
+                                <li><a href="{{ url_for('admin.list_students_class', pagin=page) }} ">{{ page }}</a></li>
+                            {% else %}
+                                <li class="active"><a href="#">{{ page }}</a></li>
+                            {% endif %}
+                        {% else %}
+                            <li><span class=ellipsis>…</span></li>
+                        {% endif %}
+                    {%- endfor %}
+                </ul>
             {% else %}
                 <div class="alert alert-warning" role="alert">No students.</div>
             {% endif %}

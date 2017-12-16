@@ -9,15 +9,15 @@ from .forms import ClassroomEditForm
 from ..models import Classroom, RoomSpecialization
 
 
-@admin.route('/classrooms')
+@admin.route('/classrooms/<int:pagin>')
 @login_required
-def list_classrooms():
+def list_classrooms(pagin):
     """
     Show classroom list
     """
     check_admin()
 
-    classrooms = Classroom.query.order_by(Classroom.name).all()
+    classrooms = Classroom.query.order_by(Classroom.name).paginate(page=pagin, per_page=5)
     return render_template('admin/classrooms/classrooms.html',
                            classrooms=classrooms)
 
@@ -62,7 +62,7 @@ def add_classroom():
             flash('Error: Classroom Specialization name already exists.', category='error')
 
         # redirect to the list of classroom PAGE
-        return redirect(url_for('admin.list_classrooms'))
+        return redirect(url_for('admin.list_classrooms', pagin=1))
 
     return render_template('admin/classrooms/classroom.html',
                            form=form,
@@ -91,7 +91,7 @@ def edit_classroom(id):
             flash('Error in changing the name of the Classroom Specialization.', category='error')
 
         # redirect to the list of classroom PAGE
-        return redirect(url_for('admin.list_classrooms'))
+        return redirect(url_for('admin.list_classrooms', pagin=1))
 
     form.name.data = classroom.name
     form.spec.data = RoomSpecialization.query.get_or_404(classroom.room_specialization_id)

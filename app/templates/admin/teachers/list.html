@@ -10,7 +10,7 @@
                     <h1> Teachers info </h1>
                 </div>
 
-                {% if teachers %}
+                {% if teachers.items %}
                     <table class="table table-striped table-bordered">
                         <thead>
                         <tr>
@@ -21,7 +21,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {% for teacher in teachers %}
+                        {% for teacher in teachers.items %}
                             {% if teacher.is_admin==False %}
                                 <tr>
                                     <td>
@@ -71,7 +71,7 @@
                                         {% else %}
                                             No classes available <br>
                                             <a href="{{ url_for('classes.add_class') }}">
-                                                <i class="fas fa-plus"></i> add class
+                                                <i class="fas fa-link"></i> add link
                                             </a>
                                         {% endif %}
                                     </td>
@@ -80,6 +80,19 @@
                         {% endfor %}
                         </tbody>
                     </table>
+                    <ul class="pagination">
+                    {%- for page in teachers.iter_pages() %}
+                        {% if page %}
+                            {% if page != teachers.page %}
+                                <li><a href="{{ url_for('admin.list_teachers_info', pagin=page) }} ">{{ page }}</a></li>
+                            {% else %}
+                                <li class="active"><a href="#">{{ page }}</a></li>
+                            {% endif %}
+                        {% else %}
+                            <li><span class=ellipsis>…</span></li>
+                        {% endif %}
+                    {%- endfor %}
+                    </ul>
                 {% else %}
                     <div class="alert alert-warning" role="alert">No teachers.</div>
                 {% endif %}

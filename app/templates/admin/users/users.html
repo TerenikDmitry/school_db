@@ -32,7 +32,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for user in users %}
+                    {% for user in users.items %}
                         {% if user.is_admin %}
                             <tr style="background-color: #138d75; color: white;">
                                 <td> <i class="fa fa-key"></i> Admin </td>
@@ -91,6 +91,19 @@
                     {% endfor %}
                     </tbody>
                 </table>
+                <ul class="pagination">
+                    {%- for page in users.iter_pages() %}
+                        {% if page %}
+                            {% if page != users.page %}
+                                <li><a href="{{ url_for('admin.list_users', pagin=page) }} ">{{ page }}</a></li>
+                            {% else %}
+                                <li class="active"><a href="#">{{ page }}</a></li>
+                            {% endif %}
+                        {% else %}
+                            <li><span class=ellipsis>…</span></li>
+                        {% endif %}
+                    {%- endfor %}
+                </ul>
             {% else %}
                 <div class="alert alert-warning" role="alert">No Users have been added.</div>
             {% endif %}

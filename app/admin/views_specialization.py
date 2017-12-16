@@ -7,15 +7,16 @@ from .forms import SpecializationForm
 from ..models import Specialization, RoomSpecialization, Subject
 
 
-@admin.route('/class_specializations')
+@admin.route('/class_specializations/<int:pagin>')
 @login_required
-def list_class_specializations():
+def list_class_specializations(pagin):
     """
     Show the list of specializations of classes
     """
     check_admin()
 
-    specializations = Specialization.query.order_by(Specialization.name).all()
+    specializations = Specialization.query.order_by(Specialization.name).paginate(page=pagin, per_page=5)
+
     return render_template('admin/class_specializations/class_specializations.html',
                            specializations=specializations)
 
@@ -39,7 +40,7 @@ def add_class_specialization():
             flash('Error: Class Specialization name already exists.',category='error')
 
         # redirect to the list of specializations of classes PAGE
-        return redirect(url_for('admin.list_class_specializations'))
+        return redirect(url_for('admin.list_class_specializations', pagin=1))
 
     return render_template('admin/class_specializations/class_specialization.html',
                            form=form,
@@ -63,7 +64,7 @@ def delete_class_specialization(id):
         flash('error in removing the Class Specialization.', category='error')
 
     # redirect to the list of specializations of classes PAGE
-    return redirect(url_for('admin.list_class_specializations'))
+    return redirect(url_for('admin.list_class_specializations', pagin=1))
 
 
 @admin.route('/class_specializations/edit/<int:id>', methods=['GET', 'POST'])
@@ -86,7 +87,7 @@ def edit_class_specialization(id):
             flash('Error in changing Class Specialization name.', category='error')
 
         # redirect to the list of specializations of classes PAGE
-        return redirect(url_for('admin.list_class_specializations'))
+        return redirect(url_for('admin.list_class_specializations', pagin=1))
 
     form.name.data = specialization.name
     return render_template('admin/class_specializations/class_specialization.html',
@@ -95,17 +96,17 @@ def edit_class_specialization(id):
                            title="Edit Class Specialization")
 
 
-@admin.route('/room_specializations')
+@admin.route('/room_specializations/<int:pagin>')
 @login_required
-def list_room_specializations():
+def list_room_specializations(pagin):
     """
     Show the list of specializations of classroom
     """
     check_admin()
 
-    room_specializations = RoomSpecialization.query.order_by(RoomSpecialization.name).all()
+    room_specializations = RoomSpecialization.query.order_by(RoomSpecialization.name).paginate(page=pagin, per_page=5)
     return render_template('admin/room_specializations/room_specializations.html',
-                           room_specializations=room_specializations, )
+                           room_specializations=room_specializations)
 
 
 @admin.route('/room_specializations/add', methods=['GET', 'POST'])
@@ -127,7 +128,7 @@ def add_room_specialization():
             flash('Error: Classroom Specialization name already exists.',category='error')
 
         # redirect to the list of specializations of classroom PAGE
-        return redirect(url_for('admin.list_room_specializations'))
+        return redirect(url_for('admin.list_room_specializations', pagin=1))
 
     return render_template('admin/room_specializations/room_specialization.html',
                            form=form,
@@ -151,7 +152,7 @@ def delete_room_specialization(id):
         flash('Error in removing the Classroom Specialization.', category='error')
 
     # redirect to the list of specializations of classroom PAGE
-    return redirect(url_for('admin.list_room_specializations'))
+    return redirect(url_for('admin.list_room_specializations', pagin=1))
 
 
 @admin.route('/room_specializations/edit/<int:id>', methods=['GET', 'POST'])
@@ -174,7 +175,7 @@ def edit_room_specialization(id):
             flash('Error in changing Classroom Specialization name.', category='error')
 
         # redirect to the list of specializations of classroom PAGE
-        return redirect(url_for('admin.list_room_specializations'))
+        return redirect(url_for('admin.list_room_specializations', pagin=1))
 
     form.name.data = room_specialization.name
     return render_template('admin/room_specializations/room_specialization.html',
@@ -183,15 +184,15 @@ def edit_room_specialization(id):
                            title="Edit Room Specialization")
 
 
-@admin.route('/subjects')
+@admin.route('/subjects/<int:pagin>')
 @login_required
-def list_subjects():
+def list_subjects(pagin):
     """"
     Show the list of subjects
     """
     check_admin()
 
-    subjects = Subject.query.order_by(Subject.name).all()
+    subjects = Subject.query.order_by(Subject.name).paginate(page=pagin, per_page=5)
     return render_template('admin/subjects/list.html',
                            subjects=subjects)
 
@@ -215,7 +216,7 @@ def add_subject():
             flash('Error: Subject name already exists.', category='error')
 
         # redirect to the list of subjects PAGE
-        return redirect(url_for('admin.list_subjects'))
+        return redirect(url_for('admin.list_subjects', pagin=1))
 
     return render_template('admin/subjects/edit.html',
                            form=form,
@@ -242,7 +243,7 @@ def edit_subject(id):
             flash('Error in changing Subject name.', category='error')
 
         # redirect to the list of subjects PAGE
-        return redirect(url_for('admin.list_subjects'))
+        return redirect(url_for('admin.list_subjects', pagin=1))
 
     form.name.data = subject.name
     return render_template('admin/subjects/edit.html',
@@ -268,4 +269,4 @@ def delete_subject(id):
         flash('Error in removing the Subject.', category='error')
 
     # redirect to the list of subjects PAGE
-    return redirect(url_for('admin.list_subjects'))
+    return redirect(url_for('admin.list_subjects', pagin=1))

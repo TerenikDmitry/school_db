@@ -9,15 +9,15 @@ from .forms import RegistrationForm, UserEditForm
 from ..models import User
 
 
-@admin.route('/users')
+@admin.route('/users/<int:pagin>')
 @login_required
-def list_users():
+def list_users(pagin):
     """
     List all users
     """
     check_admin()
 
-    users = User.query.order_by(User.role_id,User.last_name).all()
+    users = User.query.order_by(User.role_id,User.last_name).paginate(page=pagin, per_page=10)
     return render_template('admin/users/users.html',
                            users=users)
 
@@ -49,7 +49,7 @@ def add_user():
             flash('Error in adding user.', category='error')
 
         # redirect to the user list PAGE
-        return redirect(url_for('admin.list_users'))
+        return redirect(url_for('admin.list_users', pagin=1))
 
     return render_template('admin/users/user.html',
                            form=form)
@@ -72,7 +72,7 @@ def delete_user(id):
         flash('Error in deleting user.', category='error')
 
     # redirect to the user list PAGE
-    return redirect(url_for('admin.list_users'))
+    return redirect(url_for('admin.list_users', pagin=1))
 
 
 @admin.route('/users/edit/<int:id>', methods=['GET', 'POST'])
@@ -102,7 +102,7 @@ def edit_user(id):
             flash('Error in changing user information.', category='error')
 
         # redirect to the user list PAGE
-        return redirect(url_for('admin.list_users'))
+        return redirect(url_for('admin.list_users', pagin=1))
 
     return render_template('admin/users/user.html',
                            user=user,

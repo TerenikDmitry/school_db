@@ -8,15 +8,15 @@ from .forms import StudentToClassEditForm
 
 from ..models import User, StudentInClass, Class
 
-@admin.route('/students_class')
+@admin.route('/students_class/<int:pagin>')
 @login_required
-def list_students_class():
+def list_students_class(pagin):
     """
     A list link between students and class
     """
     check_admin()
 
-    students = User.query.filter_by(role_id=2).order_by(User.last_name).outerjoin(StudentInClass, User.id==StudentInClass.user_id_studen).all()
+    students = User.query.filter_by(role_id=2).order_by(User.last_name).outerjoin(StudentInClass, User.id==StudentInClass.user_id_studen).paginate(page=pagin, per_page=10)
 
     return render_template('admin/students/list.html',
                            students=students)
@@ -44,7 +44,7 @@ def add_students_class(id):
             flash('Error in adding a new link between Student and Class',category='error')
 
         # redirect to the list links between students and class PAGE
-        return redirect(url_for('admin.list_students_class'))
+        return redirect(url_for('admin.list_students_class', pagin=1))
 
     return render_template('admin/students/edit.html',
                            form=form,
@@ -68,7 +68,7 @@ def delete_students_class(id):
         flash('Error in deleting link between Students and Class', category='error')
 
     # redirect to the list links between parents and students PAGE
-    return redirect(url_for('admin.list_students_class'))
+    return redirect(url_for('admin.list_students_class', pagin=1))
 
 
 @admin.route('/students_class/edit/<int:id>', methods=['GET', 'POST'])
@@ -98,7 +98,7 @@ def edit_students_class(id):
             flash('Error in linking Student to Class.', category='error')
 
         # redirect to the list links between students and class PAGE
-        return redirect(url_for('admin.list_students_class'))
+        return redirect(url_for('admin.list_students_class', pagin=1))
 
     form.class_name.query = db.session.query(Class)
     if student_to_class:

@@ -33,15 +33,15 @@ def one_class(class_id):
                                classStudents=classStudents)
 
 
-@classes.route('/class/list')
+@classes.route('/class/list/<int:pagin>')
 @login_required
-def list_classes():
+def list_classes(pagin):
     """
     List of classes
     """
     check_admin()
 
-    classesList = Class.query.order_by(Class.name).all()
+    classesList = Class.query.order_by(Class.name).paginate(page=pagin, per_page=5)
     return render_template('classes/class.html',
                            classesList=classesList)
 
@@ -71,7 +71,7 @@ def add_class():
             flash('Add the class error.',category='error')
 
         # redirect to the list of classes PAGE
-        return redirect(url_for('classes.list_classes'))
+        return redirect(url_for('classes.list_classes', pagin=1))
 
     form.headTeacher.query = User.query.filter(User.is_admin!=True, User.role_id==1).outerjoin(Class, Class.headTeacher == User.id).filter(Class.id==None)
 
@@ -106,7 +106,7 @@ def edit_class(id):
             flash('Edited the class error',category='error')
 
         # redirect to the list of classes PAGE
-        return redirect(url_for('classes.list_classes'))
+        return redirect(url_for('classes.list_classes', pagin=1))
 
     form.headTeacher.data = User.query.get_or_404(classOne.headTeacher)
     form.room_id.data = Classroom.query.get_or_404(classOne.room_id)
@@ -131,7 +131,7 @@ def delete_class(id):
     flash('You have successfully deleted the class.')
 
     # redirect to the list of classes PAGE
-    return redirect(url_for('classes.list_classes'))
+    return redirect(url_for('classes.list_classes', pagin=1))
 
 
 @classes.route('/class/<int:id>/students/add', methods=['GET', 'POST'])
@@ -154,7 +154,7 @@ def add_student(id):
             flash('Error in adding student to class',category='error')
 
         # redirect to the list of classes PAGE
-        return redirect(url_for('classes.list_classes'))
+        return redirect(url_for('classes.list_classes', pagin=1))
 
     form.student.query = User.query.filter_by(role_id=2).outerjoin(StudentInClass, StudentInClass.user_id_studen == User.id).filter(StudentInClass.class_id==None)
 
@@ -198,4 +198,4 @@ def delete_student(id_class,id_student):
         flash('Error in removing student from class', category='error')
 
     # redirect to the list of classes PAGE
-    return redirect(url_for('classes.list_classes'))
+    return redirect(url_for('classes.list_classes', pagin=1))

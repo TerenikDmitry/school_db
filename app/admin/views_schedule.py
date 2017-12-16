@@ -1,5 +1,6 @@
 from datetime import date
 
+from flask_sqlalchemy import Pagination
 from sqlalchemy.orm.exc import NoResultFound
 
 from . import admin
@@ -157,15 +158,15 @@ def delete_schedule_subject(id_subject, id_day, id):
     return redirect(url_for('admin.list_schedule_subject',id_subject=id_subject, id_day=id_day))
 
 
-@admin.route('/schedule/<int:year>/<int:semester>')
+@admin.route('/schedule/<int:year>/<int:semester>/<int:pagin>')
 @login_required
-def list_schedule_year_sem(year,semester):
+def list_schedule_year_sem(year,semester,pagin):
     """
     Show schedule
     """
     user_access()
 
-    schedules = EducationPlan.query.filter(EducationPlan.year==year, EducationPlan.semester==semester).order_by(EducationPlan.day, EducationPlan.lessonNumber).all()
+    schedules = Schedule.query.outerjoin(EducationPlan, EducationPlan.id==Schedule.educationPlan_id).filter(EducationPlan.year==year, EducationPlan.semester==semester).order_by(EducationPlan.day, EducationPlan.lessonNumber).paginate(page=pagin, per_page=10)
 
     return render_template('admin/schedule/yearSemesterList.html',
                            schedules=schedules,
@@ -196,7 +197,7 @@ def add_schedule_year_sem(year,semester):
             flash('Error in adding Schedule.', category='error')
 
         # redirect to the list roles PAGE
-        return redirect(url_for('admin.list_schedule_year_sem', year=year, semester=semester))
+        return redirect(url_for('admin.list_schedule_year_sem', year=year, semester=semester, pagin=1))
 
     form.educationPlan_id.query = EducationPlan.query.filter(EducationPlan.year==year, EducationPlan.semester==semester)
     return render_template('admin/schedule/edit.html',
@@ -226,7 +227,7 @@ def edit_schedule_year_sem(plan_id,year,semester):
             flash('Error in changing Schedule.', category='error')
 
         # redirect to the list roles PAGE
-        return redirect(url_for('admin.list_schedule_year_sem', year=year, semester=semester))
+        return redirect(url_for('admin.list_schedule_year_sem', year=year, semester=semester, pagin=1))
 
     form.classroom_id.data = Classroom.query.get_or_404(schedules.classroom_id)
     form.class_id.data = Class.query.get_or_404(schedules.class_id)
@@ -254,4 +255,4 @@ def delete_schedule_year_sem(id,year,semester):
         flash('Error in removing Schedule.', category='error')
 
     # redirect to the list roles PAGE
-    return redirect(url_for('admin.list_schedule_year_sem', year=year, semester=semester))
+    return redirect(url_for('admin.list_schedule_year_sem', year=year, semester=semester, pagin=1))

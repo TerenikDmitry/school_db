@@ -9,7 +9,7 @@
                 {% if plans %}
                 <div class="list-group">
                     {% for plan in plans %}
-                        <a href="{{ url_for('admin.list_schedule_year_sem', year=plan['_year'],semester=plan['_semester']) }}" class="list-group-item list-group-item-info">
+                        <a href="{{ url_for('admin.list_schedule_year_sem', year=plan['_year'],semester=plan['_semester'], pagin=1) }}" class="list-group-item list-group-item-info">
                             <i class="fas fa-external-link-square-alt" aria-hidden="true"></i> {{ plan['_year'] }} - {{ plan['_semester'] }} semester
                         </a>
                     {% endfor %}

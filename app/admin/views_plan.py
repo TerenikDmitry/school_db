@@ -7,15 +7,15 @@ from flask_login import login_required
 from .forms import PlanForm, PlanFormDay, PlanFormSemester
 from ..models import EducationPlan
 
-@admin.route('/plans')
+@admin.route('/plans/<int:pagin>')
 @login_required
-def list_plan():
+def list_plan(pagin):
     """
     Show plan list
     """
     check_admin()
 
-    educationPlan = EducationPlan.query.order_by(EducationPlan.year, EducationPlan.semester, EducationPlan.day, EducationPlan.lessonNumber).all()
+    educationPlan = EducationPlan.query.order_by(EducationPlan.year, EducationPlan.semester, EducationPlan.day, EducationPlan.lessonNumber).paginate(page=pagin, per_page=10)
     return render_template('admin/plans/list.html',
                            educationPlan=educationPlan,
                            title="Education Plan")
@@ -37,7 +37,7 @@ def delete_plan(id):
     except:
         flash('Error. Delete the plan.',category='error')
 
-    return redirect(url_for('admin.list_plan'))
+    return redirect(url_for('admin.list_plan', pagin=1))
 
 
 @admin.route('/plans/add', methods=['GET', 'POST'])
@@ -61,7 +61,7 @@ def add_plan():
         except:
             flash('Such a Plan already exists.', category='error')
 
-        return redirect(url_for('admin.list_plan'))
+        return redirect(url_for('admin.list_plan', pagin=1))
 
     return render_template('admin/plans/plan.html',
                            form=form,
@@ -87,7 +87,7 @@ def edit_plan(id):
         except:
             flash('Error. Edit the Plan.', category='error')
 
-        return redirect(url_for('admin.list_plan'))
+        return redirect(url_for('admin.list_plan', pagin=1))
 
     return render_template('admin/plans/plan.html',
                            form=form,
@@ -117,7 +117,7 @@ def add_plan_day():
             except:
                 flash('Such a Plan already exists.', category='error')
 
-        return redirect(url_for('admin.list_plan'))
+        return redirect(url_for('admin.list_plan', pagin=1))
 
     return render_template('admin/plans/plan.html',
                            form=form,
@@ -147,7 +147,7 @@ def add_plan_semester():
                 except:
                     flash('Such a Plan already exists.', category='error')
 
-        return redirect(url_for('admin.list_plan'))
+        return redirect(url_for('admin.list_plan', pagin=1))
 
     return render_template('admin/plans/plan.html',
                            form=form,

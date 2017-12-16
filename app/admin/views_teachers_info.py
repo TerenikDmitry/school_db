@@ -7,15 +7,15 @@ from .forms import TeacherSubjectAddForm, TeacherClassroomEditForm
 from ..models import User, TeacherToSubject, TeachersClassroom, Classroom, Subject
 
 
-@admin.route('/teachers/list')
+@admin.route('/teachers/list/<int:pagin>')
 @login_required
-def list_teachers_info():
+def list_teachers_info(pagin):
     """
     A list with info about teachers
     """
     check_admin()
 
-    teachers = User.query.filter_by(role_id=1).order_by(User.last_name).all()
+    teachers = User.query.filter_by(role_id=1).order_by(User.last_name).paginate(page=pagin, per_page=10)
 
     return render_template('admin/teachers/list.html',
                            teachers=teachers)
@@ -109,7 +109,7 @@ def add_teacher_classroom(id_teacher):
             flash('Error in linking between Teacher and Class', category='error')
 
         # redirect to the list of Teachers
-        return redirect(url_for('admin.list_teachers_info'))
+        return redirect(url_for('admin.list_teachers_info', pagin=1))
 
     return render_template('admin/teachers/classroom_edit.html',
                            form=form,
@@ -139,7 +139,7 @@ def edit_teacher_classroom(id_teacher):
             flash('Error in changing the binding between Teacher and Class', category='error')
 
         # redirect to the list of Teachers
-        return redirect(url_for('admin.list_teachers_info'))
+        return redirect(url_for('admin.list_teachers_info', pagin=1))
 
     form.classroom.data = Classroom.query.get_or_404(teacher_classroom.classroom_id)
 
@@ -163,4 +163,4 @@ def delete_teacher_classroom(id_teacher):
     except:
         flash('An error in deleting the relationship between Teacher and Classroom', category='error')
 
-    return redirect(url_for('admin.list_teachers_info'))
+    return redirect(url_for('admin.list_teachers_info', pagin=1))

@@ -15,7 +15,7 @@
                     </a>
                 </div>
 
-                {% if schedules %}
+                {% if schedules.items %}
                     <table class="table table-striped table-bordered">
                         <thead>
                         <tr>
@@ -28,10 +28,9 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {% for schedulePlan in schedules %}
-                        {% for schedule in schedulePlan.schedule_id.all() %}
+                        {% for schedule in schedules.items %}
                             <tr>
-                                <td> {{ schedulePlan.dayLesson }} </td>
+                                <td> {{ schedule.education_plan.dayLesson }} </td>
                                 <td> {{ schedule.teachers_to_subjects }} </td>
                                 <td>
                                     <a href="{{ url_for('classes.one_class', class_id=schedule.classes.id) }}">
@@ -40,20 +39,32 @@
                                 </td>
                                 <td> {{ schedule.classrooms }} </td>
                                 <td>
-                                    <a href="{{ url_for('admin.edit_schedule_year_sem', plan_id=schedulePlan.id, year=schedulePlan.year ,semester=schedulePlan.semester) }}">
+                                    <a href="{{ url_for('admin.edit_schedule_year_sem', plan_id=schedule.id, year=schedule.education_plan.year ,semester=schedule.education_plan.semester) }}">
                                         <i class="fas fa-pencil-alt"></i> edit
                                     </a>
                                 </td>
                                 <td>
-                                    <a href="{{ url_for('admin.delete_schedule_year_sem', id=schedule.id, year=schedulePlan.year ,semester=schedulePlan.semester) }}">
+                                    <a href="{{ url_for('admin.delete_schedule_year_sem', id=schedule.id, year=schedule.education_plan.year ,semester=schedule.education_plan.semester) }}">
                                         <i class="fas fa-trash"></i> delete
                                     </a>
                                 </td>
                             </tr>
                         {% endfor %}
-                        {% endfor %}
                         </tbody>
                     </table>
+                    <ul class="pagination">
+                    {%- for page in schedules.iter_pages() %}
+                        {% if page %}
+                            {% if page != schedules.page %}
+                                <li><a href="{{ url_for('admin.list_schedule_year_sem', year=year, semester=semester, pagin=page) }} ">{{ page }}</a></li>
+                            {% else %}
+                                <li class="active"><a href="#">{{ page }}</a></li>
+                            {% endif %}
+                        {% else %}
+                            <li><span class=ellipsis>…</span></li>
+                        {% endif %}
+                    {%- endfor %}
+                    </ul>
                 {% else %}
                     <div class="alert alert-warning" role="alert">No Schedule.</div>
                 {% endif %}

@@ -26,18 +26,18 @@
             <ul class="nav navbar-nav navbar-right">
                 {% if current_user.is_authenticated %}
                     {% if current_user.is_admin %}
-                        <li><a href="{{ url_for('admin.list_schedule') }}">Schedule</a></li>
-                        <li><a href="{{ url_for('admin.list_plan') }}">Plan</a></li>
-                        <li><a href="{{ url_for('admin.list_teachers_info') }}">Teachers</a></li>
-                        <li><a href="{{ url_for('admin.list_students_class') }}">Students</a></li>
-                        <li><a href="{{ url_for('admin.list_parent_to_student') }}">Parents</a></li>
-                        <li><a href="{{ url_for('admin.list_subjects') }}">Subjects</a></li>
-                        <li><a href="{{ url_for('admin.list_classrooms') }}">Classrooms</a></li>
-                        <li><a href="{{ url_for('classes.list_classes') }}">Classes</a></li>
+                        <li><a href="{{ url_for('admin.list_schedule', pagin=1) }}">Schedule</a></li>
+                        <li><a href="{{ url_for('admin.list_plan', pagin=1) }}">Plan</a></li>
+                        <li><a href="{{ url_for('admin.list_teachers_info', pagin=1) }}">Teachers</a></li>
+                        <li><a href="{{ url_for('admin.list_students_class', pagin=1) }}">Students</a></li>
+                        <li><a href="{{ url_for('admin.list_parent_to_student', pagin=1) }}">Parents</a></li>
+                        <li><a href="{{ url_for('admin.list_subjects', pagin=1) }}">Subjects</a></li>
+                        <li><a href="{{ url_for('admin.list_classrooms', pagin=1) }}">Classrooms</a></li>
+                        <li><a href="{{ url_for('classes.list_classes', pagin=1) }}">Classes</a></li>
                         <li><a href="{{ url_for('admin.list_roles') }}">Roles</a></li>
-                        <li><a href="{{ url_for('admin.list_users') }}">Users</a></li>
-                        <li><a href="{{ url_for('admin.list_class_specializations') }}">Class Spec</a></li>
-                        <li><a href="{{ url_for('admin.list_room_specializations') }}">Room Spec</a></li>
+                        <li><a href="{{ url_for('admin.list_users', pagin=1) }}">Users</a></li>
+                        <li><a href="{{ url_for('admin.list_class_specializations', pagin=1) }}">Class Spec</a></li>
+                        <li><a href="{{ url_for('admin.list_room_specializations', pagin=1) }}">Room Spec</a></li>
                         <li>
                             <a href="{{ url_for('home.admin_dashboard') }}">
                                 <i class="fa fa-user"></i> Hi, {{ current_user.first_name }}!
@@ -110,17 +110,17 @@
                     {% if current_user.is_authenticated %}
                         {% if current_user.is_admin %}
                             <li><a href="{{ url_for('admin.list_schedule') }}">Schedule</a></li>
-                            <li><a href="{{ url_for('admin.list_plan') }}">Plan</a></li>
-                            <li><a href="{{ url_for('admin.list_teachers_info') }}">Teachers</a></li>
-                            <li><a href="{{ url_for('admin.list_students_class') }}">Students</a></li>
-                            <li><a href="{{ url_for('admin.list_parent_to_student') }}">Parents</a></li>
-                            <li><a href="{{ url_for('admin.list_subjects') }}">Subjects</a></li>
-                            <li><a href="{{ url_for('admin.list_classrooms') }}">Classrooms</a></li>
-                            <li><a href="{{ url_for('classes.list_classes') }}">Classes</a></li>
+                            <li><a href="{{ url_for('admin.list_plan', pagin=1) }}">Plan</a></li>
+                            <li><a href="{{ url_for('admin.list_teachers_info', pagin=1) }}">Teachers</a></li>
+                            <li><a href="{{ url_for('admin.list_students_class', pagin=1) }}">Students</a></li>
+                            <li><a href="{{ url_for('admin.list_parent_to_student', pagin=1) }}">Parents</a></li>
+                            <li><a href="{{ url_for('admin.list_subjects', pagin=1) }}">Subjects</a></li>
+                            <li><a href="{{ url_for('admin.list_classrooms', pagin=1) }}">Classrooms</a></li>
+                            <li><a href="{{ url_for('classes.list_classes', pagin=1) }}">Classes</a></li>
                             <li><a href="{{ url_for('admin.list_roles') }}">Roles</a></li>
-                            <li><a href="{{ url_for('admin.list_users') }}">Users</a></li>
-                            <li><a href="{{ url_for('admin.list_class_specializations') }}">Class Spec</a></li>
-                            <li><a href="{{ url_for('admin.list_room_specializations') }}">Room Spec</a></li>
+                            <li><a href="{{ url_for('admin.list_users', pagin=1) }}">Users</a></li>
+                            <li><a href="{{ url_for('admin.list_class_specializations', pagin=1) }}">Class Spec</a></li>
+                            <li><a href="{{ url_for('admin.list_room_specializations', pagin=1) }}">Room Spec</a></li>
                             <li>
                                 <a href="{{ url_for('home.admin_dashboard') }}">
                                     <i class="fa fa-user"></i> Hi, {{ current_user.first_name }}

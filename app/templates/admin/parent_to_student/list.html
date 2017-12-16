@@ -16,43 +16,56 @@
                 </a>
             </div>
 
-            {% if parent_to_student %}
-            <table class="table table-striped table-bordered">
-                <thead>
-                <tr>
-                    <th width="35%"> Parent </th>
-                    <th width="35%"> Student </th>
-                    <th width="15%"> Bind </th>
-                    <th width="15%"> Unbind </th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for parent_student in parent_to_student %}
+            {% if parent_to_student.items %}
+                <table class="table table-striped table-bordered">
+                    <thead>
                     <tr>
-                        <td>
-                            <a href="{{ url_for('home.parent_dashboard', id=parent_student.parentStudent.id) }}">
-                                {{ parent_student.parentStudent }}
-                            </a>
-                        </td>
-                        <td>
-                            <a href="{{ url_for('home.student_dashboard', id=parent_student.studentParent.id) }}">
-                                {{ parent_student.studentParent }}
-                            </a>
-                        </td>
-                        <td>
-                            <a href="{{ url_for('admin.edit_parent_to_student', id=parent_student.parentStudent.id) }}">
-                                <i class="fa fa-chain"></i> change bind
-                            </a>
-                        </td>
-                        <td>
-                            <a href="{{ url_for('admin.delete_parent_to_student', id=parent_student.id) }}">
-                                <i class="fa fa-chain-broken"></i> remove bind
-                            </a>
-                        </td>
+                        <th width="35%"> Parent </th>
+                        <th width="35%"> Student </th>
+                        <th width="15%"> Bind </th>
+                        <th width="15%"> Unbind </th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {% for parent_student in parent_to_student.items %}
+                        <tr>
+                            <td>
+                                <a href="{{ url_for('home.parent_dashboard', id=parent_student.parentStudent.id) }}">
+                                    {{ parent_student.parentStudent }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ url_for('home.student_dashboard', id=parent_student.studentParent.id) }}">
+                                    {{ parent_student.studentParent }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ url_for('admin.edit_parent_to_student', id=parent_student.parentStudent.id) }}">
+                                    <i class="fa fa-chain"></i> change bind
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ url_for('admin.delete_parent_to_student', id=parent_student.id) }}">
+                                    <i class="fa fa-chain-broken"></i> remove bind
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <ul class="pagination">
+                    {%- for page in parent_to_student.iter_pages() %}
+                        {% if page %}
+                            {% if page != parent_to_student.page %}
+                                <li><a href="{{ url_for('classes.list_classes', pagin=page) }} ">{{ page }}</a></li>
+                            {% else %}
+                                <li class="active"><a href="#">{{ page }}</a></li>
+                            {% endif %}
+                        {% else %}
+                            <li><span class=ellipsis>…</span></li>
+                        {% endif %}
+                    {%- endfor %}
+                </ul>
             {% else %}
                 <div class="alert alert-warning" role="alert">No parent-student relationship.</div>
             {% endif %}
