@@ -2,7 +2,8 @@ import datetime
 
 from flask_wtf import FlaskForm
 
-from wtforms import StringField, SubmitField, PasswordField, ValidationError, IntegerField, SelectField, BooleanField
+from wtforms import StringField, SubmitField, PasswordField, ValidationError, IntegerField, SelectField, BooleanField, \
+    DateField
 from wtforms.validators import DataRequired, Email, EqualTo, NumberRange
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 
@@ -30,11 +31,11 @@ class UserEditForm(FlaskForm):
     """
     Form for admin to assign departments and roles to employees
     """
-    username = StringField('Login', validators=[DataRequired()])
     email = StringField('Mail', validators=[DataRequired(), Email()])
     first_name = StringField('First Name', validators=[DataRequired()])
     last_name = StringField('Last Name', validators=[DataRequired()])
     middle_name = StringField('Middle Name', validators=[DataRequired()])
+    date_of_birth = DateField('Date of birth', validators=[DataRequired()])
     telephone = StringField('Telephone')
     is_man = BooleanField('Is man')
     submit = SubmitField('Submit')
@@ -72,13 +73,13 @@ class UserAddForm(FlaskForm):
     """
     Form for admin to assign departments and roles to employees
     """
-    login = StringField('Login*', validators=[DataRequired()])
     email = StringField('Mail*', validators=[DataRequired(), Email()])
     password = PasswordField('Password*', validators=[DataRequired()])
     first_name = StringField('First Name*', validators=[DataRequired()])
     last_name = StringField('Last Name*', validators=[DataRequired()])
     middle_name = StringField('Middle Name*', validators=[DataRequired()])
-    tell = StringField('Telephone')
+    date_of_birth = DateField('Date of birth', validators=[DataRequired()])
+    telephone = StringField('Telephone')
     role = QuerySelectField(query_factory=lambda: Role.query.all(),
                             get_label="name")
     is_man = BooleanField('Sex')

@@ -4,9 +4,9 @@ from .. import db
 from flask import render_template, flash, redirect, url_for
 from flask_login import login_required
 
-from forms import RegistrationForm, UserEditForm
+from .forms import RegistrationForm, UserEditForm
 
-from ..models import Role, User
+from ..models import User
 
 
 @admin.route('/users')
@@ -34,7 +34,7 @@ def add_user():
     if form.validate_on_submit():
         try:
             user = User(email=form.email.data,
-                        username=form.username.data,
+                        date_of_birth=form.date_of_birth.data,
                         first_name=form.first_name.data,
                         last_name=form.last_name.data,
                         middle_name=form.middle_name.data,
@@ -88,7 +88,7 @@ def edit_user(id):
     form = UserEditForm(obj=user)
     if form.validate_on_submit():
         try:
-            user.username = form.username.data
+            user.date_of_birth = form.date_of_birth.data
             user.first_name = form.first_name.data
             user.last_name = form.last_name.data
             user.middle_name = form.middle_name.data
