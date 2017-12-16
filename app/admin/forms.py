@@ -4,7 +4,7 @@ from flask_wtf import FlaskForm
 
 from wtforms import StringField, SubmitField, PasswordField, ValidationError, IntegerField, SelectField, BooleanField, \
     DateField
-from wtforms.validators import DataRequired, Email, EqualTo, NumberRange
+from wtforms.validators import DataRequired, Email, EqualTo, NumberRange, Length
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 
 from ..models import Role, User, RoomSpecialization, Class, Subject, Classroom, EducationPlan, TeacherToSubject
@@ -46,13 +46,14 @@ class RegistrationForm(FlaskForm):
     Form for users to create new account
     """
     email = StringField('Email', validators=[DataRequired(), Email()])
-    username = StringField('Username', validators=[DataRequired()])
     first_name = StringField('First Name', validators=[DataRequired()])
     last_name = StringField('Last Name', validators=[DataRequired()])
     middle_name = StringField('Middle Name', validators=[DataRequired()])
+    date_of_birth = DateField('Date of birth', validators=[DataRequired()])
     telephone = StringField('Telephone')
     password = PasswordField('Password', validators=[
         DataRequired(),
+        Length(message='Length should be between 10 and 20 characters.',min=10, max=20),
         EqualTo('confirm_password')
     ])
     confirm_password = PasswordField('Confirm Password')
@@ -63,27 +64,6 @@ class RegistrationForm(FlaskForm):
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first():
             raise ValidationError('Email is already in use.')
-
-    def validate_username(self, field):
-        if User.query.filter_by(username=field.data).first():
-            raise ValidationError('Username is already in use.')
-
-
-class UserAddForm(FlaskForm):
-    """
-    Form for admin to assign departments and roles to employees
-    """
-    email = StringField('Mail*', validators=[DataRequired(), Email()])
-    password = PasswordField('Password*', validators=[DataRequired()])
-    first_name = StringField('First Name*', validators=[DataRequired()])
-    last_name = StringField('Last Name*', validators=[DataRequired()])
-    middle_name = StringField('Middle Name*', validators=[DataRequired()])
-    date_of_birth = DateField('Date of birth', validators=[DataRequired()])
-    telephone = StringField('Telephone')
-    role = QuerySelectField(query_factory=lambda: Role.query.all(),
-                            get_label="name")
-    is_man = BooleanField('Sex')
-    submit = SubmitField('Submit')
 
 
 class ClassroomEditForm(FlaskForm):
