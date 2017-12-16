@@ -356,7 +356,7 @@ class Schedule(db.Model):
 
     __tablename__ = 'schedules'
     __table_args__ = (
-        UniqueConstraint('classroom_id', 'educationPlan_id', name='_schedulesUnique'),
+        UniqueConstraint('class_id', 'educationPlan_id', name='_schedulesUnique'),
     )
 
     id = db.Column(db.Integer, primary_key=True)
