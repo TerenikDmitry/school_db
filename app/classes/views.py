@@ -4,7 +4,7 @@ from flask_login import current_user, login_required
 from . import classes
 from .. import db
 from ..models import Class, StudentInClass, User, Classroom, Specialization
-from forms import ClassForm, ClassStudentsForm
+from .forms import ClassForm, ClassStudentsForm
 
 
 def check_admin():

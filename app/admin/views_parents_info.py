@@ -4,7 +4,7 @@ from .. import db
 from flask import render_template, flash, redirect, url_for
 from flask_login import login_required
 
-from forms import ParentToStudentAddForm, ParentToStudentEditForm
+from .forms import ParentToStudentAddForm, ParentToStudentEditForm
 
 from ..models import User, ParentToStudent
 

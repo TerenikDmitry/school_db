@@ -3,7 +3,7 @@ from flask_login import login_required
 
 from . import admin, check_admin
 from .. import db
-from forms import TeacherSubjectAddForm, TeacherClassroomEditForm
+from .forms import TeacherSubjectAddForm, TeacherClassroomEditForm
 from ..models import User, TeacherToSubject, TeachersClassroom, Classroom, Subject
 
 

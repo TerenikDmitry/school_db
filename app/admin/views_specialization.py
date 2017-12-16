@@ -3,7 +3,7 @@ from flask_login import login_required
 
 from . import admin, check_admin
 from .. import db
-from forms import SpecializationForm
+from .forms import SpecializationForm
 from ..models import Specialization, RoomSpecialization, Subject
 
 

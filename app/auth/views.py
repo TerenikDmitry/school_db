@@ -2,7 +2,7 @@ from flask import flash, redirect, render_template, url_for
 from flask_login import login_required, login_user, logout_user
 
 from . import auth
-from forms import LoginForm
+from .forms import LoginForm
 from ..models import User
 
 @auth.route('/login', methods=['GET', 'POST'])
