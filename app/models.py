@@ -14,16 +14,16 @@ class User(UserMixin, db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(60), index=True, unique=True)
-    username = db.Column(db.String(60), index=True, unique=True)
-    telephone = db.Column(db.String(60), nullable=True)
-    first_name = db.Column(db.String(60), index=True, nullable=False)
-    last_name = db.Column(db.String(60), index=True, nullable=False)
-    middle_name = db.Column(db.String(60), index=True)
-    password_hash = db.Column(db.String(128), nullable=False)
+    email = db.Column(db.String(50), index=True, nullable=False, unique=True)
+    password_hash = db.Column(db.String(256), nullable=False)
+    first_name = db.Column(db.String(30), index=True, nullable=False)
+    last_name = db.Column(db.String(30), index=True, nullable=False)
+    middle_name = db.Column(db.String(30), index=True, nullable=False)
+    date_of_birth = db.Column(db.DateTime, nullable=False)
+    telephone = db.Column(db.String(20), nullable=True)
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
-    is_man = db.Column(db.Boolean, default=False)
+    is_man = db.Column(db.Boolean, nullable=False)
 
     studentInClass = db.relationship('StudentInClass', backref='users', lazy='dynamic', cascade="all, delete")
     teacherInClass = db.relationship('Class', backref='users', lazy='dynamic', cascade="all, delete")
@@ -43,6 +43,8 @@ class User(UserMixin, db.Model):
         """
         Set password to a hashed password
         """
+        if len(password) <= 10:
+            raise AttributeError('password must be longer than 10 characters')
         self.password_hash = generate_password_hash(password)
 
     def verify_password(self, password):
@@ -56,6 +58,9 @@ class User(UserMixin, db.Model):
         return self.last_name + " " + self.first_name + " " + self.middle_name
 
     def __repr__(self):
+        return '<User {}: {} {} {}>'.format(self.id, self.last_name, self.first_name, self.middle_name)
+
+    def __str__(self):
         return '{}: {} {} {}'.format(self.id, self.last_name, self.first_name, self.middle_name)
 
 
@@ -83,8 +88,8 @@ class Role(db.Model):
     __tablename__ = 'roles'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(60), unique=True)
-    description = db.Column(db.String(200), default='-')
+    name = db.Column(db.String(30), unique=True, nullable=False)
+    description = db.Column(db.String(400), nullable=True)
 
     user_id = db.relationship('User', backref='roles', lazy='dynamic', cascade="all, delete-orphan")
 
@@ -98,6 +103,9 @@ class StudentInClass(db.Model):
     """
 
     __tablename__ = 'students_in_class'
+    __table_args__ = (
+        UniqueConstraint('class_id', 'user_id_studen', name='_studentClassUnique'),
+    )
 
     id = db.Column(db.Integer, primary_key=True)
     class_id = db.Column(db.Integer, db.ForeignKey('classes.id'))
@@ -115,7 +123,7 @@ class Class(db.Model):
     __tablename__ = 'classes'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(60), unique=True)
+    name = db.Column(db.String(3), nullable=False, unique=True)
     dateStartEducation = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     dateEndEducation = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     specialization_id = db.Column(db.Integer, db.ForeignKey('specializations.id'), nullable=False)
@@ -126,7 +134,7 @@ class Class(db.Model):
     schedule_id = db.relationship('Schedule', backref='classes', lazy='dynamic')
 
     def __repr__(self):
-        return '<Class: {}>'.format(self.name)
+        return '<Class {}: {}>'.format(self.id, self.name)
 
     def __str__(self):
         return '{}'.format(self.name)
@@ -140,12 +148,12 @@ class Specialization(db.Model):
     __tablename__ = 'specializations'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(60), unique=True)
+    name = db.Column(db.String(50), nullable=False, unique=True)
 
     specialization_id = db.relationship('Class', backref='specializations', lazy='dynamic')
 
     def __repr__(self):
-        return '<Specialization: {}>'.format(self.name)
+        return '<Specialization {}: {}>'.format(self.id, self.name)
 
     def __str__(self):
         return '{}'.format(self.name)
@@ -159,12 +167,12 @@ class Subject(db.Model):
     __tablename__ = 'subjects'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(60), unique=True)
+    name = db.Column(db.String(50), unique=True, nullable=False)
 
     teacher_subject_id = db.relationship('TeacherToSubject', backref='subjects', lazy='dynamic')
 
     def __repr__(self):
-        return '<Subject: {}>'.format(self.name)
+        return '<Subject {}: {}>'.format(self.id, self.name)
 
     def __str__(self):
         return '{}'.format(self.name)
@@ -201,12 +209,12 @@ class RoomSpecialization(db.Model):
     __tablename__ = 'room_specializations'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(60), unique=True)
+    name = db.Column(db.String(50), nullable=False, unique=True)
 
     room_specialization_id = db.relationship('Classroom', backref='room_specializations', lazy='dynamic')
 
     def __repr__(self):
-        return '<Room Specialization: {}>'.format(self.name)
+        return '<Room Specialization {}: {}>'.format(self.id, self.name)
 
 
 class Classroom(db.Model):
@@ -217,7 +225,7 @@ class Classroom(db.Model):
     __tablename__ = 'classrooms'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(60), unique=True)
+    name = db.Column(db.String(5), nullable=False, unique=True)
     room_specialization_id = db.Column(db.Integer, db.ForeignKey('room_specializations.id'), nullable=False)
 
     classroom_id = db.relationship('Class', backref='classrooms', lazy='dynamic')
@@ -225,7 +233,7 @@ class Classroom(db.Model):
     schedule_id = db.relationship('Schedule', backref='classrooms', lazy='dynamic')
 
     def __repr__(self):
-        return '<Classroom: {}>'.format(self.name)
+        return '<Classroom {}: {}>'.format(self.id, self.name)
 
     def __str__(self):
         return '{}'.format(self.name)
@@ -348,7 +356,7 @@ class Schedule(db.Model):
 
     __tablename__ = 'schedules'
     __table_args__ = (
-        UniqueConstraint('class_id', 'educationPlan_id', name='_schedules'),
+        UniqueConstraint('classroom_id', 'educationPlan_id', name='_schedulesUnique'),
     )
 
     id = db.Column(db.Integer, primary_key=True)
