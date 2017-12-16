@@ -15,11 +15,11 @@ class User(UserMixin, db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(50), index=True, nullable=False, unique=True)
-    password_hash = db.Column(db.String(256), nullable=False)
+    password_hash = db.Column(db.String(128), nullable=False)
     first_name = db.Column(db.String(30), index=True, nullable=False)
     last_name = db.Column(db.String(30), index=True, nullable=False)
     middle_name = db.Column(db.String(30), index=True, nullable=False)
-    date_of_birth = db.Column(db.DateTime, nullable=False)
+    date_of_birth = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     telephone = db.Column(db.String(20), nullable=True)
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=False)
     is_admin = db.Column(db.Boolean, default=False)

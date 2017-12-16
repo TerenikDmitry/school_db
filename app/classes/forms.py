@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, DateField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import DataRequired
-from ..models import Classroom, Specialization, User, Class, StudentInClass
+from ..models import Classroom, Specialization, User
 
 
 class ClassForm(FlaskForm):

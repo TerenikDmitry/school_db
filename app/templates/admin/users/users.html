@@ -22,7 +22,7 @@
                     <thead>
                     <tr>
                         <th width="22%"> Name </th>
-                        <th width="13%"> Login </th>
+                        <th width="13%"> Birth </th>
                         <th width="15%"> Mail </th>
                         <th width="15%"> Telephone </th>
                         <th width="10%"> Role </th>
@@ -36,7 +36,7 @@
                         {% if user.is_admin %}
                             <tr style="background-color: #138d75; color: white;">
                                 <td> <i class="fa fa-key"></i> Admin </td>
-                                <td> {{ user.username }} </td>
+                                <td> N/A </td>
                                 <td> N/A </td>
                                 <td> N/A </td>
                                 <td> N/A </td>
@@ -57,7 +57,7 @@
                                     {{ user }}
                                     </a>
                                 </td>
-                                <td> {{ user.username }} </td>
+                                <td> {{ user.date_of_birth.strftime('%d, %b %Y') }} </td>
                                 <td> {{ user.email }} </td>
                                 <td>
                                     {% if user.telephone %}
