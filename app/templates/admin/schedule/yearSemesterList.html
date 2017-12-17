@@ -33,13 +33,13 @@
                                 <td> {{ schedule.education_plan.dayLesson }} </td>
                                 <td> {{ schedule.teachers_to_subjects }} </td>
                                 <td>
-                                    <a href="{{ url_for('admin.one_class', class_id=schedule.classes.id) }}">
+                                    <a href="{{ url_for('home.class_dashboard', class_id=schedule.classes.id) }}">
                                         {{ schedule.classes }}
                                     </a>
                                 </td>
                                 <td> {{ schedule.classrooms }} </td>
                                 <td>
-                                    <a href="{{ url_for('admin.edit_schedule_year_sem', plan_id=schedule.id, year=schedule.education_plan.year ,semester=schedule.education_plan.semester) }}">
+                                    <a href="{{ url_for('admin.edit_schedule_year_sem', plan_id=schedule.education_plan.id, year=schedule.education_plan.year ,semester=schedule.education_plan.semester) }}">
                                         <i class="fas fa-pencil-alt"></i> edit
                                     </a>
                                 </td>

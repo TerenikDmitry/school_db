@@ -15,24 +15,6 @@ def check_admin():
         abort(403)
 
 
-@admin.route('/class/<int:class_id>')
-@login_required
-def one_class(class_id):
-    classStudents = StudentInClass.query.filter_by(class_id=class_id).all()
-    _class = Class.query.get_or_404(class_id)
-
-    if current_user.role_id == 1 or current_user.role_id == 2:
-        return render_template('admin/classes/class_dashboard.html',
-                               title='Class',
-                               _class=_class,
-                               classStudents=classStudents)
-    else:
-        return render_template('admin/classes/class_dashboard_all.html',
-                               title='Class',
-                               _class=_class,
-                               classStudents=classStudents)
-
-
 @admin.route('/class/list/<int:pagin>')
 @login_required
 def list_classes(pagin):

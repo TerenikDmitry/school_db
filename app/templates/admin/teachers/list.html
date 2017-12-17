@@ -63,7 +63,7 @@
                                     </td>
                                     <td>
                                         {% if teacher.teacherInClass.first() %}
-                                            <a href="{{ url_for('admin.one_class', class_id=teacher.teacherInClass.first().id) }}">
+                                            <a href="{{ url_for('home.class_dashboard', class_id=teacher.teacherInClass.first().id) }}">
                                             <span class="label label-success">
                                                 {{ teacher.teacherInClass.first() }}
                                             </span>

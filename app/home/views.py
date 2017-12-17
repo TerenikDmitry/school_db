@@ -1,7 +1,7 @@
 from flask import abort, render_template, flash
 from flask_login import current_user, login_required
 
-from ..models import Role, User, TeacherToSubject, ParentToStudent, TeachersClassroom, Class
+from ..models import Role, User, TeacherToSubject, ParentToStudent, TeachersClassroom, Class, StudentInClass
 
 from . import home
 
@@ -43,13 +43,31 @@ def homepage():
                            title="Welcome")
 
 
-@home.route('/admin/dashboard')
+@home.route('/admin')
 @login_required
 def admin_dashboard():
     # prevent non-admins from accessing the page
     check_admin()
 
     return render_template('home/admin_dashboard.html', title="Dashboard")
+
+
+@home.route('/class/<int:class_id>')
+@login_required
+def class_dashboard(class_id):
+    classStudents = StudentInClass.query.filter_by(class_id=class_id).all()
+    _class = Class.query.get_or_404(class_id)
+
+    if current_user.role_id == 1 or current_user.role_id == 2:
+        return render_template('home/class_dashboard.html',
+                               title='Class',
+                               _class=_class,
+                               classStudents=classStudents)
+    else:
+        return render_template('home/class_dashboard_all.html',
+                               title='Class',
+                               _class=_class,
+                               classStudents=classStudents)
 
 
 @home.route('/student/<int:id>')

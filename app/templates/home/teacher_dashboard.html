@@ -21,7 +21,8 @@
         </div>
 
         <div>Head Class:
-            {% if headClass %}<a href="{{ url_for('admin.one_class', class_id=headClass.id) }}">
+            {% if headClass %}
+            <a href="{{ url_for('home.class_dashboard', class_id=headClass.id) }}">
                 {{ headClass.name }}
             </a>
             {% else %}

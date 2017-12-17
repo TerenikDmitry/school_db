@@ -20,14 +20,15 @@
             ({{ _class.classrooms.room_specializations.name }})
         </div>
 
+        <br>
         <div>
             <a href="{{ url_for('admin.list_schedule_class', id_class=_class.id, id_day=1) }}"
                class="btn btn-default">
                 Schedule
             </a>
         </div>
-
         <br>
+
         {% if classStudents %}
             <div class="panel panel-default">
                 <div class="panel-heading">Students:</div>
