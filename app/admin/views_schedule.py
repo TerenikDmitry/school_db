@@ -3,7 +3,7 @@ from datetime import date
 from flask_sqlalchemy import Pagination
 from sqlalchemy.orm.exc import NoResultFound
 
-from . import admin
+from . import admin, check_admin
 from .. import db
 
 from flask import render_template, flash, redirect, url_for, abort
@@ -27,7 +27,7 @@ def curr_year():
 
 def curr_semester():
     month = date.today().month
-    if month>=9 and month<=12:
+    if 9 <= month <= 12:
         return 1
     else:
         return 2
@@ -42,9 +42,9 @@ def list_schedule():
     user_access()
 
     plans = []
-    for planY in EducationPlan.query.distinct(EducationPlan.year).order_by(desc(EducationPlan.year)):
-        for plan in EducationPlan.query.filter_by(year=planY.year).distinct(EducationPlan.semester):
-            plans.append({'_year':planY.year,'_semester':plan.semester})
+    for plans_year in EducationPlan.query.distinct(EducationPlan.year).order_by(desc(EducationPlan.year)):
+        for plans_semester in EducationPlan.query.filter_by(year=plans_year.year).distinct(EducationPlan.semester):
+            plans.append({'_year':plans_year.year,'_semester':plans_semester.semester})
 
     return render_template('admin/schedule/mainList.html',
                            plans=plans,
@@ -60,58 +60,29 @@ def list_schedule_teacher(id_subject, id_day):
     user_access()
 
     schedules = []
-    teacherSubject = TeacherToSubject.query.get_or_404(id_subject)
+    teacher_subject = TeacherToSubject.query.get_or_404(id_subject)
 
-    plansAll = EducationPlan.query.filter_by(year=curr_year(),semester=curr_semester(),day=id_day).order_by(EducationPlan.year, EducationPlan.semester, EducationPlan.day, EducationPlan.lessonNumber).all()
-    for plansAlllesson in plansAll:
+    all_plans = EducationPlan.query.filter_by(year=curr_year(),semester=curr_semester(),day=id_day).order_by(EducationPlan.year, EducationPlan.semester, EducationPlan.day, EducationPlan.lessonNumber).all()
+    for one_plan in all_plans:
         try:
-            schedule = Schedule.query.filter_by(educationPlan_id=plansAlllesson.id,teacher_subject_id=id_subject).one()
+            schedule = Schedule.query.filter_by(educationPlan_id=one_plan.id,teacher_subject_id=id_subject).one()
             schedules.append(schedule)
         except NoResultFound:
-            schedules.append(plansAlllesson)
+            schedules.append(one_plan)
 
     plans = EducationPlan.query.filter_by(year=curr_year(),semester=curr_semester()).distinct(EducationPlan.day)
 
     return render_template('admin/schedule/dayTeacherList.html',
-                           teacherSubject=teacherSubject,
+                           teacherSubject=teacher_subject,
                            schedules=schedules,
-                           day=plansAll[0],
+                           day=all_plans[0],
                            plans=plans,
-                           title='Schedule')
-
-
-@admin.route('/schedule/subject/<int:id_class>/<int:id_day>')
-@login_required
-def list_schedule_class(id_class, id_day):
-    """
-    Show schedule
-    """
-
-    schedules = []
-
-    currentClass = Class.query.get_or_404(id_class)
-
-    plans = EducationPlan.query.filter_by(year=curr_year(),semester=curr_semester(),day=id_day).order_by(EducationPlan.year, EducationPlan.semester, EducationPlan.day, EducationPlan.lessonNumber).all()
-    for plan in plans:
-        try:
-            schedule = Schedule.query.filter_by(educationPlan_id=plan.id,class_id=id_class).one()
-            schedules.append(schedule)
-        except NoResultFound:
-            schedules.append(plan)
-
-    plansDay = EducationPlan.query.filter_by(year=curr_year(),semester=curr_semester()).distinct(EducationPlan.day)
-
-    return render_template('admin/schedule/dayClassList.html',
-                           currentClass=currentClass,
-                           schedules=schedules,
-                           currentDay=plans[0],
-                           days=plansDay,
                            title='Schedule')
 
 
 @admin.route('/schedule/<int:id_plan>/<int:id_subject>/<int:id_day>/add', methods=['GET', 'POST'])
 @login_required
-def add_schedule_subject(id_subject,id_day,id_plan):
+def add_schedule_subject(id_subject, id_day, id_plan):
     """
     Add schedule
     """
@@ -160,7 +131,7 @@ def delete_schedule_subject(id_subject, id_day, id):
 
 @admin.route('/schedule/<int:year>/<int:semester>/<int:pagin>')
 @login_required
-def list_schedule_year_sem(year,semester,pagin):
+def list_schedule_year_sem(year, semester, pagin):
     """
     Show schedule
     """
@@ -177,11 +148,11 @@ def list_schedule_year_sem(year,semester,pagin):
 
 @admin.route('/schedule/<int:year>/<int:semester>/add', methods=['GET', 'POST'])
 @login_required
-def add_schedule_year_sem(year,semester):
+def add_schedule_year_sem(year, semester):
     """
     Add schedule
     """
-    user_access()
+    check_admin()
 
     form = ScheduleFormAdd()
     if form.validate_on_submit():
@@ -207,11 +178,11 @@ def add_schedule_year_sem(year,semester):
 
 @admin.route('/schedule/<int:year>/<int:semester>/<int:plan_id>/edit', methods=['GET', 'POST'])
 @login_required
-def edit_schedule_year_sem(plan_id,year,semester):
+def edit_schedule_year_sem(plan_id, year, semester):
     """
     Edit schedule
     """
-    user_access()
+    check_admin()
 
     schedules = Schedule.query.filter_by(educationPlan_id=plan_id).first()
     form = ScheduleFormEdit(obj=schedules)
@@ -240,11 +211,11 @@ def edit_schedule_year_sem(plan_id,year,semester):
 
 @admin.route('/schedule/<int:year>/<int:semester>/<int:id>/delete', methods=['GET', 'POST'])
 @login_required
-def delete_schedule_year_sem(id,year,semester):
+def delete_schedule_year_sem(id, year, semester):
     """
     Delete schedule
     """
-    user_access()
+    check_admin()
 
     schedules = Schedule.query.get_or_404(id)
     try:

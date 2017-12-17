@@ -17,7 +17,7 @@
                         {% else %}
                         <li role="presentation">
                         {% endif %}
-                            <a href="{{ url_for('admin.list_schedule_class', id_class=currentClass.id, id_day=day.day) }}">
+                            <a href="{{ url_for('schedule.list_schedule_class', id_class=currentClass.id, id_day=day.day) }}">
                                 {{ day.fullday }}
                             </a>
                         </li>
