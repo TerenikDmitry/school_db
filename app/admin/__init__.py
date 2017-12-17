@@ -21,3 +21,4 @@ from . import views_teachers_info
 from . import views_users
 from . import views_plan
 from . import views_schedule
+from . import views_classes

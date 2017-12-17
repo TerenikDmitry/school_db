@@ -22,7 +22,7 @@
 
         <div> Class:
         {% if studentClass %}
-        <a href="{{ url_for('classes.one_class', class_id=studentClass.classes.id) }}">
+        <a href="{{ url_for('admin.one_class', class_id=studentClass.classes.id) }}">
             {{ studentClass.classes }}
         </a>
         {% else %}

@@ -7,7 +7,7 @@ from wtforms import StringField, SubmitField, PasswordField, ValidationError, In
 from wtforms.validators import DataRequired, Email, EqualTo, NumberRange, Length
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 
-from ..models import Role, User, RoomSpecialization, Class, Subject, Classroom, EducationPlan, TeacherToSubject
+from ..models import Role, User, RoomSpecialization, Class, Subject, Classroom, EducationPlan, TeacherToSubject, Specialization
 
 
 class RoleForm(FlaskForm):
@@ -204,4 +204,29 @@ class ScheduleFormAddSubject(FlaskForm):
     """
     classroom_id = QuerySelectField(query_factory=lambda: Classroom.query)
     class_id = QuerySelectField(query_factory=lambda: Class.query)
+    submit = SubmitField('Submit')
+
+
+class ClassForm(FlaskForm):
+    """
+    Form for admin to add or edit a class
+    """
+    name = StringField('Name', validators=[DataRequired()])
+    dateStartEducation = DateField('DateStart', validators=[DataRequired()])
+    dateEndEducation = DateField('DateEnd', validators=[DataRequired()])
+    specialization_id = QuerySelectField(query_factory=lambda: Specialization.query.all())
+    headTeacher = QuerySelectField(query_factory=lambda: User.query.filter_by(role_id=1).all())
+    room_id = QuerySelectField(query_factory=lambda: Classroom.query.all())
+    submit = SubmitField('Submit')
+
+
+def get_students():
+    return User.query.filter_by(role_id=2)
+
+
+class ClassStudentsForm(FlaskForm):
+    """
+        Form for admin to add a student to class
+    """
+    student = QuerySelectField(query_factory=get_students)
     submit = SubmitField('Submit')

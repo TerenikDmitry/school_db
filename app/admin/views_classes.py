@@ -1,7 +1,7 @@
 from flask import abort, flash, redirect, render_template, url_for
 
 from flask_login import current_user, login_required
-from . import classes
+from . import admin
 from .. import db
 from ..models import Class, StudentInClass, User, Classroom, Specialization
 from .forms import ClassForm, ClassStudentsForm
@@ -15,25 +15,25 @@ def check_admin():
         abort(403)
 
 
-@classes.route('/class/<int:class_id>')
+@admin.route('/class/<int:class_id>')
 @login_required
 def one_class(class_id):
     classStudents = StudentInClass.query.filter_by(class_id=class_id).all()
     _class = Class.query.get_or_404(class_id)
 
     if current_user.role_id == 1 or current_user.role_id == 2:
-        return render_template('classes/class_dashboard.html',
+        return render_template('admin/classes/class_dashboard.html',
                                title='Class',
                                _class=_class,
                                classStudents=classStudents)
     else:
-        return render_template('classes/class_dashboard_all.html',
+        return render_template('admin/classes/class_dashboard_all.html',
                                title='Class',
                                _class=_class,
                                classStudents=classStudents)
 
 
-@classes.route('/class/list/<int:pagin>')
+@admin.route('/class/list/<int:pagin>')
 @login_required
 def list_classes(pagin):
     """
@@ -42,11 +42,11 @@ def list_classes(pagin):
     check_admin()
 
     classesList = Class.query.order_by(Class.name).paginate(page=pagin, per_page=5)
-    return render_template('classes/class.html',
+    return render_template('admin/classes/class.html',
                            classesList=classesList)
 
 
-@classes.route('/class/add', methods=['GET', 'POST'])
+@admin.route('/class/add', methods=['GET', 'POST'])
 @login_required
 def add_class():
     """
@@ -75,12 +75,12 @@ def add_class():
 
     form.headTeacher.query = User.query.filter(User.is_admin!=True, User.role_id==1).outerjoin(Class, Class.headTeacher == User.id).filter(Class.id==None)
 
-    return render_template('classes/editClass.html',
+    return render_template('admin/classes/editClass.html',
                            form=form,
                            title='Add Class')
 
 
-@classes.route('/class/<int:id>/edit', methods=['GET', 'POST'])
+@admin.route('/class/<int:id>/edit', methods=['GET', 'POST'])
 @login_required
 def edit_class(id):
     """
@@ -106,18 +106,18 @@ def edit_class(id):
             flash('Edited the class error',category='error')
 
         # redirect to the list of classes PAGE
-        return redirect(url_for('classes.list_classes', pagin=1))
+        return redirect(url_for('admin.list_classes', pagin=1))
 
     form.headTeacher.data = User.query.get_or_404(classOne.headTeacher)
     form.room_id.data = Classroom.query.get_or_404(classOne.room_id)
     form.specialization_id.data = Specialization.query.get_or_404(classOne.specialization_id)
-    return render_template('classes/editClass.html',
+    return render_template('admin/classes/editClass.html',
                            form=form,
                            class_name=classOne.name,
                            title="Edit Class")
 
 
-@classes.route('/class/<int:id>/delete', methods=['GET', 'POST'])
+@admin.route('/class/<int:id>/delete', methods=['GET', 'POST'])
 @login_required
 def delete_class(id):
     """
@@ -131,10 +131,10 @@ def delete_class(id):
     flash('You have successfully deleted the class.')
 
     # redirect to the list of classes PAGE
-    return redirect(url_for('classes.list_classes', pagin=1))
+    return redirect(url_for('admin.list_classes', pagin=1))
 
 
-@classes.route('/class/<int:id>/students/add', methods=['GET', 'POST'])
+@admin.route('/class/<int:id>/students/add', methods=['GET', 'POST'])
 @login_required
 def add_student(id):
     """
@@ -154,16 +154,16 @@ def add_student(id):
             flash('Error in adding student to class',category='error')
 
         # redirect to the list of classes PAGE
-        return redirect(url_for('classes.list_classes', pagin=1))
+        return redirect(url_for('admin.list_classes', pagin=1))
 
     form.student.query = User.query.filter_by(role_id=2).outerjoin(StudentInClass, StudentInClass.user_id_studen == User.id).filter(StudentInClass.class_id==None)
 
-    return render_template('classes/editStudentToClass.html',
+    return render_template('admin/classes/editStudentToClass.html',
                            form=form,
                            title='Add Student')
 
 
-@classes.route('/class/<int:id>/students/edit', methods=['GET', 'POST'])
+@admin.route('/class/<int:id>/students/edit', methods=['GET', 'POST'])
 @login_required
 def list_students(id):
     """
@@ -174,13 +174,13 @@ def list_students(id):
     students = StudentInClass.query.filter_by(class_id=id).all()
     oneClass = Class.query.get_or_404(id)
 
-    return render_template('classes/listStudentToClass.html',
+    return render_template('admin/classes/listStudentToClass.html',
                            students=students,
                            oneClass=oneClass,
                            title='Add Student to Class')
 
 
-@classes.route('/class/<int:id_class>/students/delete/<int:id_student>', methods=['GET', 'POST'])
+@admin.route('/class/<int:id_class>/students/delete/<int:id_student>', methods=['GET', 'POST'])
 @login_required
 def delete_student(id_class,id_student):
     """
@@ -198,4 +198,4 @@ def delete_student(id_class,id_student):
         flash('Error in removing student from class', category='error')
 
     # redirect to the list of classes PAGE
-    return redirect(url_for('classes.list_classes', pagin=1))
+    return redirect(url_for('admin.list_classes', pagin=1))

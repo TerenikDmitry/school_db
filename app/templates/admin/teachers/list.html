@@ -63,14 +63,14 @@
                                     </td>
                                     <td>
                                         {% if teacher.teacherInClass.first() %}
-                                            <a href="{{ url_for('classes.one_class', class_id=teacher.teacherInClass.first().id) }}">
+                                            <a href="{{ url_for('admin.one_class', class_id=teacher.teacherInClass.first().id) }}">
                                             <span class="label label-success">
                                                 {{ teacher.teacherInClass.first() }}
                                             </span>
                                             </a>
                                         {% else %}
                                             No classes available <br>
-                                            <a href="{{ url_for('classes.add_class') }}">
+                                            <a href="{{ url_for('admin.add_class') }}">
                                                 <i class="fas fa-link"></i> add link
                                             </a>
                                         {% endif %}

@@ -33,7 +33,7 @@
                         <li><a href="{{ url_for('admin.list_parent_to_student', pagin=1) }}">Parents</a></li>
                         <li><a href="{{ url_for('admin.list_subjects', pagin=1) }}">Subjects</a></li>
                         <li><a href="{{ url_for('admin.list_classrooms', pagin=1) }}">Classrooms</a></li>
-                        <li><a href="{{ url_for('classes.list_classes', pagin=1) }}">Classes</a></li>
+                        <li><a href="{{ url_for('admin.list_classes', pagin=1) }}">Classes</a></li>
                         <li><a href="{{ url_for('admin.list_roles') }}">Roles</a></li>
                         <li><a href="{{ url_for('admin.list_users', pagin=1) }}">Users</a></li>
                         <li><a href="{{ url_for('admin.list_class_specializations', pagin=1) }}">Class Spec</a></li>
@@ -72,7 +72,7 @@
                 {% else %}
                     <li>
                         <a href="{{ url_for('auth.login') }}">
-                            <i class="fas fa-sign-in-alt"></i>Login
+                            <i class="fas fa-sign-in-alt"></i> Login
                         </a>
                     </li>
                 {% endif %}
@@ -116,7 +116,7 @@
                             <li><a href="{{ url_for('admin.list_parent_to_student', pagin=1) }}">Parents</a></li>
                             <li><a href="{{ url_for('admin.list_subjects', pagin=1) }}">Subjects</a></li>
                             <li><a href="{{ url_for('admin.list_classrooms', pagin=1) }}">Classrooms</a></li>
-                            <li><a href="{{ url_for('classes.list_classes', pagin=1) }}">Classes</a></li>
+                            <li><a href="{{ url_for('admin.list_classes', pagin=1) }}">Classes</a></li>
                             <li><a href="{{ url_for('admin.list_roles') }}">Roles</a></li>
                             <li><a href="{{ url_for('admin.list_users', pagin=1) }}">Users</a></li>
                             <li><a href="{{ url_for('admin.list_class_specializations', pagin=1) }}">Class Spec</a></li>
@@ -153,7 +153,11 @@
                             </a>
                         </li>
                     {% else %}
-                        <li class="active"><a href="{{ url_for('auth.login') }}">Login</a></li>
+                        <li>
+                        <a href="{{ url_for('auth.login') }}">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </a>
+                    </li>
                     {% endif %}
                 </ul>
                 <p class="copyright small">Copyright © 2017. Terenik</p>

@@ -33,7 +33,7 @@
                                 <td> {{ schedule.education_plan.dayLesson }} </td>
                                 <td> {{ schedule.teachers_to_subjects }} </td>
                                 <td>
-                                    <a href="{{ url_for('classes.one_class', class_id=schedule.classes.id) }}">
+                                    <a href="{{ url_for('admin.one_class', class_id=schedule.classes.id) }}">
                                         {{ schedule.classes }}
                                     </a>
                                 </td>
