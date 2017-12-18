@@ -51,35 +51,6 @@ def list_schedule():
                            title='Schedules')
 
 
-@admin.route('/schedule/teacher/<int:id_subject>/<int:id_day>')
-@login_required
-def list_schedule_teacher(id_subject, id_day):
-    """
-    Show schedule
-    """
-    user_access()
-
-    schedules = []
-    teacher_subject = TeacherToSubject.query.get_or_404(id_subject)
-
-    all_plans = EducationPlan.query.filter_by(year=curr_year(),semester=curr_semester(),day=id_day).order_by(EducationPlan.year, EducationPlan.semester, EducationPlan.day, EducationPlan.lessonNumber).all()
-    for one_plan in all_plans:
-        try:
-            schedule = Schedule.query.filter_by(educationPlan_id=one_plan.id,teacher_subject_id=id_subject).one()
-            schedules.append(schedule)
-        except NoResultFound:
-            schedules.append(one_plan)
-
-    plans = EducationPlan.query.filter_by(year=curr_year(),semester=curr_semester()).distinct(EducationPlan.day)
-
-    return render_template('admin/schedule/dayTeacherList.html',
-                           teacherSubject=teacher_subject,
-                           schedules=schedules,
-                           day=all_plans[0],
-                           plans=plans,
-                           title='Schedule')
-
-
 @admin.route('/schedule/<int:id_plan>/<int:id_subject>/<int:id_day>/add', methods=['GET', 'POST'])
 @login_required
 def add_schedule_subject(id_subject, id_day, id_plan):

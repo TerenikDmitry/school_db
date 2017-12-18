@@ -31,7 +31,7 @@
                                 <a href="{{ url_for('admin.edit_students_class', id=student.id) }}">
                                     <i class="fas fa-link"></i> change bind
                                 </a><br>
-                                <a href="{{ url_for('home.class_dashboard', class_id=student.studentInClass.first().classes.id) }}">
+                                <a href="{{ url_for('home.class_dashboard', id=student.studentInClass.first().classes.id) }}">
                                     <span class="label label-success">{{ student.studentInClass.first().classes }}</span>
                                 </a><br>
                                 <a href="{{ url_for('admin.delete_students_class', id=student.id) }}">

@@ -52,11 +52,11 @@ def admin_dashboard():
     return render_template('home/admin_dashboard.html', title="Dashboard")
 
 
-@home.route('/class/<int:class_id>')
+@home.route('/class/<int:id>')
 @login_required
-def class_dashboard(class_id):
-    classStudents = StudentInClass.query.filter_by(class_id=class_id).all()
-    _class = Class.query.get_or_404(class_id)
+def class_dashboard(id):
+    classStudents = StudentInClass.query.filter_by(class_id=id).all()
+    _class = Class.query.get_or_404(id)
 
     if current_user.role_id == 1 or current_user.role_id == 2:
         return render_template('home/class_dashboard.html',
