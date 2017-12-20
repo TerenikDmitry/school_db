@@ -34,12 +34,12 @@ def delete_classroom(id):
         classroom = Classroom.query.get_or_404(id)
         db.session.delete(classroom)
         db.session.commit()
-        flash('You have successfully deleted the Classroom Specialization.', category='message')
+        flash('You have successfully deleted the Classroom.', category='message')
     except:
-        flash('Error in removing the Classroom Specialization.', category='error')
+        flash('Error in removing the Classroom.', category='error')
 
     # redirect to the list of classroom PAGE
-    return redirect(url_for('admin.list_room_specializations'))
+    return redirect(url_for('admin.list_classrooms', pagin=1))
 
 
 @admin.route('/classrooms/add', methods=['GET', 'POST'])
@@ -57,7 +57,7 @@ def add_classroom():
                                   room_specialization_id=form.spec.data.id)
             db.session.add(classroom)
             db.session.commit()
-            flash('You have successfully added a new Classroom Specialization.', category='message')
+            flash('You have successfully added a new Classroom.', category='message')
         except:
             flash('Error: Classroom Specialization name already exists.', category='error')
 

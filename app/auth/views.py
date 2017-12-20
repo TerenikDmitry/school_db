@@ -16,6 +16,7 @@ def login():
         if user is not None and user.verify_password(form.password.data):
             login_user(user)
 
+            flash('You have successfully logged in.', category='message')
             # redirect to the appropriate page
             if user.is_admin:
                 return redirect(url_for('home.admin_dashboard'))
